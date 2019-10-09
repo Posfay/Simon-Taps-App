@@ -6,21 +6,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class MainActivity extends Activity {
 
-  TextView szoveg;
-  EditText bemenet;
+  TextView text;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    szoveg = findViewById(R.id.textout);
-    bemenet = findViewById(R.id.textin);
+    text = findViewById(R.id.textout);
   }
   public void requestClick(View v) {
-    szoveg.setText(bemenet.getText());
+    JSONObject json = new JSONObject();
+    text.setText("a");
   }
 }
