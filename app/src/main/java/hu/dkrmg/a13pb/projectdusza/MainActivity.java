@@ -5,9 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 public class MainActivity extends Activity {
 
@@ -21,6 +25,10 @@ public class MainActivity extends Activity {
   }
   public void requestClick(View v) {
     JSONObject json = new JSONObject();
-    text.setText("a");
+    try {
+      text.setText(OkHttpHandler.post("http://example.com",json));
+    } catch (IOException e) {
+      Toast.makeText(this, "Hiba a kérésben", Toast.LENGTH_SHORT).show();
+    }
   }
 }
