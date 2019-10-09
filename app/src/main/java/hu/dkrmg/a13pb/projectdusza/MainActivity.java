@@ -11,7 +11,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -57,7 +56,6 @@ public class MainActivity extends Activity {
       public void onFailure(Call call, IOException e) {
         String mMessage = e.getMessage();
         Log.w("failure Response", mMessage);
-        Toast.makeText(MainActivity.this, "Hiba a keresben!", Toast.LENGTH_SHORT).show();
       }
 
       @Override
@@ -68,7 +66,7 @@ public class MainActivity extends Activity {
             try {
               text.setText(response.body().string());
             } catch (IOException e) {
-              Toast.makeText(MainActivity.this, "Hiba a keresben!", Toast.LENGTH_SHORT).show();
+              e.printStackTrace();
             }
           }
         });
