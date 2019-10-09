@@ -60,16 +60,18 @@ public class MainActivity extends Activity {
 
       @Override
       public void onResponse(Call call, final Response response) {
-        handler.post(new Runnable() {
-          @Override
-          public void run() {
-            try {
-              text.setText(response.body().string());
-            } catch (IOException e) {
-              e.printStackTrace();
+        if (response.isSuccessful()) {
+          handler.post(new Runnable() {
+            @Override
+            public void run() {
+              try {
+                text.setText(response.body().string());
+              } catch (IOException e) {
+                e.printStackTrace();
+              }
             }
-          }
-        });
+          });
+        }
       }
     });
 
