@@ -60,14 +60,18 @@ public class MainActivity extends Activity {
 
       @Override
       public void onResponse(Call call, final Response response) {
-        if (response.isSuccessful()) {
+        Log.i("response", response.toString());
+
+        if (response.isSuccessful() && response.code() == 200) {
+
           handler.post(new Runnable() {
+
             @Override
             public void run() {
               try {
                 text.setText(response.body().string());
               } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("request parsing error", "error: ", e);
               }
             }
           });
