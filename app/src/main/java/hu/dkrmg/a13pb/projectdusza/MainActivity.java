@@ -2,6 +2,8 @@ package hu.dkrmg.a13pb.projectdusza;
 
 import java.io.IOException;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -24,7 +26,7 @@ public class MainActivity extends Activity {
 
   public TextView text;
 
-  private Handler handler;
+  public Handler handler;
 
   public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -41,7 +43,7 @@ public class MainActivity extends Activity {
   public void requestClick(View v) {
 
     JSONObject json = new JSONObject();
-    String url = "http://example.com";
+    String url = "http://szerver3.dkrmg.sulinet.hu:8080/USER/androidtest/firsttest";
 
     postRequest(url, json);
   }
@@ -51,33 +53,46 @@ public class MainActivity extends Activity {
     OkHttpClient client = new OkHttpClient();
     Request request = createRequest(url, json);
 
-    client.newCall(request).enqueue(new Callback() {
-      @Override
-      public void onFailure(Call call, IOException e) {
-        String mMessage = e.getMessage();
-        Log.w("failure Response", mMessage);
+    client.newCall(request).enqueue(new OkHttpCallback());
+
+  }
+
+  public class OkHttpCallback implements Callback {
+
+    @Override
+    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+      String mMessage = e.getMessage();
+      Log.w("failure Response", mMessage);
+    }
+
+    @Override
+    public void onResponse(@NotNull Call call, @NotNull final Response response) {
+      Log.i("response", response.toString());
+
+      if (response.isSuccessful() && response.code() == 200) {
+
+        handler.post(new Runnable() {
+          @Override
+          public void run() {
+            parseResponse(response);
+          }
+        });
       }
+    }
+  }
 
-      @Override
-      public void onResponse(Call call, final Response response) {
-        Log.i("response", response.toString());
+  public void parseResponse(Response response) {
 
-        if (response.isSuccessful() && response.code() == 200) {
+    JSONObject responseJson;
 
-          handler.post(new Runnable() {
+    try {
 
-            @Override
-            public void run() {
-              try {
-                text.setText(response.body().string());
-              } catch (IOException e) {
-                Log.e("request parsing error", "error: ", e);
-              }
-            }
-          });
-        }
-      }
-    });
+      responseJson = new JSONObject(response.body().string());
+      text.setText(responseJson.toString(4));
+
+    } catch (JSONException | IOException e) {
+      e.printStackTrace();
+    }
 
   }
 
