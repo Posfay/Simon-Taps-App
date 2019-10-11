@@ -2,20 +2,15 @@ package hu.dkrmg.a13pb.projectdusza;
 
 import java.io.IOException;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,8 +21,6 @@ public class MainActivity extends Activity {
 
   public TextView textView;
 
-  public Handler handler;
-
   public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
   @Override
@@ -36,8 +29,6 @@ public class MainActivity extends Activity {
     setContentView(R.layout.activity_main);
 
     textView = findViewById(R.id.textout);
-
-    handler = new Handler(Looper.getMainLooper());
   }
 
   public void requestClick(View v) {
@@ -50,59 +41,32 @@ public class MainActivity extends Activity {
 
   public void postRequest(String url, JSONObject json) {
 
-    OkHttpClient client = new OkHttpClient();
     Request request = createRequest(url, json);
 
-    client.newCall(request).enqueue(new OkHttpCallback());
+    new OkHttpAsyncTask().execute(request);
 
   }
 
-  public class OkHttpCallback implements Callback {
-
-    @Override
-    public void onFailure(@NotNull Call call, @NotNull IOException e) {
-      String mMessage = e.getMessage();
-      Log.w("failure Response", mMessage);
-    }
-
-    @Override
-    public void onResponse(@NotNull Call call, @NotNull final Response response) {
-      Log.i("response", response.toString());
-
-      if (response.isSuccessful() && response.code() == 200) {
-
-        handler.post(new Runnable() {
-          @Override
-          public void run() {
-            parseResponse(response);
-          }
-        });
-      }
-    }
-  }
-
-  public void parseResponse(Response response) {
+  public void parseResponse(String responseJsonString) {
 
     JSONObject responseJson;
 
     try {
 
-      responseJson = new JSONObject(response.body().string());
-      textView.setText(responseJson.toString(4));
-
+      responseJson = new JSONObject(responseJsonString);
       Long number = responseJson.getLong("szam");
 
       if (number > 0) {
         textView.setText(number.toString());
       }
 
-    } catch (JSONException | IOException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
     }
-
   }
 
   private Request createRequest(String url, JSONObject json) {
+
     RequestBody body = RequestBody.create(JSON, json.toString());
     return new Request.Builder()
         .url(url)
@@ -111,4 +75,37 @@ public class MainActivity extends Activity {
         .header("Content-Type", "application/json")
         .build();
   }
+
+  public class OkHttpAsyncTask extends AsyncTask<Request, Void, String> {
+
+    @Override
+    protected String doInBackground(Request... request) {
+
+      OkHttpClient client = new OkHttpClient();
+
+      try {
+
+        Response response = client.newCall(request[0]).execute();
+
+        if (response.isSuccessful() && response.code() == 200) {
+
+          return response.body().string();
+        } else {
+
+          return "{}";
+        }
+
+      } catch (IOException e) {
+        e.printStackTrace();
+        return null;
+      }
+    }
+
+    @Override
+    protected void onPostExecute(String responseJsonString) {
+
+      parseResponse(responseJsonString);
+    }
+  }
+
 }
