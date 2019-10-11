@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
   public void requestClick(View v) {
 
     JSONObject json = new JSONObject();
-    String url = "http://szerver3.dkrmg.sulinet.hu:8080/USER/androidtest/firsttest";
+    String url = "http://szerver3.dkrmg.sulinet.hu:8080/TESZT/firsttest";
 
     postRequest(url, json);
   }
@@ -89,6 +89,12 @@ public class MainActivity extends Activity {
 
       responseJson = new JSONObject(response.body().string());
       text.setText(responseJson.toString(4));
+
+      Long number = responseJson.getLong("szam");
+
+      if (number > 0) {
+        text.setText(number.toString());
+      }
 
     } catch (JSONException | IOException e) {
       e.printStackTrace();
