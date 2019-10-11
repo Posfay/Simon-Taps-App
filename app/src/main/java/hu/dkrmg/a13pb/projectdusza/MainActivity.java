@@ -24,7 +24,7 @@ import okhttp3.Response;
 
 public class MainActivity extends Activity {
 
-  public TextView text;
+  public TextView textView;
 
   public Handler handler;
 
@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    text = findViewById(R.id.textout);
+    textView = findViewById(R.id.textout);
 
     handler = new Handler(Looper.getMainLooper());
   }
@@ -88,12 +88,12 @@ public class MainActivity extends Activity {
     try {
 
       responseJson = new JSONObject(response.body().string());
-      text.setText(responseJson.toString(4));
+      textView.setText(responseJson.toString(4));
 
       Long number = responseJson.getLong("szam");
 
       if (number > 0) {
-        text.setText(number.toString());
+        textView.setText(number.toString());
       }
 
     } catch (JSONException | IOException e) {
