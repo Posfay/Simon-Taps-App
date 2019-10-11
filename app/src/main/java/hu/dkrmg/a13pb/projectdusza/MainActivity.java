@@ -25,8 +25,6 @@ public class MainActivity extends Activity implements AsyncResponse {
     setContentView(R.layout.activity_main);
 
     textView = findViewById(R.id.textout);
-
-    okHttpHandler = new OkHttpHandler();
   }
 
   public void requestClick(View v) {
@@ -34,6 +32,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     String url = "http://szerver3.dkrmg.sulinet.hu:8080/TESZT/FirstTest";
     JSONObject payloadJson = new JSONObject();
 
+    okHttpHandler = new OkHttpHandler(this);
     okHttpHandler.postRequest(url, payloadJson);
   }
 
@@ -44,9 +43,9 @@ public class MainActivity extends Activity implements AsyncResponse {
       Long number = responseJson.getLong("szam");
 
       if (number > 0) {
-        textView.setText(number + "\n" + latency);
+        textView.setText(number + "\n" + latency + " ms");
       } else {
-        textView.setText(0 + "\n" + latency);
+        textView.setText(0 + "\n" + latency + " ms");
       }
 
     } catch (JSONException e) {

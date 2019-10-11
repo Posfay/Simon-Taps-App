@@ -15,7 +15,7 @@ import okhttp3.Response;
 
 public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
-  public AsyncResponse asyncResponse = null;
+  private AsyncResponse asyncResponse;
 
   public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -54,7 +54,7 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
     Request request = createRequest(url, json);
 
-    new OkHttpHandler().execute(request);
+    this.execute(request);
   }
 
   private Request createRequest(String url, JSONObject json) {
@@ -66,5 +66,9 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
         .header("Accept", "application/json")
         .header("Content-Type", "application/json")
         .build();
+  }
+
+  public OkHttpHandler(AsyncResponse asyncResponse) {
+    this.asyncResponse = asyncResponse;
   }
 }
