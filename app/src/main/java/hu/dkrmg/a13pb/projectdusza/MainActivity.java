@@ -1,6 +1,7 @@
 package hu.dkrmg.a13pb.projectdusza;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,6 +9,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -22,6 +24,8 @@ public class MainActivity extends Activity {
   public TextView textView;
 
   public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+  public static Date requestStartingAt;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,7 @@ public class MainActivity extends Activity {
 
   }
 
-  public void parseResponse(String responseJsonString) {
+  public void parseResponse(String responseJsonString, long latency) {
 
     JSONObject responseJson;
 
@@ -57,7 +61,7 @@ public class MainActivity extends Activity {
       Long number = responseJson.getLong("szam");
 
       if (number > 0) {
-        textView.setText(number.toString());
+        textView.setText(number + "\n" + latency);
       }
 
     } catch (JSONException e) {
@@ -85,6 +89,8 @@ public class MainActivity extends Activity {
 
       try {
 
+        requestStartingAt = new Date();
+
         Response response = client.newCall(request[0]).execute();
 
         if (response.isSuccessful() && response.code() == 200) {
@@ -104,7 +110,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onPostExecute(String responseJsonString) {
 
-      parseResponse(responseJsonString);
+      Date recievedResponseAt = new Date();
+      long latency = recievedResponseAt.getTime() - requestStartingAt.getTime();
+
+      Log.i("latency", latency + " ms");
+
+      parseResponse(responseJsonString, latency);
     }
   }
 
