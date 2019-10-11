@@ -62,6 +62,8 @@ public class MainActivity extends Activity {
 
       if (number > 0) {
         textView.setText(number + "\n" + latency);
+      } else {
+        textView.setText(0 + "\n" + latency);
       }
 
     } catch (JSONException e) {
