@@ -1,6 +1,6 @@
 package hu.dkrmg.a13pb.projectdusza;
 
-public interface AsyncResponseMainActivity {
+public interface AsyncResponse {
 
   void onRequestComplete(String responseJsonString);
 

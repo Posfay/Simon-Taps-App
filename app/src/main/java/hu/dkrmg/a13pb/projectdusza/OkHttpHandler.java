@@ -15,7 +15,7 @@ import okhttp3.Response;
 
 public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
-  public AsyncResponseMainActivity asyncResponse = null;
+  public AsyncResponse asyncResponse = null;
 
   public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -25,7 +25,6 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
     OkHttpClient client = new OkHttpClient();
 
     try {
-
       MainActivity.requestStartingAt = new Date();
 
       Response response = client.newCall(request[0]).execute();
@@ -35,7 +34,7 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
         return response.body().string();
       } else {
 
-        return "{}";
+        return new JSONObject().toString();
       }
 
     } catch (IOException e) {

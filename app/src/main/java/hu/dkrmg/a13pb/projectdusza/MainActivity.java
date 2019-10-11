@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements AsyncResponseMainActivity {
+public class MainActivity extends Activity implements AsyncResponse {
 
   public TextView textView;
 
@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements AsyncResponseMainActivity 
 
   public void requestClick(View v) {
 
-    String url = "http://szerver3.dkrmg.sulinet.hu:8080/TESZT/firsttest";
+    String url = "http://szerver3.dkrmg.sulinet.hu:8080/TESZT/FirstTest";
     JSONObject payloadJson = new JSONObject();
 
     okHttpHandler.postRequest(url, payloadJson);
