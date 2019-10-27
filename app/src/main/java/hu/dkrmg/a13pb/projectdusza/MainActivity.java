@@ -1,7 +1,5 @@
 package hu.dkrmg.a13pb.projectdusza;
 
-import java.util.Date;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,8 +11,6 @@ import android.widget.TextView;
 public class MainActivity extends Activity implements AsyncResponse {
 
   public TextView textView;
-
-  public static Date requestStartingAt;
 
   public OkHttpHandler okHttpHandler;
 
