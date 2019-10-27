@@ -1,7 +1,6 @@
 package hu.dkrmg.a13pb.projectdusza;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -25,8 +24,6 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
     OkHttpClient client = new OkHttpClient();
 
     try {
-      MainActivity.requestStartingAt = new Date();
-
       Response response = client.newCall(request[0]).execute();
 
       if (response.isSuccessful() && response.code() == 200) {

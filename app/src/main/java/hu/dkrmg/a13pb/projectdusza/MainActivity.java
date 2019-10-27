@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,16 +35,16 @@ public class MainActivity extends Activity implements AsyncResponse {
     okHttpHandler.postRequest(url, payloadJson);
   }
 
-  public void parseResponse(String responseJsonString, long latency) {
+  public void parseResponse(String responseJsonString) {
 
     try {
       JSONObject responseJson = new JSONObject(responseJsonString);
       Long number = responseJson.getLong("szam");
 
       if (number > 0) {
-        textView.setText(number + "\n" + latency + " ms");
+        textView.setText(number.toString());
       } else {
-        textView.setText(0 + "\n" + latency + " ms");
+        textView.setText(0);
       }
 
     } catch (JSONException e) {
@@ -56,11 +55,6 @@ public class MainActivity extends Activity implements AsyncResponse {
   @Override
   public void onRequestComplete(String responseJsonString) {
 
-    Date receivedResponseAt = new Date();
-    long latency = receivedResponseAt.getTime() - requestStartingAt.getTime();
-
-    Log.i("latency", latency + " ms");
-
-    parseResponse(responseJsonString, latency);
+    parseResponse(responseJsonString);
   }
 }
