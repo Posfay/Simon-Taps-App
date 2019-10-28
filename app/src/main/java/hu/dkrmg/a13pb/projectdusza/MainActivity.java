@@ -4,13 +4,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.service.voice.AlwaysOnHotwordDetector;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.UUID;
 
 public class MainActivity extends Activity implements AsyncResponse {
 
   public TextView textView;
+  public EditText roomIdEditText;
+  String playerId;
+
 
   public OkHttpHandler okHttpHandler;
 
@@ -20,37 +29,62 @@ public class MainActivity extends Activity implements AsyncResponse {
     setContentView(R.layout.activity_main);
 
     textView = findViewById(R.id.textout);
+    roomIdEditText = findViewById(R.id.editText);
+  
   }
 
   public void requestClick(View v) {
 
-    String url = "http://szerver3.dkrmg.sulinet.hu:8080/TESZT/FirstTest";
+    String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/join";
     JSONObject payloadJson = new JSONObject();
+    String roomId = roomIdEditText.getText().toString();
+    playerId = UUID.randomUUID().toString();
+
+    try {
+      payloadJson.put("room_id", roomId);
+      payloadJson.put("player_id", this.playerId);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
 
     okHttpHandler = new OkHttpHandler(this);
     okHttpHandler.postRequest(url, payloadJson);
   }
 
-  public void parseResponse(String responseJsonString) {
-
-    try {
-      JSONObject responseJson = new JSONObject(responseJsonString);
-      Long number = responseJson.getLong("szam");
-
-      if (number > 0) {
-        textView.setText(number.toString());
-      } else {
-        textView.setText(0);
-      }
-
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
+  public void gameOnClick(View v) {
+    Intent intent = new Intent(this, GameActivity.class);
+    startActivity(intent);
   }
+
 
   @Override
   public void onRequestComplete(String responseJsonString) {
 
-    parseResponse(responseJsonString);
+    String status = null;
+    String reason = null;
+    JSONObject payloadJson = null;
+    long num = -1;
+
+    try {
+      payloadJson = new JSONObject(responseJsonString);
+      Log.i("response",responseJsonString);
+      Log.i("responseJson",payloadJson.toString());
+      status = payloadJson.getString("status");
+
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
+    if (status.equals("OK")) {
+      num = payloadJson.optLong("number_of_players");
+      textView.setText(num+"");
+      Intent intent = new Intent(this, GameActivity.class);
+      startActivity(intent);
+    }
+    else {
+      reason = payloadJson.optString("reason");
+      textView.setText(reason);
+    }
+
   }
 }
