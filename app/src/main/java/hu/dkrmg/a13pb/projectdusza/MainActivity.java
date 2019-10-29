@@ -56,24 +56,20 @@ public class MainActivity extends Activity implements AsyncResponse {
     startActivity(intent);
   }
 
-  public void getStateClick(View v) {
 
-    String url = "https://szerver3.dkrmg.sulinet.hu:8080/simon-taps/state?room_id="+roomId+"&player_id="+playerId;
-
-  }
+  String status;
+  String reason;
 
   @Override
   public void onRequestComplete(String responseJsonString) {
 
-    String status = null;
-    String reason = null;
+    status = null;
+    reason = null;
     JSONObject payloadJson = null;
     long num = -1;
 
     try {
       payloadJson = new JSONObject(responseJsonString);
-      Log.i("response",responseJsonString);
-      Log.i("responseJson",payloadJson.toString());
       status = payloadJson.getString("status");
 
     } catch (JSONException e) {
@@ -83,7 +79,10 @@ public class MainActivity extends Activity implements AsyncResponse {
     if (status.equals("OK")) {
       num = payloadJson.optLong("number_of_players");
       textView.setText(num+"");
-      Intent intent = new Intent(this, GameActivity.class);
+      Intent intent = new Intent(getBaseContext(), GameActivity.class);
+      Log.i("name", playerId);
+      intent.putExtra("EXTRA_PLAYER_ID", playerId);
+      intent.putExtra("EXTRA_ROOM_ID", roomId);
       startActivity(intent);
     }
     else {
