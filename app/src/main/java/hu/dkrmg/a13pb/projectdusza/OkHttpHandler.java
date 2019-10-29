@@ -49,12 +49,19 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
   public void postRequest(String url, JSONObject json) {
 
-    Request request = createRequest(url, json);
+    Request request = createPostRequest(url, json);
 
     this.execute(request);
   }
 
-  private Request createRequest(String url, JSONObject json) {
+  public void getRequest(String url) {
+
+    Request request = createGetRequest(url);
+
+    this.execute(request);
+  }
+
+  private Request createPostRequest(String url, JSONObject json) {
 
     RequestBody body = RequestBody.create(JSON, json.toString());
     return new Request.Builder()
@@ -62,6 +69,15 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
         .post(body)
         .header("Accept", "application/json")
         .header("Content-Type", "application/json")
+        .build();
+  }
+
+  private Request createGetRequest(String url) {
+
+    return new Request.Builder()
+        .url(url)
+        .get()
+        .header("Accept", "application/json")
         .build();
   }
 
