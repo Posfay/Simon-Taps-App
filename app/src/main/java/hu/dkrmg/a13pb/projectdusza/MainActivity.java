@@ -18,10 +18,10 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public TextView textView;
   public EditText roomIdEditText;
-  String playerId;
-
 
   public OkHttpHandler okHttpHandler;
+  public String roomId;
+  public String playerId;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/join";
     JSONObject payloadJson = new JSONObject();
-    String roomId = roomIdEditText.getText().toString();
+    roomId = roomIdEditText.getText().toString();
     playerId = UUID.randomUUID().toString();
 
     try {
@@ -56,6 +56,11 @@ public class MainActivity extends Activity implements AsyncResponse {
     startActivity(intent);
   }
 
+  public void getStateClick(View v) {
+
+    String url = "https://szerver3.dkrmg.sulinet.hu:8080/simon-taps/state?room_id="+roomId+"&player_id="+playerId;
+
+  }
 
   @Override
   public void onRequestComplete(String responseJsonString) {
