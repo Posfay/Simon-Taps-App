@@ -1,34 +1,47 @@
 package hu.dkrmg.a13pb.projectdusza;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements AsyncResponse {
 
     public static final long DELAY_MILLIS = 500;
     public static final long ROUNDS = 2;
+
+    public OkHttpHandler okHttpHandler;
+    public String playerId;
+    public String roomId;
+
+
+
     Button greenButton;
     Button redButton;
     Button yellowButton;
     Button blueButton;
     Button yourButton;
-    Long tileId;
+
+    Long tileId = null;
     List<Integer> pattern;
     String wordPattern = "";
     Handler timerHandler = new Handler();
+    Handler getStateTimerHandler = new Handler();
     Handler delayHandler = new Handler();
     Integer counter = 0;
-    Runnable timerRunnable = new Runnable() {
 
+    Runnable timerRunnable = new Runnable() {
 
         @Override
         public void run() {
@@ -75,6 +88,7 @@ public class GameActivity extends Activity {
             }
             timerHandler.postDelayed(this, DELAY_MILLIS+100);
         }
+
     };
 
     @Override
@@ -88,7 +102,8 @@ public class GameActivity extends Activity {
         blueButton = (Button) findViewById(R.id.button6);
         yourButton = (Button) findViewById(R.id.button7);
 
-        tileId = (long) Math.floor(Math.random()*4)+1;
+        playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
+        roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
         pattern = new ArrayList<Integer>();
         for (int n = 1; n <= ROUNDS; n++) {
@@ -103,36 +118,91 @@ public class GameActivity extends Activity {
         }
         Log.i("minta", wordPattern);
 
-        pattern.clear();
-        for (int i=0; i<wordPattern.length(); i++) {
-           pattern.add(Integer.valueOf(String.valueOf(wordPattern.charAt(i))));
-        }
+
         Log.i("minta2", pattern.toString());
     }
 
+    Runnable getStateTimerRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            String url = "https://szerver3.dkrmg.sulinet.hu:8080/simon-taps/state?room_id="+roomId+"&player_id="+playerId;
+            okHttpHandler = new OkHttpHandler(GameActivity.this);
+            okHttpHandler.getRequest(url);
 
 
+            getStateTimerHandler.postDelayed(this, 300);
+        }
+    };
+
+
+    @Override
+    public void onRequestComplete(String responseJsonString) {
+
+        JSONObject payloadJson = null;
+        String status = null;
+        String state = null;
+        long num = -1;
+
+        try {
+            payloadJson = new JSONObject(responseJsonString);
+            status = payloadJson.getString("status");
+            state = payloadJson.getString("game_state");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (status.equals("OK")) {
+
+            //WAITING
+            if (state == "waiting") {
+                num = payloadJson.optLong("number_of_players");
+                yourButton.setText(num+"");
+            }
+            //PREPARING
+            if (state == "preparing") {
+                tileId = payloadJson.optLong("tile_id");
+                if (tileId == 1) {
+                    yourButton.setBackgroundColor(getResources().getColor(R.color.green));
+                }
+                if (tileId == 2) {
+                    yourButton.setBackgroundColor(getResources().getColor(R.color.red));
+                }
+                if (tileId == 3) {
+                    yourButton.setBackgroundColor(getResources().getColor(R.color.yellow));
+                }
+                if (tileId == 4) {
+                    yourButton.setBackgroundColor(getResources().getColor(R.color.blue));
+                }
+            }
+            //SHOWING PATTERN
+            if (state == "showing_pattern") {
+                wordPattern = payloadJson.optString("pattern");
+                pattern.clear();
+                for (int i=0; i<wordPattern.length(); i++) {
+                    pattern.add(Integer.valueOf(String.valueOf(wordPattern.charAt(i))));
+                }
+                timerHandler.postDelayed(timerRunnable, 1000);
+            }
+
+
+        }
+        else {
+            return;
+        }
+
+    }
 
 
     public void youOnClick(View v) {
 
 
-        if (tileId == 1) {
-            yourButton.setBackgroundColor(getResources().getColor(R.color.green));
-        }
-        if (tileId == 2) {
-            yourButton.setBackgroundColor(getResources().getColor(R.color.red));
-        }
-        if (tileId == 3) {
-            yourButton.setBackgroundColor(getResources().getColor(R.color.yellow));
-        }
-        if (tileId == 4) {
-            yourButton.setBackgroundColor(getResources().getColor(R.color.blue));
-        }
 
 
-        timerHandler.postDelayed(timerRunnable, 1000);
 
+
+        getStateTimerHandler.postDelayed(getStateTimerRunnable, 1000);
     }
 
 }
