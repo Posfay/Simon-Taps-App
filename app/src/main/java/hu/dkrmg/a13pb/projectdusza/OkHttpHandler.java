@@ -76,8 +76,6 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
     return new Request.Builder()
         .url(url)
-        .get()
-        .header("Accept", "application/json")
         .build();
   }
 
