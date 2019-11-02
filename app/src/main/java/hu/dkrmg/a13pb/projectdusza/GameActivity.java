@@ -51,12 +51,12 @@ public class GameActivity extends Activity implements AsyncResponse {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
-    greenButton = (Button) findViewById(R.id.button3);
-    redButton = (Button) findViewById(R.id.button4);
-    yellowButton = (Button) findViewById(R.id.button5);
-    blueButton = (Button) findViewById(R.id.button6);
-    yourButton = (Button) findViewById(R.id.button7);
-    layout = (ConstraintLayout) findViewById(R.id.layout);
+    greenButton = findViewById(R.id.button3);
+    redButton = findViewById(R.id.button4);
+    yellowButton = findViewById(R.id.button5);
+    blueButton = findViewById(R.id.button6);
+    yourButton = findViewById(R.id.button7);
+    layout = findViewById(R.id.layout);
 
     yourButton.setEnabled(false);
 
@@ -113,60 +113,70 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     // WAITING
     if (state.equals(StateUtils.WAITING)) {
-
-      numOfPlayers = payloadJson.optLong("number_of_players");
-      yourButton.setText(numOfPlayers + "");
+      gameWaiting(payloadJson);
     }
     // PREPARING
     if (state.equals(StateUtils.PREPARING)) {
-
-      // intervalMilli = 200;
-      tileId = payloadJson.optLong("tile_id");
-
-      if (tileId == 1) {
-        yourButton.setBackgroundColor(getResources().getColor(R.color.green));
-      }
-      if (tileId == 2) {
-        yourButton.setBackgroundColor(getResources().getColor(R.color.red));
-      }
-      if (tileId == 3) {
-        yourButton.setBackgroundColor(getResources().getColor(R.color.yellow));
-      }
-      if (tileId == 4) {
-        yourButton.setBackgroundColor(getResources().getColor(R.color.blue));
-      }
+      gamePreparing(payloadJson);
     }
-    // SHOWING PATTERN
+    // SHOWING_PATTERN
     if (state.equals(StateUtils.SHOWING_PATTERN)) {
-
-      if (!shown) {
-
-        wordPattern = payloadJson.optString("pattern");
-        pattern.clear();
-
-        for (int i = 0; i < wordPattern.length(); i++) {
-          pattern.add(Integer.valueOf(String.valueOf(wordPattern.charAt(i))));
-        }
-
-        displayPattern();
-        shown = true;
-      }
+      gameShowingPattern(payloadJson);
     }
     // PLAYING
     if (state.equals(StateUtils.PLAYING)) {
-      yourButton.setEnabled(true);
+      gamePlaying(payloadJson);
     }
     // SUCCESSFUL_END
     if (state.equals(StateUtils.SUCCESSFUL_END)) {
-      layout.setBackgroundColor(Color.GREEN);
-      exitCondition = true;
+      gameEnd(true);
       return;
     }
     // FAIL_END
     if (state.equals(StateUtils.FAIL_END)) {
-      layout.setBackgroundColor(Color.RED);
-      exitCondition = true;
+      gameEnd(false);
       return;
+    }
+  }
+
+  public void gameWaiting(JSONObject payloadJson) {
+
+    numOfPlayers = payloadJson.optLong("number_of_players");
+    yourButton.setText(numOfPlayers + "");
+  }
+
+  public void gamePreparing(JSONObject payloadJson) {
+
+    // intervalMilli = 200;
+    tileId = payloadJson.optLong("tile_id");
+
+    if (tileId == 1) {
+      yourButton.setBackgroundColor(getResources().getColor(R.color.green));
+    }
+    if (tileId == 2) {
+      yourButton.setBackgroundColor(getResources().getColor(R.color.red));
+    }
+    if (tileId == 3) {
+      yourButton.setBackgroundColor(getResources().getColor(R.color.yellow));
+    }
+    if (tileId == 4) {
+      yourButton.setBackgroundColor(getResources().getColor(R.color.blue));
+    }
+  }
+
+  public void gameShowingPattern (JSONObject payloadJson) {
+
+    if (!shown) {
+
+      wordPattern = payloadJson.optString("pattern");
+      pattern.clear();
+
+      for (int i = 0; i < wordPattern.length(); i++) {
+        pattern.add(Integer.valueOf(String.valueOf(wordPattern.charAt(i))));
+      }
+
+      displayPattern();
+      shown = true;
     }
   }
 
@@ -247,6 +257,10 @@ public class GameActivity extends Activity implements AsyncResponse {
     okHttpHandler.postRequest(url, payloadJson);
   }
 
+  public void gamePlaying(JSONObject payloadJson) {
+    yourButton.setEnabled(true);
+  }
+
   public void youOnClick(View v) {
 
     Log.i("press", "true");
@@ -264,5 +278,16 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+  }
+
+  public void gameEnd(Boolean success) {
+    if (success) {
+      layout.setBackgroundColor(Color.GREEN);
+      exitCondition = true;
+    }
+    if (!success) {
+      layout.setBackgroundColor(Color.RED);
+      exitCondition = true;
+    }
   }
 }

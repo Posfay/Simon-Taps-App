@@ -55,11 +55,6 @@ public class MainActivity extends Activity implements AsyncResponse {
     okHttpHandler.postRequest(url, payloadJson);
   }
 
-  public void gameOnClick(View v) {
-    Intent intent = new Intent(this, GameActivity.class);
-    startActivity(intent);
-  }
-
   String status;
   String reason;
 
@@ -80,10 +75,13 @@ public class MainActivity extends Activity implements AsyncResponse {
     }
 
     if (status.equals("OK")) {
+
       num = payloadJson.optLong("number_of_players");
       textView.setText(num + "");
+
       Intent intent = new Intent(getBaseContext(), GameActivity.class);
       Log.i("name", playerId);
+
       intent.putExtra("EXTRA_PLAYER_ID", playerId);
       intent.putExtra("EXTRA_ROOM_ID", roomId);
       startActivity(intent);
