@@ -119,7 +119,7 @@ public class GameActivity extends Activity implements AsyncResponse {
         //PREPARING
         if (state.equals(StateUtils.PREPARING)) {
 
-            intervalMilli = 200;
+            //intervalMilli = 200;
             tileId = payloadJson.optLong("tile_id");
 
             if (tileId == 1) {
