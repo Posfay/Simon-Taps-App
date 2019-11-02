@@ -15,10 +15,12 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
 
   public OkHttpHandler okHttpHandler;
+  public OkHttpClient client;
   public String playerId;
   public String roomId;
 
@@ -63,6 +65,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     pattern = new ArrayList<>();
 
+    client = new OkHttpClient();
+
     getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
   }
 
@@ -77,7 +81,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/state?room_id=" + roomId
           + "&player_id=" + playerId;
 
-      okHttpHandler = new OkHttpHandler(GameActivity.this);
+      okHttpHandler = new OkHttpHandler(GameActivity.this, client);
       okHttpHandler.getRequest(url);
 
       getStateTimerHandler.postDelayed(getStateTimerRunnable, intervalMilli);
@@ -239,7 +243,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       e.printStackTrace();
     }
 
-    okHttpHandler = new OkHttpHandler(this);
+    okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
   }
 
@@ -258,7 +262,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       e.printStackTrace();
     }
 
-    okHttpHandler = new OkHttpHandler(this);
+    okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
   }
 }

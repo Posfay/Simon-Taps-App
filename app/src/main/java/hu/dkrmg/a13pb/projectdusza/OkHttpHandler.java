@@ -14,6 +14,8 @@ import okhttp3.Response;
 
 public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
+  private final OkHttpClient okHttpClient;
+
   private AsyncResponse asyncResponse;
 
   public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -21,9 +23,7 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
   @Override
   protected String doInBackground(Request... request) {
 
-    OkHttpClient client = new OkHttpClient();
-
-    try (Response response = client.newCall(request[0]).execute()) {
+    try (Response response = okHttpClient.newCall(request[0]).execute()) {
 
       if (response.isSuccessful() && response.code() == 200) {
 
@@ -78,7 +78,8 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
         .build();
   }
 
-  public OkHttpHandler(AsyncResponse asyncResponse) {
+  public OkHttpHandler(AsyncResponse asyncResponse, OkHttpClient client) {
+    this.okHttpClient = client;
     this.asyncResponse = asyncResponse;
   }
 }
