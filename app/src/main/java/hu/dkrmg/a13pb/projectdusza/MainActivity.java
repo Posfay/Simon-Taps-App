@@ -1,18 +1,19 @@
 package hu.dkrmg.a13pb.projectdusza;
 
+import java.util.UUID;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.service.voice.AlwaysOnHotwordDetector;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.UUID;
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends Activity implements AsyncResponse {
 
@@ -23,6 +24,8 @@ public class MainActivity extends Activity implements AsyncResponse {
   public String roomId;
   public String playerId;
 
+  public OkHttpClient client;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -30,7 +33,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     textView = findViewById(R.id.textout);
     roomIdEditText = findViewById(R.id.editText);
-  
+
+    client = new OkHttpClient();
   }
 
   public void requestClick(View v) {
@@ -47,7 +51,7 @@ public class MainActivity extends Activity implements AsyncResponse {
       e.printStackTrace();
     }
 
-    okHttpHandler = new OkHttpHandler(this);
+    okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
   }
 
@@ -55,7 +59,6 @@ public class MainActivity extends Activity implements AsyncResponse {
     Intent intent = new Intent(this, GameActivity.class);
     startActivity(intent);
   }
-
 
   String status;
   String reason;
@@ -78,14 +81,13 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (status.equals("OK")) {
       num = payloadJson.optLong("number_of_players");
-      textView.setText(num+"");
+      textView.setText(num + "");
       Intent intent = new Intent(getBaseContext(), GameActivity.class);
       Log.i("name", playerId);
       intent.putExtra("EXTRA_PLAYER_ID", playerId);
       intent.putExtra("EXTRA_ROOM_ID", roomId);
       startActivity(intent);
-    }
-    else {
+    } else {
       reason = payloadJson.optString("reason");
       textView.setText(reason);
     }
