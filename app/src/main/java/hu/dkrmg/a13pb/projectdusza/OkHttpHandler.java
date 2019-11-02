@@ -23,8 +23,7 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
     OkHttpClient client = new OkHttpClient();
 
-    try {
-      Response response = client.newCall(request[0]).execute();
+    try (Response response = client.newCall(request[0]).execute()) {
 
       if (response.isSuccessful() && response.code() == 200) {
 
@@ -32,7 +31,7 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
       } else {
 
         return new JSONObject().toString();
-    }
+      }
 
     } catch (IOException e) {
       e.printStackTrace();
