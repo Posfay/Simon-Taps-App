@@ -2,8 +2,10 @@ package hu.dkrmg.a13pb.projectdusza;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 public class GameActivity extends Activity implements AsyncResponse {
 
     public OkHttpHandler okHttpHandler;
@@ -27,12 +31,14 @@ public class GameActivity extends Activity implements AsyncResponse {
     Button yellowButton;
     Button blueButton;
     Button yourButton;
+    ConstraintLayout layout;
 
     long numOfPlayers = -1;
     Long tileId = null;
     List<Integer> pattern;
     String wordPattern = "";
     Boolean shown = false;
+    Boolean exitCondition = false;
 
     Handler getStateTimerHandler = new Handler();
     long intervalMilli = 1000;
@@ -52,6 +58,9 @@ public class GameActivity extends Activity implements AsyncResponse {
         yellowButton = (Button) findViewById(R.id.button5);
         blueButton = (Button) findViewById(R.id.button6);
         yourButton = (Button) findViewById(R.id.button7);
+        layout = (ConstraintLayout) findViewById(R.id.layout);
+
+        yourButton.setEnabled(false);
 
         playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
         roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
@@ -65,12 +74,16 @@ public class GameActivity extends Activity implements AsyncResponse {
         @Override
         public void run() {
 
+            if (exitCondition) {
+                return;
+            }
+
             String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/state?room_id="+roomId+"&player_id="+playerId;
 
             okHttpHandler = new OkHttpHandler(GameActivity.this);
             okHttpHandler.getRequest(url);
 
-            getStateTimerHandler.postDelayed(this, intervalMilli);
+            getStateTimerHandler.postDelayed(getStateTimerRunnable, intervalMilli);
         }
     };
 
@@ -81,6 +94,7 @@ public class GameActivity extends Activity implements AsyncResponse {
         String status = null;
         String state = null;
 
+        Log.i("GameResponse", responseJsonString);
 
         try {
 
@@ -124,29 +138,36 @@ public class GameActivity extends Activity implements AsyncResponse {
         //SHOWING PATTERN
         if (state.equals(StateUtils.SHOWING_PATTERN)) {
 
-            if (shown) {
-                return;
+            if (!shown) {
+
+                wordPattern = payloadJson.optString("pattern");
+                pattern.clear();
+
+                for (int i=0; i<wordPattern.length(); i++) {
+                    pattern.add(Integer.valueOf(String.valueOf(wordPattern.charAt(i))));
+                }
+
+                displayPattern();
+                shown = true;
             }
-
-            wordPattern = payloadJson.optString("pattern");
-            pattern.clear();
-
-
-            for (int i=0; i<wordPattern.length(); i++) {
-                pattern.add(Integer.valueOf(String.valueOf(wordPattern.charAt(i))));
-            }
-
-            shown = true;
-
-            Log.i("minta", pattern.toString());
-            displayPattern();
-
         }
-
-        getStateTimerHandler.postDelayed(getStateTimerRunnable, intervalMilli);
-
+        //PLAYING
+        if (state.equals(StateUtils.PLAYING)) {
+            yourButton.setEnabled(true);
+        }
+        //SUCCESSFUL_END
+        if (state.equals(StateUtils.SUCCESSFUL_END)) {
+            layout.setBackgroundColor(Color.GREEN);
+            exitCondition = true;
+            return;
+        }
+        //FAIL_END
+        if (state.equals(StateUtils.FAIL_END)) {
+            layout.setBackgroundColor(Color.RED);
+            exitCondition = true;
+            return;
+        }
     }
-
 
     public void displayPattern() {
         Runnable timerRunnable = new Runnable() {
@@ -199,6 +220,7 @@ public class GameActivity extends Activity implements AsyncResponse {
                     }, DELAY_MILLIS);
                 }
                 if (counter <= 0) {
+                    startGame();
                     return;
                 }
                 timerHandler.postDelayed(this, DELAY_MILLIS+100);
@@ -209,7 +231,37 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     }
 
+    public void startGame() {
+        String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/start";
+        JSONObject payloadJson = new JSONObject();
+
+        try {
+            payloadJson.put("room_id", roomId);
+            payloadJson.put("player_id", playerId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        okHttpHandler = new OkHttpHandler(this);
+        okHttpHandler.postRequest(url, payloadJson);
+    }
+
     public void youOnClick(View v) {
 
+        Log.i("press", "true");
+
+        String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/game";
+        JSONObject payloadJson = new JSONObject();
+
+        try {
+            payloadJson.put("room_id", roomId);
+            payloadJson.put("player_id", playerId);
+            payloadJson.put("action", "button_press");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        okHttpHandler = new OkHttpHandler(this);
+        okHttpHandler.postRequest(url, payloadJson);
     }
 }

@@ -89,6 +89,5 @@ public class MainActivity extends Activity implements AsyncResponse {
       reason = payloadJson.optString("reason");
       textView.setText(reason);
     }
-
   }
 }
