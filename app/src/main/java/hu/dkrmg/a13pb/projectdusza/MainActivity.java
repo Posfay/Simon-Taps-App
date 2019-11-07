@@ -39,14 +39,14 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public void requestClick(View v) {
 
-    String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/join";
+    String url = "http://szerver3.dkrmg.sulinet.hu:8081/join";
     JSONObject payloadJson = new JSONObject();
     roomId = roomIdEditText.getText().toString();
     playerId = UUID.randomUUID().toString();
 
     try {
-      payloadJson.put("room_id", roomId);
-      payloadJson.put("player_id", this.playerId);
+      payloadJson.put("roomId", roomId);
+      payloadJson.put("playerId", this.playerId);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -64,9 +64,10 @@ public class MainActivity extends Activity implements AsyncResponse {
     status = null;
     reason = null;
     JSONObject payloadJson = null;
-    long num = -1;
 
     try {
+      Log.i("JoinResponse", responseJsonString);
+
       payloadJson = new JSONObject(responseJsonString);
       status = payloadJson.getString("status");
 
@@ -75,9 +76,6 @@ public class MainActivity extends Activity implements AsyncResponse {
     }
 
     if (status.equals("OK")) {
-
-      num = payloadJson.optLong("number_of_players");
-      textView.setText(num + "");
 
       Intent intent = new Intent(getBaseContext(), GameActivity.class);
       Log.i("name", playerId);

@@ -78,8 +78,7 @@ public class GameActivity extends Activity implements AsyncResponse {
         return;
       }
 
-      String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/state?room_id=" + roomId
-          + "&player_id=" + playerId;
+      String url = "http://szerver3.dkrmg.sulinet.hu:8081/state/"+roomId+"/"+playerId;
 
       okHttpHandler = new OkHttpHandler(GameActivity.this, client);
       okHttpHandler.getRequest(url);
@@ -96,7 +95,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     String state = null;
 
     Log.i("GameResponse", responseJsonString);
-
     try {
 
       payloadJson = new JSONObject(responseJsonString);
@@ -147,7 +145,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   public void gamePreparing(JSONObject payloadJson) {
 
-    // intervalMilli = 200;
+    intervalMilli = 250;
     tileId = payloadJson.optLong("tile_id");
 
     if (tileId == 1) {
@@ -243,12 +241,12 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void startGame() {
-    String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/start";
+    String url = "http://szerver3.dkrmg.sulinet.hu:8081/start";
     JSONObject payloadJson = new JSONObject();
 
     try {
-      payloadJson.put("room_id", roomId);
-      payloadJson.put("player_id", playerId);
+      payloadJson.put("roomId", roomId);
+      payloadJson.put("playerId", playerId);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -265,13 +263,12 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     Log.i("press", "true");
 
-    String url = "http://szerver3.dkrmg.sulinet.hu:8080/simon-taps/game";
+    String url = "http://szerver3.dkrmg.sulinet.hu:8081/game";
     JSONObject payloadJson = new JSONObject();
 
     try {
-      payloadJson.put("room_id", roomId);
-      payloadJson.put("player_id", playerId);
-      payloadJson.put("action", "button_press");
+      payloadJson.put("roomId", roomId);
+      payloadJson.put("playerId", playerId);
     } catch (JSONException e) {
       e.printStackTrace();
     }
