@@ -12,7 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.500684" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintGuide_percent="0.500684"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
@@ -40,7 +44,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_green"
-        android:text="Green"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline6" />
 
@@ -49,7 +52,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_red"
-        android:text="Red"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintStart_toStartOf="@+id/guideline6" />
@@ -59,7 +61,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_yellow"
-        android:text="Yellow"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
@@ -68,7 +69,6 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_blue"
-        android:text="Blue"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
@@ -77,10 +77,20 @@
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:onClick="youOnClick"
-        android:text="You"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
+
+    <TextView
+        android:id="@+id/numtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="66dp"
+        android:layout_marginBottom="72dp"
+        app:layout_constraintBottom_toTopOf="@id/guideline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import okhttp3.OkHttpClient;
@@ -24,6 +26,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public String playerId;
   public String roomId;
 
+  TextView numberText;
   Button greenButton;
   Button redButton;
   Button yellowButton;
@@ -45,12 +48,15 @@ public class GameActivity extends Activity implements AsyncResponse {
   Handler delayHandler = new Handler();
   public static final long DELAY_MILLIS = 500;
 
+  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
+    numberText = findViewById(R.id.numtext);
     greenButton = findViewById(R.id.button3);
     redButton = findViewById(R.id.button4);
     yellowButton = findViewById(R.id.button5);
@@ -140,7 +146,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gameWaiting(JSONObject payloadJson) {
 
     numOfPlayers = payloadJson.optLong("number_of_players");
-    yourButton.setText(numOfPlayers + "");
+    numberText.setText("Players in room: " + numOfPlayers + " ");
   }
 
   public void gamePreparing(JSONObject payloadJson) {
@@ -262,6 +268,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void youOnClick(View v) {
 
     Log.i("press", "true");
+
+    v.startAnimation(buttonClick);
 
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/game";
     JSONObject payloadJson = new JSONObject();

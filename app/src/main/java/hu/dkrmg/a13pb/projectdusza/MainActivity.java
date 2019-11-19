@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,6 +27,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public OkHttpClient client;
 
+  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -38,6 +41,8 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   public void requestClick(View v) {
+
+    v.startAnimation(buttonClick);
 
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/join";
     JSONObject payloadJson = new JSONObject();
