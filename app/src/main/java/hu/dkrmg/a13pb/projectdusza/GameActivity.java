@@ -26,7 +26,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   public String playerId;
   public String roomId;
 
-  TextView numberText;
+  TextView feedbackText;
+  TextView roomIdText;
   Button greenButton;
   Button redButton;
   Button yellowButton;
@@ -56,7 +57,8 @@ public class GameActivity extends Activity implements AsyncResponse {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
-    numberText = findViewById(R.id.numtext);
+    feedbackText = findViewById(R.id.feedbacktext);
+    roomIdText = findViewById(R.id.roomIdText);
     greenButton = findViewById(R.id.button3);
     redButton = findViewById(R.id.button4);
     yellowButton = findViewById(R.id.button5);
@@ -68,6 +70,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
+    roomIdText.setText("Room ID: " + roomId);
 
     pattern = new ArrayList<>();
 
@@ -146,13 +149,14 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gameWaiting(JSONObject payloadJson) {
 
     numOfPlayers = payloadJson.optLong("number_of_players");
-    numberText.setText("Players in room: " + numOfPlayers + " ");
+    feedbackText.setText("Players in room: " + numOfPlayers + " ");
   }
 
   public void gamePreparing(JSONObject payloadJson) {
 
     intervalMilli = 250;
     tileId = payloadJson.optLong("tile_id");
+    feedbackText.setText("Prepare for the game (10 s)");
 
     if (tileId == 1) {
       yourButton.setBackgroundColor(getResources().getColor(R.color.green));
@@ -169,6 +173,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void gameShowingPattern (JSONObject payloadJson) {
+
+    feedbackText.setText("");
 
     if (!shown) {
 
@@ -247,6 +253,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void startGame() {
+
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/start";
     JSONObject payloadJson = new JSONObject();
 
@@ -262,6 +269,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void gamePlaying(JSONObject payloadJson) {
+    feedbackText.setText("The game has started!");
     yourButton.setEnabled(true);
   }
 
@@ -286,6 +294,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void gameEnd(Boolean success) {
+    feedbackText.setText("");
+
     if (success) {
       layout.setBackgroundColor(Color.GREEN);
       exitCondition = true;
