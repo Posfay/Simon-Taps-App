@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public OkHttpClient client;
 
-  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
+  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +67,14 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public void requestClick(View v) {
 
-    v.startAnimation(buttonClick);
-
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/join";
     JSONObject payloadJson = new JSONObject();
     roomId = roomIdEditText.getText().toString();
     playerId = UUID.randomUUID().toString();
+
+    if (roomId.equals("")) {
+      return;
+    }
 
     try {
       payloadJson.put("roomId", roomId);
@@ -83,11 +85,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+
+    v.startAnimation(buttonClick);
   }
 
   public void createClick(View v){
-
-    v.startAnimation(buttonClick);
 
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/join";
     JSONObject payloadJson = new JSONObject();
@@ -103,6 +105,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+
+    v.startAnimation(buttonClick);
   }
 
   String status;

@@ -97,6 +97,12 @@ public class GameActivity extends Activity implements AsyncResponse {
   };
 
   @Override
+  protected void onPause() {
+    super.onPause();
+    exitCondition = true;
+  }
+
+  @Override
   public void onRequestComplete(String responseJsonString) {
 
     JSONObject payloadJson = null;
@@ -277,8 +283,6 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     Log.i("press", "true");
 
-    v.startAnimation(buttonClick);
-
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/game";
     JSONObject payloadJson = new JSONObject();
 
@@ -291,6 +295,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+
+    v.startAnimation(buttonClick);
   }
 
   public void gameEnd(Boolean success) {
