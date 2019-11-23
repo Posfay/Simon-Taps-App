@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import okhttp3.OkHttpClient;
@@ -24,6 +26,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   public String playerId;
   public String roomId;
 
+  TextView feedbackText;
+  TextView roomIdText;
   Button greenButton;
   Button redButton;
   Button yellowButton;
@@ -45,12 +49,16 @@ public class GameActivity extends Activity implements AsyncResponse {
   Handler delayHandler = new Handler();
   public static final long DELAY_MILLIS = 500;
 
+  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
+    feedbackText = findViewById(R.id.feedbacktext);
+    roomIdText = findViewById(R.id.roomIdText);
     greenButton = findViewById(R.id.button3);
     redButton = findViewById(R.id.button4);
     yellowButton = findViewById(R.id.button5);
@@ -62,6 +70,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
+    roomIdText.setText("Room ID: " + roomId);
 
     pattern = new ArrayList<>();
 
@@ -86,6 +95,12 @@ public class GameActivity extends Activity implements AsyncResponse {
       getStateTimerHandler.postDelayed(getStateTimerRunnable, intervalMilli);
     }
   };
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    exitCondition = true;
+  }
 
   @Override
   public void onRequestComplete(String responseJsonString) {
@@ -140,13 +155,14 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gameWaiting(JSONObject payloadJson) {
 
     numOfPlayers = payloadJson.optLong("number_of_players");
-    yourButton.setText(numOfPlayers + "");
+    feedbackText.setText("Players in room: " + numOfPlayers + " ");
   }
 
   public void gamePreparing(JSONObject payloadJson) {
 
     intervalMilli = 250;
     tileId = payloadJson.optLong("tile_id");
+    feedbackText.setText("Prepare for the game (10 s)");
 
     if (tileId == 1) {
       yourButton.setBackgroundColor(getResources().getColor(R.color.green));
@@ -163,6 +179,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void gameShowingPattern (JSONObject payloadJson) {
+
+    feedbackText.setText("");
 
     if (!shown) {
 
@@ -241,6 +259,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void startGame() {
+
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/start";
     JSONObject payloadJson = new JSONObject();
 
@@ -256,6 +275,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void gamePlaying(JSONObject payloadJson) {
+    feedbackText.setText("The game has started!");
     yourButton.setEnabled(true);
   }
 
@@ -275,9 +295,13 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+
+    v.startAnimation(buttonClick);
   }
 
   public void gameEnd(Boolean success) {
+    feedbackText.setText("");
+
     if (success) {
       layout.setBackgroundColor(Color.GREEN);
       exitCondition = true;

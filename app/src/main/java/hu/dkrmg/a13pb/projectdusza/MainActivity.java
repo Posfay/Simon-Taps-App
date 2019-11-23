@@ -8,8 +8,11 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,6 +29,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public OkHttpClient client;
 
+  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,6 +38,29 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     textView = findViewById(R.id.textout);
     roomIdEditText = findViewById(R.id.editText);
+
+    roomIdEditText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+      }
+
+      @Override
+      public void afterTextChanged(Editable et) {
+        String s=et.toString();
+        if(!s.equals(s.toUpperCase()))
+        {
+          s=s.toUpperCase();
+          roomIdEditText.setText(s);
+          roomIdEditText.setSelection(roomIdEditText.length());
+        }
+      }
+    });
 
     client = new OkHttpClient();
   }
@@ -44,6 +72,10 @@ public class MainActivity extends Activity implements AsyncResponse {
     roomId = roomIdEditText.getText().toString();
     playerId = UUID.randomUUID().toString();
 
+    if (roomId.equals("")) {
+      return;
+    }
+
     try {
       payloadJson.put("roomId", roomId);
       payloadJson.put("playerId", this.playerId);
@@ -53,6 +85,28 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+
+    v.startAnimation(buttonClick);
+  }
+
+  public void createClick(View v){
+
+    String url = "http://szerver3.dkrmg.sulinet.hu:8081/join";
+    JSONObject payloadJson = new JSONObject();
+    roomId = UUID.randomUUID().toString().substring(0,5).toUpperCase();
+    playerId = UUID.randomUUID().toString();
+
+    try {
+      payloadJson.put("roomId", roomId);
+      payloadJson.put("playerId", this.playerId);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
+    okHttpHandler = new OkHttpHandler(this, client);
+    okHttpHandler.postRequest(url, payloadJson);
+
+    v.startAnimation(buttonClick);
   }
 
   String status;
