@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import okhttp3.OkHttpClient;
 
@@ -72,7 +73,8 @@ public class MainActivity extends Activity implements AsyncResponse {
     roomId = roomIdEditText.getText().toString();
     playerId = UUID.randomUUID().toString();
 
-    if (roomId.equals("")) {
+    if (roomId.equals("") || (roomId.length()<5)) {
+      Toast.makeText(this, "Invalid room name", Toast.LENGTH_LONG).show();
       return;
     }
 
