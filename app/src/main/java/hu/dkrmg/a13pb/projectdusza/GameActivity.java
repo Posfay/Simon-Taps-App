@@ -33,6 +33,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   Button yellowButton;
   Button blueButton;
   Button yourButton;
+  Button leaveRoomButton;
   ConstraintLayout layout;
 
   long numOfPlayers = -1;
@@ -64,9 +65,11 @@ public class GameActivity extends Activity implements AsyncResponse {
     yellowButton = findViewById(R.id.button5);
     blueButton = findViewById(R.id.button6);
     yourButton = findViewById(R.id.button7);
+    leaveRoomButton = findViewById(R.id.leaveButton);
     layout = findViewById(R.id.layout);
 
     yourButton.setEnabled(false);
+    leaveRoomButton.setVisibility(View.VISIBLE);
 
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
@@ -163,6 +166,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     intervalMilli = 250;
     tileId = payloadJson.optLong("tile_id");
     feedbackText.setText("Prepare for the game (10 s)");
+    leaveRoomButton.setVisibility(View.GONE);
 
     if (tileId == 1) {
       yourButton.setBackgroundColor(getResources().getColor(R.color.green));
@@ -288,6 +292,25 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     try {
       payloadJson.put("roomId", roomId);
+      payloadJson.put("playerId", playerId);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
+    okHttpHandler = new OkHttpHandler(this, client);
+    okHttpHandler.postRequest(url, payloadJson);
+
+    v.startAnimation(buttonClick);
+  }
+
+  public void leaveRoomOnClick(View v) {
+
+    Log.i("leave", "true");
+
+    String url = "http://szerver3.dkrmg.sulinet.hu:8081/leave";
+    JSONObject payloadJson = new JSONObject();
+
+    try {
       payloadJson.put("playerId", playerId);
     } catch (JSONException e) {
       e.printStackTrace();
