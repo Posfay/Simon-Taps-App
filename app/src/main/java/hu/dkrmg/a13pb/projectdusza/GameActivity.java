@@ -60,6 +60,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   Handler delayHandler = new Handler();
   public static final long DELAY_MILLIS = 500;
 
+  public static final String BASE_URL = ServerUtil.PROTOCOL+ServerUtil.HOSTNAME+":"+ServerUtil.PORT+"/";
+
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
 
   @Override
@@ -111,14 +113,13 @@ public class GameActivity extends Activity implements AsyncResponse {
 
       if (offlineTime >= 3000) {
         Log.i("offline", String.valueOf(offlineTime));
-        Intent intent = new Intent(getBaseContext(), MainActivity.class); //Going back to MainActivity
-        startActivity(intent);
+        backToMainActivity();
       }
 
       //Getstate request
       if (connected) {
         offlineTime = 0;
-        String url = "http://szerver3.dkrmg.sulinet.hu:8081/state/" + roomId + "/" + playerId;
+        String url = BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
 
         okHttpHandler = new OkHttpHandler(GameActivity.this, client);
         okHttpHandler.getRequest(url);
@@ -153,66 +154,68 @@ public class GameActivity extends Activity implements AsyncResponse {
   @Override
   public void onRequestComplete(String responseJsonString) {
 
-    JSONObject payloadJson = null;
+    JSONObject responseJson = null;
     String status = null;
     String state = null;
 
     Log.i("GameResponse", responseJsonString);
     try {
 
-      payloadJson = new JSONObject(responseJsonString);
-      status = payloadJson.optString("status");
-      state = payloadJson.optString("game_state");
+      responseJson = new JSONObject(responseJsonString);
+      status = responseJson.optString(ServerUtil.ResponseParameter.STATUS.toString());
+      state = responseJson.optString(ServerUtil.ResponseParameter.GAME_STATE.toString());
 
     } catch (JSONException e) {
       e.printStackTrace();
     }
 
     //-----------------------------------EXAMINING GAME STATES--------------------------------------
-
     if (!status.equals("OK")) {
       return;
     }
 
     // WAITING
-    if (state.equals(StateUtils.WAITING)) {
-      gameWaiting(payloadJson);
+    if (state.equals(ServerUtil.State.WAITING.toString())) {
+      gameWaiting(responseJson);
     }
     // PREPARING
-    if (state.equals(StateUtils.PREPARING)) {
-      gamePreparing(payloadJson);
+    if (state.equals(ServerUtil.State.PREPARING.toString())) {
+      gamePreparing(responseJson);
     }
     // SHOWING_PATTERN
-    if (state.equals(StateUtils.SHOWING_PATTERN)) {
-      gameShowingPattern(payloadJson);
+    if (state.equals(ServerUtil.State.SHOWING_PATTERN.toString())) {
+      gameShowingPattern(responseJson);
     }
     // PLAYING
-    if (state.equals(StateUtils.PLAYING)) {
-      gamePlaying(payloadJson);
+    if (state.equals(ServerUtil.State.PLAYING.toString())) {
+      gamePlaying(responseJson);
     }
     // SUCCESSFUL_END
-    if (state.equals(StateUtils.SUCCESSFUL_END)) {
+    if (state.equals(ServerUtil.State.SUCCESSFUL_END.toString())) {
       gameEnd(true);
       return;
     }
     // FAIL_END
-    if (state.equals(StateUtils.FAIL_END)) {
+    if (state.equals(ServerUtil.State.FAIL_END.toString())) {
       gameEnd(false);
       return;
+    }
+    //LEAVE ROOM
+    if (responseJson.optBoolean(ServerUtil.ResponseParameter.LEFT.toString())) {
+      backToMainActivity();
     }
   }
 
   //-----------------------------------------GAME STATES--------------------------------------------
   public void gameWaiting(JSONObject payloadJson) {
-
-    numOfPlayers = payloadJson.optLong("number_of_players");
+    numOfPlayers = payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_PLAYERS.toString());
     feedbackText.setText("Players in room: " + numOfPlayers + " ");
   }
 
   public void gamePreparing(JSONObject payloadJson) {
 
     intervalMilli = 250;
-    tileId = payloadJson.optLong("tile_id");
+    tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
     feedbackText.setText("Prepare for the game (10 s)");
     leaveRoomButton.setVisibility(View.GONE);
 
@@ -236,7 +239,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (!shown) {
 
-      wordPattern = payloadJson.optString("pattern");
+      wordPattern = payloadJson.optString(ServerUtil.ResponseParameter.PATTERN.toString());
       pattern.clear();
 
       for (int i = 0; i < wordPattern.length(); i++) {
@@ -312,12 +315,12 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   public void startGame() {
 
-    String url = "http://szerver3.dkrmg.sulinet.hu:8081/start";
+    String url = BASE_URL+ServerUtil.Endpoint.START.toString();
     JSONObject payloadJson = new JSONObject();
 
     try {
-      payloadJson.put("roomId", roomId);
-      payloadJson.put("playerId", playerId);
+      payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -336,12 +339,12 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     Log.i("press", "true");
 
-    String url = "http://szerver3.dkrmg.sulinet.hu:8081/game";
+    String url = BASE_URL+ServerUtil.Endpoint.GAME.toString();
     JSONObject payloadJson = new JSONObject();
 
     try {
-      payloadJson.put("roomId", roomId);
-      payloadJson.put("playerId", playerId);
+      payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -357,7 +360,18 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     v.startAnimation(buttonClick);
     vibrator.vibrate(250);
-    leaveRoom();
+
+    String url = BASE_URL+ServerUtil.Endpoint.LEAVE.toString();
+    JSONObject payloadJson = new JSONObject();
+
+    try {
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
+    okHttpHandler = new OkHttpHandler(this, client);
+    okHttpHandler.postRequest(url, payloadJson);
   }
 
   //END OF THE GAME
@@ -376,25 +390,10 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   //LEAVING ROOM
-  public void leaveRoom() {
+  public void backToMainActivity() {
     Log.i("leave", "true");
-
-    String url = "http://szerver3.dkrmg.sulinet.hu:8081/leave";
-    JSONObject payloadJson = new JSONObject();
-
-    try {
-      payloadJson.put("playerId", playerId);
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
-
-    okHttpHandler = new OkHttpHandler(this, client);
-    okHttpHandler.postRequest(url, payloadJson);
-
-    if (payloadJson.optString("status").equals("OK")) {
-      Intent intent = new Intent(getBaseContext(), MainActivity.class);
-      startActivity(intent);
-    }
+    finish();
+    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+    startActivity(intent);
   }
-
 }

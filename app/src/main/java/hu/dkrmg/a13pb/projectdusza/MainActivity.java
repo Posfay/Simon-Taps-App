@@ -41,6 +41,8 @@ public class MainActivity extends Activity implements AsyncResponse {
   String status;
   String reason;
 
+  public static final String BASE_URL = ServerUtil.PROTOCOL+ServerUtil.HOSTNAME+":"+ServerUtil.PORT+"/";
+
   public Vibrator vibrator;
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
@@ -121,7 +123,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     if (connected) {
       Log.i("internet", connected.toString());
       Log.i("request","sent");
-      String url = "http://szerver3.dkrmg.sulinet.hu:8081/join";
+      String url = BASE_URL+ServerUtil.Endpoint.JOIN.toString();
       JSONObject payloadJson = new JSONObject();
       roomId = roomIdEditText.getText().toString();
       playerId = UUID.randomUUID().toString();
@@ -134,8 +136,8 @@ public class MainActivity extends Activity implements AsyncResponse {
       }
 
       try {
-        payloadJson.put("roomId", roomId);
-        payloadJson.put("playerId", this.playerId);
+        payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
+        payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), this.playerId);
       } catch (JSONException e) {
         e.printStackTrace();
       }
@@ -154,18 +156,17 @@ public class MainActivity extends Activity implements AsyncResponse {
     connectionCheck();
     if (!connected) {
       //no internet
-      //TODO dialog
     }
 
     if (connected) {
-      String url = "http://szerver3.dkrmg.sulinet.hu:8081/join";
+    String url = BASE_URL+ServerUtil.Endpoint.CREATE.toString();
       JSONObject payloadJson = new JSONObject();
       roomId = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
       playerId = UUID.randomUUID().toString();
 
       try {
-        payloadJson.put("roomId", roomId);
-        payloadJson.put("playerId", this.playerId);
+        payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
+        payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), this.playerId);
       } catch (JSONException e) {
         e.printStackTrace();
       }
@@ -180,6 +181,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   //Open settings
   public void settingsClick(View v) {
+    finish();
     Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
     startActivity(intent);
 
@@ -199,7 +201,7 @@ public class MainActivity extends Activity implements AsyncResponse {
       Log.i("JoinResponse", responseJsonString);
 
       payloadJson = new JSONObject(responseJsonString);
-      status = payloadJson.getString("status");
+      status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
 
     } catch (JSONException e) {
       e.printStackTrace();
@@ -212,11 +214,12 @@ public class MainActivity extends Activity implements AsyncResponse {
       Intent intent = new Intent(getBaseContext(), GameActivity.class);
       Log.i("name", playerId);
 
+      finish();
       intent.putExtra("EXTRA_PLAYER_ID", playerId);
       intent.putExtra("EXTRA_ROOM_ID", roomId);
       startActivity(intent);
     } else {
-      reason = payloadJson.optString("reason");
+      reason = payloadJson.optString(ServerUtil.ResponseParameter.REASON.toString());
       textView.setText(reason);
     }
   }
