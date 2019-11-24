@@ -7,24 +7,32 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
 
+  //------------------------------------DECLARING VARIABLES-----------------------------------------
   public OkHttpHandler okHttpHandler;
   public OkHttpClient client;
   public String playerId;
   public String roomId;
+  public Vibrator vibrator;
 
   TextView feedbackText;
   TextView roomIdText;
@@ -42,9 +50,11 @@ public class GameActivity extends Activity implements AsyncResponse {
   String wordPattern = "";
   Boolean shown = false;
   Boolean exitCondition = false;
+  Boolean connected = false;
 
   Handler getStateTimerHandler = new Handler();
   long intervalMilli = 1000;
+  long offlineTime = 0;
 
   Handler timerHandler = new Handler();
   Handler delayHandler = new Handler();
@@ -58,6 +68,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
+    //----------------------------------FINDING COMPONENTS------------------------------------------
     feedbackText = findViewById(R.id.feedbacktext);
     roomIdText = findViewById(R.id.roomIdText);
     greenButton = findViewById(R.id.button3);
@@ -68,20 +79,22 @@ public class GameActivity extends Activity implements AsyncResponse {
     leaveRoomButton = findViewById(R.id.leaveButton);
     layout = findViewById(R.id.layout);
 
-    yourButton.setEnabled(false);
-    leaveRoomButton.setVisibility(View.VISIBLE);
-
-    playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
-    roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
-    roomIdText.setText("Room ID: " + roomId);
-
     pattern = new ArrayList<>();
 
     client = new OkHttpClient();
-
+    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
+
+    yourButton.setEnabled(false);
+    leaveRoomButton.setVisibility(View.VISIBLE);
+
+    //Getting Player ID and Room ID from MainACtivity
+    playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
+    roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
+    roomIdText.setText("Room ID: " + roomId);
   }
 
+  //-----------------------------------GETSTATE REQUEST (REPEATED)----------------------------------
   Runnable getStateTimerRunnable = new Runnable() {
     @Override
     public void run() {
@@ -90,10 +103,26 @@ public class GameActivity extends Activity implements AsyncResponse {
         return;
       }
 
-      String url = "http://szerver3.dkrmg.sulinet.hu:8081/state/"+roomId+"/"+playerId;
+      connectionCheck();
+      if (!connected) {
+        offlineTime += intervalMilli;
+        Toast.makeText(GameActivity.this, "No connection!", Toast.LENGTH_SHORT).show();
+      }
 
-      okHttpHandler = new OkHttpHandler(GameActivity.this, client);
-      okHttpHandler.getRequest(url);
+      if (offlineTime >= 3000) {
+        Log.i("offline", String.valueOf(offlineTime));
+        Intent intent = new Intent(getBaseContext(), MainActivity.class); //Going back to MainActivity
+        startActivity(intent);
+      }
+
+      //Getstate request
+      if (connected) {
+        offlineTime = 0;
+        String url = "http://szerver3.dkrmg.sulinet.hu:8081/state/" + roomId + "/" + playerId;
+
+        okHttpHandler = new OkHttpHandler(GameActivity.this, client);
+        okHttpHandler.getRequest(url);
+      }
 
       getStateTimerHandler.postDelayed(getStateTimerRunnable, intervalMilli);
     }
@@ -102,9 +131,25 @@ public class GameActivity extends Activity implements AsyncResponse {
   @Override
   protected void onPause() {
     super.onPause();
-    exitCondition = true;
+    exitCondition = true; //No more getstate requests, when exits this activity
   }
 
+  //Checking internet connection
+  public void connectionCheck() {
+    ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+    if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+            connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+      //We are connected to a network
+      connected = true;
+    }
+    else {
+      //No internet :(
+      connected = false;
+    }
+    Log.i("connected",connected.toString() );
+  }
+
+  //SUCCESSFUL REQUEST
   @Override
   public void onRequestComplete(String responseJsonString) {
 
@@ -122,6 +167,8 @@ public class GameActivity extends Activity implements AsyncResponse {
     } catch (JSONException e) {
       e.printStackTrace();
     }
+
+    //-----------------------------------EXAMINING GAME STATES--------------------------------------
 
     if (!status.equals("OK")) {
       return;
@@ -155,6 +202,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     }
   }
 
+  //-----------------------------------------GAME STATES--------------------------------------------
   public void gameWaiting(JSONObject payloadJson) {
 
     numOfPlayers = payloadJson.optLong("number_of_players");
@@ -283,6 +331,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     yourButton.setEnabled(true);
   }
 
+  //OWN BUTTON CLICKED
   public void youOnClick(View v) {
 
     Log.i("press", "true");
@@ -301,10 +350,33 @@ public class GameActivity extends Activity implements AsyncResponse {
     okHttpHandler.postRequest(url, payloadJson);
 
     v.startAnimation(buttonClick);
+    vibrator.vibrate(250);
   }
 
   public void leaveRoomOnClick(View v) {
 
+    v.startAnimation(buttonClick);
+    vibrator.vibrate(250);
+    leaveRoom();
+  }
+
+  //END OF THE GAME
+  public void gameEnd(Boolean success) {
+    feedbackText.setText("");
+    yourButton.setEnabled(false);
+
+    if (success) {
+      layout.setBackgroundColor(Color.GREEN);
+      exitCondition = true;
+    }
+    if (!success) {
+      layout.setBackgroundColor(Color.RED);
+      exitCondition = true;
+    }
+  }
+
+  //LEAVING ROOM
+  public void leaveRoom() {
     Log.i("leave", "true");
 
     String url = "http://szerver3.dkrmg.sulinet.hu:8081/leave";
@@ -319,19 +391,10 @@ public class GameActivity extends Activity implements AsyncResponse {
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
 
-    v.startAnimation(buttonClick);
-  }
-
-  public void gameEnd(Boolean success) {
-    feedbackText.setText("");
-
-    if (success) {
-      layout.setBackgroundColor(Color.GREEN);
-      exitCondition = true;
-    }
-    if (!success) {
-      layout.setBackgroundColor(Color.RED);
-      exitCondition = true;
+    if (payloadJson.optString("status").equals("OK")) {
+      Intent intent = new Intent(getBaseContext(), MainActivity.class);
+      startActivity(intent);
     }
   }
+
 }
