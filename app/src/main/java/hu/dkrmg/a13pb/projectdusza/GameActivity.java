@@ -9,12 +9,14 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -34,6 +36,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public String playerId;
   public String roomId;
   public Vibrator vibrator;
+  public static Integer VIBRATION_LENGTH = 250;
 
   TextView feedbackText;
   TextView roomIdText;
@@ -155,6 +158,20 @@ public class GameActivity extends Activity implements AsyncResponse {
       connected = false;
     }
     Log.i("connected", connected.toString());
+  }
+
+  //Vibrator, checking settings
+  public void preferredVibration() {
+
+    //Vibrations check
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    Boolean vibrationsState = prefs.getBoolean("vibrations", true);
+    if (vibrationsState) {
+      vibrator.vibrate(VIBRATION_LENGTH);
+    }
+    if (!vibrationsState) {
+      return;
+    }
   }
 
   // SUCCESSFUL REQUEST
@@ -358,7 +375,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void youOnClick(View v) {
 
     v.startAnimation(buttonClick);
-    vibrator.vibrate(250);
+    preferredVibration();
 
     Log.i("press", "true");
 
@@ -380,7 +397,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void leaveRoomOnClick(View v) {
 
     v.startAnimation(buttonClick);
-    vibrator.vibrate(250);
+    preferredVibration();
 
     String url = BASE_URL + ServerUtil.Endpoint.LEAVE.toString();
 
@@ -401,16 +418,19 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     feedbackText.setText("");
     yourButton.setEnabled(false);
+    exitCondition = true;
+
+    finish();
+    Intent intent = new Intent(getBaseContext(), EndScreenActivity.class);
 
     if (success) {
-
-      layout.setBackgroundColor(Color.GREEN);
-      exitCondition = true;
-      return;
+      intent.putExtra("win",true);
+    } else {
+      intent.putExtra("win",false);
     }
 
     layout.setBackgroundColor(Color.RED);
-    exitCondition = true;
+    startActivity(intent);
   }
 
   // LEAVING ROOM
