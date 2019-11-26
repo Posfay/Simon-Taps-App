@@ -7,7 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,6 +20,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -29,8 +32,7 @@ import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
 
-  // ------------------------------------DECLARING
-  // VARIABLES-----------------------------------------
+  // ------------------------------------DECLARING VARIABLES---------------------------------------
   public OkHttpHandler okHttpHandler;
   public OkHttpClient client;
   public String playerId;
@@ -45,7 +47,6 @@ public class GameActivity extends Activity implements AsyncResponse {
   Button yellowButton;
   Button blueButton;
   Button yourButton;
-  Button leaveRoomButton;
   ConstraintLayout layout;
 
   long numOfPlayers = -1;
@@ -55,6 +56,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   Boolean shown = false;
   Boolean exitCondition = false;
   Boolean connected = false;
+  Boolean leavable = false;
 
   Handler getStateTimerHandler = new Handler();
   long intervalMilli = 1000;
@@ -83,7 +85,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     yellowButton = findViewById(R.id.button5);
     blueButton = findViewById(R.id.button6);
     yourButton = findViewById(R.id.button7);
-    leaveRoomButton = findViewById(R.id.leaveButton);
     layout = findViewById(R.id.layout);
 
     pattern = new ArrayList<>();
@@ -93,7 +94,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
 
     yourButton.setEnabled(false);
-    leaveRoomButton.setVisibility(View.VISIBLE);
+    leavable = true;
 
     // Getting Player ID and Room ID from MainACtivity
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
@@ -245,7 +246,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   public void gamePreparing(JSONObject payloadJson) {
 
-    leaveRoomButton.setVisibility(View.GONE);
+    leavable = false;
     feedbackText.setText("Prepare for the game (10 s)");
 
     intervalMilli = 250;
@@ -394,9 +395,8 @@ public class GameActivity extends Activity implements AsyncResponse {
     okHttpHandler.postRequest(url, payloadJson);
   }
 
-  public void leaveRoomOnClick(View v) {
+  public void leaveRoomOnClick() {
 
-    v.startAnimation(buttonClick);
     preferredVibration();
 
     String url = BASE_URL + ServerUtil.Endpoint.LEAVE.toString();
@@ -411,6 +411,37 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+  }
+
+  //BACK BUTTON PRESSED
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+      if (!leavable) {
+        return false;
+      }
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setMessage("Do you want to leave the room?");
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          preferredVibration();
+          leaveRoomOnClick();
+        }
+      });
+      builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          preferredVibration();
+        }
+      });
+      builder.setCancelable(false);
+
+      AlertDialog dialog = builder.create();
+
+      dialog.show();
+      return true;
+    }
+    return super.onKeyDown(keyCode, event);
   }
 
   // END OF THE GAME

@@ -1,11 +1,14 @@
 package hu.dkrmg.a13pb.projectdusza;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.CompoundButton;
@@ -67,10 +70,36 @@ public class SettingsActivity extends AppCompatActivity {
     }
   }
 
-  //LEAVING ACTIVITY
-  public void backToMainActivity(View v) {
+  //BACK BUTTON PRESSED
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-    v.startAnimation(buttonClick);
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setMessage("Back to menu?");
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          preferredVibration();
+          backToMainActivity();
+        }
+      });
+      builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          preferredVibration();
+        }
+      });
+      builder.setCancelable(false);
+
+      AlertDialog dialog = builder.create();
+
+      dialog.show();
+      return true;
+    }
+    return super.onKeyDown(keyCode, event);
+  }
+
+  //LEAVING ACTIVITY
+  public void backToMainActivity() {
+
     preferredVibration();
 
     finish();

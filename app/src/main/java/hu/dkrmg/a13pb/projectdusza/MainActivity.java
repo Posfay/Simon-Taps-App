@@ -20,6 +20,7 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
@@ -219,9 +220,40 @@ public class MainActivity extends Activity implements AsyncResponse {
     v.startAnimation(buttonClick);
     preferredVibration();
 
+    finish();
     Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
     startActivity(intent);
   }
+
+  //BACK BUTTON PRESSED
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+      preferredVibration();
+
+      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+      builder.setMessage("Do you want to exit?");
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          preferredVibration();
+          finish();
+          System.exit(0);
+        }
+      });
+      builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+         preferredVibration();
+        }
+      });
+      builder.setCancelable(false);
+
+      AlertDialog dialog = builder.create();
+
+      dialog.show();
+      return true;
+    }
+    return super.onKeyDown(keyCode, event);
+  }
+
 
   // Successful request
   @Override
