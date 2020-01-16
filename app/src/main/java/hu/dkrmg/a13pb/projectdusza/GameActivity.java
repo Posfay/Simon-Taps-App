@@ -11,14 +11,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -39,7 +36,6 @@ public class GameActivity extends Activity implements AsyncResponse {
   public String playerId;
   public String roomId;
   public Vibrator vibrator;
-  public static Integer VIBRATION_LENGTH = 250;
 
   TextView feedbackText;
   TextView roomIdText;
@@ -162,20 +158,6 @@ public class GameActivity extends Activity implements AsyncResponse {
       connected = false;
     }
     Log.i("connected", connected.toString());
-  }
-
-  //Vibrator, checking settings
-  public void preferredVibration() {
-
-    //Vibrations check
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    Boolean vibrationsState = prefs.getBoolean("vibrations", true);
-    if (vibrationsState) {
-      vibrator.vibrate(VIBRATION_LENGTH);
-    }
-    if (!vibrationsState) {
-      return;
-    }
   }
 
   // SUCCESSFUL REQUEST
@@ -379,7 +361,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void youOnClick(View v) {
 
     v.startAnimation(buttonClick);
-    preferredVibration();
+    VibrationUtil.preferredVibration(GameActivity.this, vibrator);
 
     Log.i("press", "true");
 
@@ -400,7 +382,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   public void leaveRoomOnClick() {
 
-    preferredVibration();
+    VibrationUtil.preferredVibration(GameActivity.this, vibrator);
 
     String url = BASE_URL + ServerUtil.Endpoint.LEAVE.toString();
 
@@ -416,11 +398,11 @@ public class GameActivity extends Activity implements AsyncResponse {
     okHttpHandler.postRequest(url, payloadJson);
   }
 
-  //BACK BUTTON PRESSED
+  // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-      preferredVibration();
+      VibrationUtil.preferredVibration(GameActivity.this, vibrator);
 
       if (!leavable) {
         return false;
@@ -430,13 +412,13 @@ public class GameActivity extends Activity implements AsyncResponse {
       builder.setMessage("Do you want to leave the room?");
       builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
-          preferredVibration();
+          VibrationUtil.preferredVibration(GameActivity.this, vibrator);
           leaveRoomOnClick();
         }
       });
       builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
-          preferredVibration();
+          VibrationUtil.preferredVibration(GameActivity.this, vibrator);
         }
       });
       builder.setCancelable(false);
@@ -460,9 +442,9 @@ public class GameActivity extends Activity implements AsyncResponse {
     Intent intent = new Intent(getBaseContext(), EndScreenActivity.class);
 
     if (success) {
-      intent.putExtra("win",true);
+      intent.putExtra("win", true);
     } else {
-      intent.putExtra("win",false);
+      intent.putExtra("win", false);
     }
 
     startActivity(intent);

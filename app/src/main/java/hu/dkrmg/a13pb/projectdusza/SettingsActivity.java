@@ -7,16 +7,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.Toast;
-
-import java.security.PublicKey;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,7 +21,6 @@ public class SettingsActivity extends AppCompatActivity {
   SharedPreferences prefs;
 
   public Vibrator vibrator;
-  public static Integer VIBRATION_LENGTH = 250;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,42 +46,28 @@ public class SettingsActivity extends AppCompatActivity {
         } else {
           editor.putBoolean("vibrations", false);
         }
-        editor.commit();
+        editor.apply();
       }
     });
   }
 
-  //Vibration, checks settings
-  public void preferredVibration() {
-
-    //Vibrations check
-    prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    vibrationsState = prefs.getBoolean("vibrations", true);
-    if (vibrationsState) {
-      vibrator.vibrate(VIBRATION_LENGTH);
-    }
-    if (!vibrationsState) {
-      return;
-    }
-  }
-
-  //BACK BUTTON PRESSED
+  // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-      preferredVibration();
+      VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
       builder.setMessage("Back to menu?");
       builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
-          preferredVibration();
+          VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
           backToMainActivity();
         }
       });
       builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
-          preferredVibration();
+          VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
         }
       });
       builder.setCancelable(false);
@@ -101,10 +80,10 @@ public class SettingsActivity extends AppCompatActivity {
     return super.onKeyDown(keyCode, event);
   }
 
-  //LEAVING ACTIVITY
+  // LEAVING ACTIVITY
   public void backToMainActivity() {
 
-    preferredVibration();
+    VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
 
     finish();
 
