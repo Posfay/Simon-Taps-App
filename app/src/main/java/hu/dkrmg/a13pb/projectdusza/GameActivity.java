@@ -355,6 +355,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     feedbackText.setText("The game has started!");
     yourButton.setEnabled(true);
+
+    shown = false;
   }
 
   // OWN BUTTON CLICKED
