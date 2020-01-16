@@ -28,7 +28,6 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-
 import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
@@ -84,11 +83,11 @@ public class GameActivity extends Activity implements AsyncResponse {
     feedbackText = findViewById(R.id.feedBackText);
     roomIdText = findViewById(R.id.roomIdText);
     roundText = findViewById(R.id.roundText);
-    greenButton = findViewById(R.id.button3);
-    redButton = findViewById(R.id.button4);
-    yellowButton = findViewById(R.id.button5);
-    blueButton = findViewById(R.id.button6);
-    yourButton = findViewById(R.id.button7);
+    greenButton = findViewById(R.id.greenButton);
+    redButton = findViewById(R.id.redButton);
+    yellowButton = findViewById(R.id.yellowButton);
+    blueButton = findViewById(R.id.blueButton);
+    yourButton = findViewById(R.id.gameButton);
     layout = findViewById(R.id.layout);
 
     pattern = new ArrayList<>();
@@ -245,19 +244,19 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (tileId == 1) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.green));
+          ContextCompat.getColorStateList(this, R.color.green));
     }
     if (tileId == 2) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.red));
+          ContextCompat.getColorStateList(this, R.color.red));
     }
     if (tileId == 3) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.yellow));
+          ContextCompat.getColorStateList(this, R.color.yellow));
     }
     if (tileId == 4) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.blue));
+          ContextCompat.getColorStateList(this, R.color.blue));
     }
   }
 
