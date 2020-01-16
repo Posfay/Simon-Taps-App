@@ -65,8 +65,8 @@
         android:id="@+id/settingsButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:background="@android:drawable/ic_menu_manage"
         android:onClick="settingsClick"
-        android:text="S"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:textSize="25dp" />

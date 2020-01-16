@@ -22,6 +22,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.TextView;
@@ -76,6 +77,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
+
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedbacktext);
@@ -417,6 +420,8 @@ public class GameActivity extends Activity implements AsyncResponse {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
+      preferredVibration();
+
       if (!leavable) {
         return false;
       }
@@ -460,7 +465,6 @@ public class GameActivity extends Activity implements AsyncResponse {
       intent.putExtra("win",false);
     }
 
-    layout.setBackgroundColor(Color.RED);
     startActivity(intent);
   }
 

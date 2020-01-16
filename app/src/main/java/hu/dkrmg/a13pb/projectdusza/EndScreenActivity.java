@@ -3,13 +3,17 @@ package hu.dkrmg.a13pb.projectdusza;
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,6 +32,8 @@ public class EndScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_screen);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         resultText = findViewById(R.id.result);
@@ -58,10 +64,38 @@ public class EndScreenActivity extends AppCompatActivity {
         }
     }
 
-    //LEAVING ACTIVITY
-    public void backToMainActivity(View v) {
+    //BACK BUTTON PRESSED
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-        v.startAnimation(buttonClick);
+            preferredVibration();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Back to menu?");
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    preferredVibration();
+                    backToMainActivity();
+                }
+            });
+            builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    preferredVibration();
+                }
+            });
+            builder.setCancelable(false);
+
+            AlertDialog dialog = builder.create();
+
+            dialog.show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    //LEAVING ACTIVITY
+    public void backToMainActivity() {
+
         preferredVibration();
 
         finish();

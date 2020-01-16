@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -27,12 +28,13 @@ public class SettingsActivity extends AppCompatActivity {
 
   public Vibrator vibrator;
   public static Integer VIBRATION_LENGTH = 250;
-  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
+
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -73,6 +75,8 @@ public class SettingsActivity extends AppCompatActivity {
   //BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+      preferredVibration();
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
       builder.setMessage("Back to menu?");

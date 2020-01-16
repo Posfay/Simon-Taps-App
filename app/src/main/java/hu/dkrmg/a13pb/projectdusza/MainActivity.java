@@ -22,6 +22,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -55,6 +56,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     textView = findViewById(R.id.textout);
     roomIdEditText = findViewById(R.id.editText);
