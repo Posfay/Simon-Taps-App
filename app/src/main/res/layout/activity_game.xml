@@ -40,7 +40,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/greenButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_green"
@@ -48,7 +48,7 @@
         app:layout_constraintEnd_toStartOf="@+id/guideline6" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/redButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_red"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="@+id/guideline6" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/yellowButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_yellow"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/blueButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_blue"
@@ -73,17 +73,18 @@
         app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/gameButton"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:onClick="youOnClick"
+        android:background="@drawable/button_standard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
     <TextView
-        android:id="@+id/feedbacktext"
+        android:id="@+id/feedBackText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="66dp"

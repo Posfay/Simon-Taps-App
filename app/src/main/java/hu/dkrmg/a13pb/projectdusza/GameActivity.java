@@ -26,6 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+
 import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
@@ -77,13 +80,13 @@ public class GameActivity extends Activity implements AsyncResponse {
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
-    feedbackText = findViewById(R.id.feedbacktext);
+    feedbackText = findViewById(R.id.feedBackText);
     roomIdText = findViewById(R.id.roomIdText);
-    greenButton = findViewById(R.id.button3);
-    redButton = findViewById(R.id.button4);
-    yellowButton = findViewById(R.id.button5);
-    blueButton = findViewById(R.id.button6);
-    yourButton = findViewById(R.id.button7);
+    greenButton = findViewById(R.id.greenButton);
+    redButton = findViewById(R.id.redButton);
+    yellowButton = findViewById(R.id.yellowButton);
+    blueButton = findViewById(R.id.blueButton);
+    yourButton = findViewById(R.id.gameButton);
     layout = findViewById(R.id.layout);
 
     pattern = new ArrayList<>();
@@ -239,16 +242,20 @@ public class GameActivity extends Activity implements AsyncResponse {
     tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
 
     if (tileId == 1) {
-      yourButton.setBackgroundColor(getResources().getColor(R.color.green));
+      ViewCompat.setBackgroundTintList(yourButton,
+              ContextCompat.getColorStateList(this, R.color.green));
     }
     if (tileId == 2) {
-      yourButton.setBackgroundColor(getResources().getColor(R.color.red));
+      ViewCompat.setBackgroundTintList(yourButton,
+              ContextCompat.getColorStateList(this, R.color.red));
     }
     if (tileId == 3) {
-      yourButton.setBackgroundColor(getResources().getColor(R.color.yellow));
+      ViewCompat.setBackgroundTintList(yourButton,
+              ContextCompat.getColorStateList(this, R.color.yellow));
     }
     if (tileId == 4) {
-      yourButton.setBackgroundColor(getResources().getColor(R.color.blue));
+      ViewCompat.setBackgroundTintList(yourButton,
+              ContextCompat.getColorStateList(this, R.color.blue));
     }
   }
 
