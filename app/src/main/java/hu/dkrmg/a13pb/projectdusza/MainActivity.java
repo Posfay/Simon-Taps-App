@@ -20,6 +20,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -138,6 +139,10 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#ffff00" alt. yellow
         break;
     }
+    Window window = this.getWindow();
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    window.setStatusBarColor(this.getResources().getColor(R.color.colorPrimary));
   }
 
   // Checking internet connection
