@@ -98,7 +98,7 @@
         android:id="@+id/roomIdText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ROOMID"
+        android:text="@string/room_id"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -108,8 +108,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:onClick="leaveRoomOnClick"
-        android:text="X"
-        android:textSize="25dp"
+        android:text="@string/exit_button"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

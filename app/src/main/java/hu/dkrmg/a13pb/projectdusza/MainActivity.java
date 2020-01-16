@@ -1,5 +1,6 @@
 package hu.dkrmg.a13pb.projectdusza;
 
+import java.util.Random;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -19,9 +20,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import okhttp3.OkHttpClient;
 
@@ -38,12 +43,17 @@ public class MainActivity extends Activity implements AsyncResponse {
   Boolean connected = false;
   String status;
   String reason;
+  Random randomBetweenOneFour = new Random();
+  public Button joinBut;
+  public Button createBut;
 
   public static final String BASE_URL =
       ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
 
   public Vibrator vibrator;
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
+
+  public final int vibrateLength = 10;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +94,41 @@ public class MainActivity extends Activity implements AsyncResponse {
     });
 
     client = new OkHttpClient();
+
+    // randomising button color
+    joinBut = findViewById(R.id.joinButton);
+    createBut = findViewById(R.id.createButton);
+
+    int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
+    switch (randomSwitchNum) {
+    case 1:
+      ViewCompat.setBackgroundTintList(joinBut, ContextCompat.getColorStateList(this, R.color.blue));
+      ViewCompat.setBackgroundTintList(createBut, ContextCompat.getColorStateList(this, R.color.blue));
+      createBut.setTextColor(getResources().getColor(R.color.blue));
+      //"#00b0ff" alt. blue
+      break;
+    case 2:
+      ViewCompat.setBackgroundTintList(joinBut, ContextCompat.getColorStateList(this, R.color.red));
+      ViewCompat.setBackgroundTintList(createBut, ContextCompat.getColorStateList(this, R.color.red));
+      createBut.setTextColor(getResources().getColor(R.color.red));
+      //#f44336" alt. red
+      break;
+    case 3:
+      ViewCompat.setBackgroundTintList(joinBut, ContextCompat.getColorStateList(this, R.color.green));
+      ViewCompat.setBackgroundTintList(createBut, ContextCompat.getColorStateList(this, R.color.green));
+      createBut.setTextColor(getResources().getColor(R.color.green));
+      //"#64dd17" alt. green
+      break;
+    case 4:
+      ViewCompat.setBackgroundTintList(joinBut, ContextCompat.getColorStateList(this, R.color.yellow));
+      ViewCompat.setBackgroundTintList(createBut, ContextCompat.getColorStateList(this, R.color.yellow));
+      createBut.setTextColor(getResources().getColor(R.color.yellow));
+      //"#ffff00" alt. yellow
+      break;
   }
+}
+
+
 
   // Checking internet connection
   public void connectionCheck() {
@@ -115,7 +159,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     builder.setMessage("No internet connection!");
     builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
-        vibrator.vibrate(250);
+        vibrator.vibrate(vibrateLength);
       }
     });
     builder.setCancelable(false);
@@ -129,7 +173,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   public void joinClick(View v) {
 
     v.startAnimation(buttonClick);
-    vibrator.vibrate(250);
+    vibrator.vibrate(vibrateLength);
 
     connectionCheck();
 
@@ -152,7 +196,7 @@ public class MainActivity extends Activity implements AsyncResponse {
       Toast.makeText(this, "Invalid room name", Toast.LENGTH_LONG).show();
 
       v.startAnimation(buttonClick);
-      vibrator.vibrate(250);
+      vibrator.vibrate(vibrateLength);
 
       return;
     }
@@ -172,7 +216,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   public void createClick(View v) {
 
     v.startAnimation(buttonClick);
-    vibrator.vibrate(250);
+    vibrator.vibrate(vibrateLength);
 
     connectionCheck();
 
@@ -202,7 +246,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   public void settingsClick(View v) {
 
     v.startAnimation(buttonClick);
-    vibrator.vibrate(250);
+    vibrator.vibrate(vibrateLength);
 
     finish();
 
