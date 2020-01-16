@@ -42,6 +42,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   TextView feedbackText;
   TextView roomIdText;
+  TextView roundText;
   Button greenButton;
   Button redButton;
   Button yellowButton;
@@ -82,11 +83,12 @@ public class GameActivity extends Activity implements AsyncResponse {
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedBackText);
     roomIdText = findViewById(R.id.roomIdText);
-    greenButton = findViewById(R.id.greenButton);
-    redButton = findViewById(R.id.redButton);
-    yellowButton = findViewById(R.id.yellowButton);
-    blueButton = findViewById(R.id.blueButton);
-    yourButton = findViewById(R.id.gameButton);
+    roundText = findViewById(R.id.roundText);
+    greenButton = findViewById(R.id.button3);
+    redButton = findViewById(R.id.button4);
+    yellowButton = findViewById(R.id.button5);
+    blueButton = findViewById(R.id.button6);
+    yourButton = findViewById(R.id.button7);
     layout = findViewById(R.id.layout);
 
     pattern = new ArrayList<>();
@@ -273,6 +275,8 @@ public class GameActivity extends Activity implements AsyncResponse {
       }
 
       displayPattern();
+
+      roundText.setText("ROUND: " + wordPattern.length());
 
       shown = true;
     }

@@ -102,6 +102,8 @@ public class MainActivity extends Activity implements AsyncResponse {
     joinBut = findViewById(R.id.joinButton);
     createBut = findViewById(R.id.createButton);
 
+    createBut.setEnabled(true);
+
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
     switch (randomSwitchNum) {
       case 1:
@@ -226,6 +228,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
+
+    createBut.setEnabled(false);
 
     connectionCheck();
 
