@@ -39,6 +39,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   TextView feedbackText;
   TextView roomIdText;
+  TextView roundText;
   Button greenButton;
   Button redButton;
   Button yellowButton;
@@ -79,6 +80,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedbacktext);
     roomIdText = findViewById(R.id.roomIdText);
+    roundText = findViewById(R.id.roundText);
     greenButton = findViewById(R.id.button3);
     redButton = findViewById(R.id.button4);
     yellowButton = findViewById(R.id.button5);
@@ -267,6 +269,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
       displayPattern();
 
+      roundText.setText("ROUND: " + wordPattern.length());
+
       shown = true;
     }
   }
@@ -355,6 +359,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     feedbackText.setText("The game has started!");
     yourButton.setEnabled(true);
+
+    shown = false;
   }
 
   // OWN BUTTON CLICKED

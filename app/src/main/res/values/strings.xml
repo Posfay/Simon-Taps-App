@@ -9,5 +9,6 @@
     <string name="simon_taps">This is the simon taps logo</string>
     <string name="scan_button">SCAN</string>
     <string name="or">or</string>
+    <string name="round">ROUND: </string>>
 
 </resources>
