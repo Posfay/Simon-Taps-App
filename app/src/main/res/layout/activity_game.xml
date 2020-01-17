@@ -76,7 +76,6 @@
         android:id="@+id/gameButton"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:onClick="youOnClick"
         android:background="@drawable/button_standard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +107,6 @@
         android:id="@+id/roundText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/round"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
