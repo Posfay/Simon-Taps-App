@@ -50,7 +50,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   ConstraintLayout layout;
 
   long numOfPlayers = -1;
-  long prevNumOfPlayers = 1;
+  long prevNumOfPlayers = 5;
   Long tileId = null;
   List<Integer> pattern;
   String wordPattern = "";
@@ -470,10 +470,10 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (success) {
       intent.putExtra("win", true);
-      intent.putExtra("successfulRounds", wordPattern.length());
+      intent.putExtra("successfulRounds", (long) wordPattern.length());
     } else {
       intent.putExtra("win", false);
-      intent.putExtra("successfulRounds", wordPattern.length()-1);
+      intent.putExtra("successfulRounds", (long) wordPattern.length()-1);
     }
 
     startActivity(intent);
