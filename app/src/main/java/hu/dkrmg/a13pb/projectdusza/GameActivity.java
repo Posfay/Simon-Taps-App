@@ -84,11 +84,11 @@ public class GameActivity extends Activity implements AsyncResponse {
     feedbackText = findViewById(R.id.feedBackText);
     roomIdText = findViewById(R.id.roomIdText);
     roundText = findViewById(R.id.roundText);
-    greenButton = findViewById(R.id.button3);
-    redButton = findViewById(R.id.button4);
-    yellowButton = findViewById(R.id.button5);
-    blueButton = findViewById(R.id.button6);
-    yourButton = findViewById(R.id.button7);
+    greenButton = findViewById(R.id.greenButton);
+    redButton = findViewById(R.id.redButton);
+    yellowButton = findViewById(R.id.yellowButton);
+    blueButton = findViewById(R.id.blueButton);
+    yourButton = findViewById(R.id.gameButton);
     layout = findViewById(R.id.layout);
 
     pattern = new ArrayList<>();
