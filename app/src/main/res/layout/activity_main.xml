@@ -15,7 +15,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_standard"
-        android:onClick="joinClick"
         android:text="@string/join_button"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -42,17 +41,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/joinButton" />
 
-    <TextView
-        android:id="@+id/textout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="38sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29000002" />
-
     <Button
         android:id="@+id/createButton"
         android:layout_width="0dp"
@@ -61,7 +49,6 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_ghost"
-        android:onClick="createClick"
         android:text="@string/create_button"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
@@ -78,7 +65,6 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_ghost"
-        android:onClick="settingsClick"
         android:text="@string/settings"
         android:textColor="#707070"
         android:textSize="24sp"

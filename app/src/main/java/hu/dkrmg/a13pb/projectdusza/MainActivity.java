@@ -38,7 +38,6 @@ public class MainActivity extends Activity implements AsyncResponse {
   public OkHttpClient client;
   public OkHttpHandler okHttpHandler;
 
-  public TextView textView;
   public EditText roomIdEditText;
   public String roomId;
   public String playerId;
@@ -48,6 +47,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   Random randomBetweenOneFour = new Random();
   public Button joinBut;
   public Button createBut;
+  public Button settingsBut;
 
   public static final String BASE_URL =
       ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
@@ -64,7 +64,6 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-    textView = findViewById(R.id.textout);
     roomIdEditText = findViewById(R.id.editText);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -104,8 +103,29 @@ public class MainActivity extends Activity implements AsyncResponse {
     // randomising button color
     joinBut = findViewById(R.id.joinButton);
     createBut = findViewById(R.id.createButton);
+    settingsBut = findViewById(R.id.settingsButton);
 
+    createBut.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        createClick(v);
+      }
+    });
     createBut.setEnabled(true);
+
+    joinBut.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        joinClick(v);
+      }
+    });
+
+    settingsBut.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        settingsClick(v);
+      }
+    });
 
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
     switch (randomSwitchNum) {
@@ -223,6 +243,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Creating room
+
   public void createClick(View v) {
 
     v.startAnimation(buttonClick);
@@ -329,7 +350,17 @@ public class MainActivity extends Activity implements AsyncResponse {
 
       reason = payloadJson.optString(ServerUtil.ResponseParameter.REASON.toString());
 
-      textView.setText(reason);
+      if (reason.equals("ROOM_ALREADY_EXISTS")) {
+        reason = "Room already exists";
+      }
+      if (reason.equals("ROOM_DOES_NOT_EXIST")) {
+        reason = "Room does not exist";
+      }
+      if (reason.equals("ROOM_IS_FULL")) {
+        reason = "Room is full";
+      }
+
+      Toast.makeText(this, reason, Toast.LENGTH_LONG).show();
     }
   }
 }

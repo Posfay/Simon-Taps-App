@@ -50,6 +50,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   ConstraintLayout layout;
 
   long numOfPlayers = -1;
+  long prevNumOfPlayers = 1;
   Long tileId = null;
   List<Integer> pattern;
   String wordPattern = "";
@@ -64,7 +65,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   Handler timerHandler = new Handler();
   Handler delayHandler = new Handler();
-  public static final long DELAY_MILLIS = 500;
+  public static final long DELAY_MILLIS = 400;
+  public static final long DELAY_DISPLAY = 1000;
 
   public static final String BASE_URL =
       ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
@@ -96,6 +98,12 @@ public class GameActivity extends Activity implements AsyncResponse {
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
 
+    yourButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        youOnClick(v);
+      }
+    });
     yourButton.setEnabled(false);
     leavable = true;
 
@@ -150,17 +158,12 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-        .getState() == NetworkInfo.State.CONNECTED ||
-        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-            .getState() == NetworkInfo.State.CONNECTED) {
-      // We are connected to a network
-      connected = true;
-
-    } else {
-      // No internet :(
-      connected = false;
-    }
+    // We are connected to a network
+    // No internet :(
+    connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+            .getState() == NetworkInfo.State.CONNECTED ||
+            connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                    .getState() == NetworkInfo.State.CONNECTED;
     Log.i("connected", connected.toString());
   }
 
@@ -231,6 +234,13 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     numOfPlayers = payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_PLAYERS.toString());
     feedbackText.setText("Players in room: " + numOfPlayers + " ");
+
+    if (numOfPlayers > prevNumOfPlayers) {
+      VibrationUtil.preferredVibration(GameActivity.this, vibrator);
+    }
+
+    prevNumOfPlayers = numOfPlayers;
+
   }
 
   public void gamePreparing(JSONObject payloadJson) {
@@ -273,7 +283,12 @@ public class GameActivity extends Activity implements AsyncResponse {
         pattern.add(Integer.valueOf(String.valueOf(wordPattern.charAt(i))));
       }
 
-      displayPattern();
+      timerHandler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          displayPattern();
+        }
+      }, DELAY_DISPLAY);
 
       roundText.setText("ROUND: " + wordPattern.length());
 
@@ -455,8 +470,10 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (success) {
       intent.putExtra("win", true);
+      intent.putExtra("successfulRounds", wordPattern.length());
     } else {
       intent.putExtra("win", false);
+      intent.putExtra("successfulRounds", wordPattern.length()-1);
     }
 
     startActivity(intent);

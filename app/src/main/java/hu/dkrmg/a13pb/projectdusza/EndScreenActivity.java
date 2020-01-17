@@ -18,6 +18,7 @@ public class EndScreenActivity extends AppCompatActivity {
   public Vibrator vibrator;
 
   Boolean win;
+  Long successfulRounds;
   TextView resultText;
   ImageView resultImage;
 
@@ -33,12 +34,17 @@ public class EndScreenActivity extends AppCompatActivity {
     resultImage = findViewById(R.id.resultImage);
     Resources res = getResources();
     win = getIntent().getBooleanExtra("win", false);
+    successfulRounds = getIntent().getLongExtra("successfulRounds",0);
 
     if (win) {
-      resultText.setText("You won!");
+      resultText.setText("Your score: " + successfulRounds);
+      if (successfulRounds >= 10) {
+        resultText.setText("You're amazing! " + resultText.toString());
+      }
       resultImage.setImageDrawable(res.getDrawable(R.drawable.godfathercat));
+
     } else {
-      resultText.setText("You lost!");
+      resultText.setText("Your score: " + successfulRounds);
       resultImage.setImageResource(R.drawable.cryingcat);
     }
   }
