@@ -69,6 +69,9 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
     // Always uppercase in textbox
     roomIdEditText.addTextChangedListener(new TextWatcher() {
 
@@ -139,10 +142,6 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#ffff00" alt. yellow
         break;
     }
-    Window window = this.getWindow();
-    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    window.setStatusBarColor(this.getResources().getColor(R.color.colorPrimary));
   }
 
   // Checking internet connection

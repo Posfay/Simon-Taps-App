@@ -28,7 +28,6 @@ import android.widget.Toast;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-
 import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
@@ -245,19 +244,19 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (tileId == 1) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.green));
+          ContextCompat.getColorStateList(this, R.color.green));
     }
     if (tileId == 2) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.red));
+          ContextCompat.getColorStateList(this, R.color.red));
     }
     if (tileId == 3) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.yellow));
+          ContextCompat.getColorStateList(this, R.color.yellow));
     }
     if (tileId == 4) {
       ViewCompat.setBackgroundTintList(yourButton,
-              ContextCompat.getColorStateList(this, R.color.blue));
+          ContextCompat.getColorStateList(this, R.color.blue));
     }
   }
 
