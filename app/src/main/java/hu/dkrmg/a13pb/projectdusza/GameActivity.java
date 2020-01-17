@@ -378,7 +378,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   public void gamePlaying() {
 
-    feedbackText.setText("The game has started!");
+    feedbackText.setText("The round has started!");
     yourButton.setEnabled(true);
 
     shown = false;
