@@ -65,7 +65,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   Handler timerHandler = new Handler();
   Handler delayHandler = new Handler();
-  public static final long DELAY_MILLIS = 400;
+  public static final long DELAY_MILLIS = 500;
   public static final long DELAY_DISPLAY = 1000;
 
   public static final String BASE_URL =
@@ -89,7 +89,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     redButton = findViewById(R.id.redButton);
     yellowButton = findViewById(R.id.yellowButton);
     blueButton = findViewById(R.id.blueButton);
-    yourButton = findViewById(R.id.gameButton);
     layout = findViewById(R.id.layout);
 
     pattern = new ArrayList<>();
@@ -98,19 +97,12 @@ public class GameActivity extends Activity implements AsyncResponse {
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
 
-    yourButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        youOnClick(v);
-      }
-    });
-    yourButton.setEnabled(false);
     leavable = true;
 
     // Getting Player ID and Room ID from MainACtivity
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
-    roomIdText.setText("Room ID: " + roomId);
+    roomIdText.setText(getString(R.string.room_id) + roomId);
   }
 
   // -----------------------------------GETSTATE REQUEST (REPEATED)---------------------------------
@@ -247,6 +239,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     leavable = false;
     feedbackText.setText("Prepare for the game (10 s)");
+    roomIdText.setText("");
 
     intervalMilli = 250;
 
@@ -255,24 +248,38 @@ public class GameActivity extends Activity implements AsyncResponse {
     if (tileId == 1) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.green));
+          yourButton = findViewById(R.id.greenButton);
     }
     if (tileId == 2) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.red));
+          yourButton = findViewById(R.id.redButton);
     }
     if (tileId == 3) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.yellow));
+          yourButton = findViewById(R.id.yellowButton);
     }
     if (tileId == 4) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.blue));
+          yourButton = findViewById(R.id.blueButton);
     }
+
+    yourButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        youOnClick(v);
+      }
+    });
+    yourButton.setEnabled(false);
   }
 
   public void gameShowingPattern(JSONObject payloadJson) {
 
     feedbackText.setText("");
+
+    yourButton.setEnabled(false);
 
     if (!shown) {
 
@@ -290,7 +297,7 @@ public class GameActivity extends Activity implements AsyncResponse {
         }
       }, DELAY_DISPLAY);
 
-      roundText.setText("ROUND: " + wordPattern.length());
+      roundText.setText(getString(R.string.round) + wordPattern.length());
 
       shown = true;
     }
@@ -306,6 +313,8 @@ public class GameActivity extends Activity implements AsyncResponse {
       public void run() {
         Integer current = pattern.remove(0);
         counter--;
+
+        VibrationUtil.preferredVibration(GameActivity.this, vibrator);
 
         if (current == 1) {
 
