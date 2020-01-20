@@ -225,9 +225,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (roomId.equals("") || (roomId.length() != 5)) {
 
-      Toast.makeText(this, "Invalid room name", Toast.LENGTH_LONG).show();
+      Toast.makeText(this, "Invalid room name", Toast.LENGTH_SHORT).show();
       return;
     }
+
+    joinBut.setEnabled(false);
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
@@ -317,6 +319,8 @@ public class MainActivity extends Activity implements AsyncResponse {
   @Override
   public void onRequestComplete(String responseJsonString) {
 
+    joinBut.setEnabled(true);
+
     JSONObject payloadJson = null;
     status = null;
     reason = null;
@@ -358,7 +362,7 @@ public class MainActivity extends Activity implements AsyncResponse {
         reason = "Room is full";
       }
 
-      Toast.makeText(this, reason, Toast.LENGTH_LONG).show();
+      Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
     }
   }
 }
