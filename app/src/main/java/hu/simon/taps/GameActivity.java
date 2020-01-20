@@ -246,24 +246,24 @@ public class GameActivity extends Activity implements AsyncResponse {
     tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
 
     if (tileId == 1) {
+      yourButton = findViewById(R.id.greenButton);
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.green));
-      yourButton = findViewById(R.id.greenButton);
     }
     if (tileId == 2) {
+      yourButton = findViewById(R.id.redButton);
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.red));
-      yourButton = findViewById(R.id.redButton);
     }
     if (tileId == 3) {
+      yourButton = findViewById(R.id.yellowButton);
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.yellow));
-      yourButton = findViewById(R.id.yellowButton);
     }
     if (tileId == 4) {
+      yourButton = findViewById(R.id.blueButton);
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.blue));
-      yourButton = findViewById(R.id.blueButton);
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
