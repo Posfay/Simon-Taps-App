@@ -63,7 +63,11 @@ public class MainActivity extends Activity implements AsyncResponse {
   String playerId;
   String status;
   String reason;
-
+  Random randomBetweenOneFour = new Random();
+  public Button joinBut;
+  public Button createBut;
+  public Button settingsBut;
+  public Button notABut;
   boolean versionChecked = false;
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
@@ -111,9 +115,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     client = new OkHttpClient();
 
-    roomIdEditText.addTextChangedListener(new UppercaseTextWatcher());
-
-    createBut.setEnabled(true);
+    // randomising button color
+    joinBut = findViewById(R.id.joinButton);
+    notABut = findViewById(R.id.unusedLayoutButton);
+    createBut = findViewById(R.id.createButton);
+    settingsBut = findViewById(R.id.settingsButton);
 
     createBut.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -148,14 +154,18 @@ public class MainActivity extends Activity implements AsyncResponse {
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
     switch (randomSwitchNum) {
       case 1:
-        ViewCompat.setBackgroundTintList(joinBut,
+        ViewCompat.setBackgroundTintList(notABut,
             ContextCompat.getColorStateList(this, R.color.blue));
+        ViewCompat.setBackgroundTintList(joinBut,
+                ContextCompat.getColorStateList(this, R.color.blue));
         ViewCompat.setBackgroundTintList(createBut,
             ContextCompat.getColorStateList(this, R.color.blue));
         createBut.setTextColor(getResources().getColor(R.color.blue));
         // "#00b0ff" alt. blue
         break;
       case 2:
+        ViewCompat.setBackgroundTintList(notABut,
+                ContextCompat.getColorStateList(this, R.color.red));
         ViewCompat.setBackgroundTintList(joinBut,
             ContextCompat.getColorStateList(this, R.color.red));
         ViewCompat.setBackgroundTintList(createBut,
@@ -164,6 +174,8 @@ public class MainActivity extends Activity implements AsyncResponse {
         // #f44336" alt. red
         break;
       case 3:
+        ViewCompat.setBackgroundTintList(notABut,
+                ContextCompat.getColorStateList(this, R.color.green));
         ViewCompat.setBackgroundTintList(joinBut,
             ContextCompat.getColorStateList(this, R.color.green));
         ViewCompat.setBackgroundTintList(createBut,
@@ -172,6 +184,8 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#64dd17" alt. green
         break;
       case 4:
+        ViewCompat.setBackgroundTintList(notABut,
+                ContextCompat.getColorStateList(this, R.color.yellow));
         ViewCompat.setBackgroundTintList(joinBut,
             ContextCompat.getColorStateList(this, R.color.yellow));
         ViewCompat.setBackgroundTintList(createBut,

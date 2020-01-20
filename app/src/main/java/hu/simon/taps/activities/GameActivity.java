@@ -270,23 +270,23 @@ public class GameActivity extends Activity implements AsyncResponse {
     tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
 
     if (tileId == 1) {
-      yourButton = findViewById(R.id.greenButton);
-      yourButton.setBackgroundResource(R.drawable.button_green_active);
+//      yourButton = findViewById(R.id.greenButton);
+//      yourButton.setBackgroundResource(R.drawable.button_green_active);
       layout.setBackgroundColor(ContextCompat.getColor(this, R.color.green_bg));
     }
     if (tileId == 2) {
-      yourButton = findViewById(R.id.redButton);
-      yourButton.setBackgroundResource(R.drawable.button_red_active);
+//      yourButton = findViewById(R.id.redButton);
+//      yourButton.setBackgroundResource(R.drawable.button_red_active);
       layout.setBackgroundColor(ContextCompat.getColor(this, R.color.red_bg));
     }
     if (tileId == 3) {
-      yourButton = findViewById(R.id.yellowButton);
-      yourButton.setBackgroundResource(R.drawable.button_yellow_active);
+//      yourButton = findViewById(R.id.yellowButton);
+//      yourButton.setBackgroundResource(R.drawable.button_yellow_active);
       layout.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow_bg));
     }
     if (tileId == 4) {
-      yourButton = findViewById(R.id.blueButton);
-      yourButton.setBackgroundResource(R.drawable.button_blue_active);
+//      yourButton = findViewById(R.id.blueButton);
+//      yourButton.setBackgroundResource(R.drawable.button_blue_active);
       layout.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_bg));
     }
 
