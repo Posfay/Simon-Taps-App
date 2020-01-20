@@ -168,19 +168,24 @@ public class MainActivity extends Activity implements AsyncResponse {
         break;
     }
 
-    checkInternetOnCreate();
+    boolean connected = checkInternetOnCreate();
 
-    checkVersionOnCreate();
+    if (connected) {
+      checkVersionOnCreate();
+    }
   }
 
-  public void checkInternetOnCreate() {
+  public boolean checkInternetOnCreate() {
 
     boolean connected = connectionCheck();
 
     if (!connected) {
 
       alertDialog(GameUtil.NO_INTERNET_CONNECTION, true);
+      return false;
     }
+
+    return true;
   }
 
   public void checkVersionOnCreate() {
