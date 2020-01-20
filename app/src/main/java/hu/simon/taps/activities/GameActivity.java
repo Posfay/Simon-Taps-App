@@ -167,24 +167,22 @@ public class GameActivity extends Activity implements AsyncResponse {
   protected void onPause() {
 
     super.onPause();
+
     // No more getstate requests, when exits this activity
     exitCondition = true;
   }
 
-  // Checking internet connection
-  public boolean connectionCheck() {
+  private boolean connectionCheck() {
 
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    // We are connected to a network
-    // No internet :(
+
     return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
         .getState() == NetworkInfo.State.CONNECTED ||
         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
             .getState() == NetworkInfo.State.CONNECTED;
   }
 
-  // SUCCESSFUL REQUEST
   @Override
   public void onRequestComplete(String responseJsonString) {
 
@@ -388,6 +386,7 @@ public class GameActivity extends Activity implements AsyncResponse {
           }, GameUtil.FLASH_DURATION);
         }
         if (counter <= 0) {
+
           startGame();
           return;
         }
@@ -497,17 +496,21 @@ public class GameActivity extends Activity implements AsyncResponse {
 
       return true;
     }
+
     return super.onKeyDown(keyCode, event);
   }
 
   // END OF THE GAME
   public void gameEnd(Boolean success) {
 
-    feedbackText.setText("");
-    yourButton.setEnabled(false);
     exitCondition = true;
 
+    feedbackText.setText("");
+
+    yourButton.setEnabled(false);
+
     finish();
+
     Intent intent = new Intent(getBaseContext(), EndScreenActivity.class);
 
     if (success) {
