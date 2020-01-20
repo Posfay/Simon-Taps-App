@@ -224,8 +224,6 @@ public class GameActivity extends Activity implements AsyncResponse {
   // -----------------------------------------GAME STATES-------------------------------------------
   public void gameWaiting(JSONObject payloadJson) {
 
-    roomIdText.setText("");
-
     numOfPlayers = payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_PLAYERS.toString());
     feedbackText.setText("Players in room: " + numOfPlayers + " ");
 
