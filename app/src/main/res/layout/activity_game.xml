@@ -29,6 +29,8 @@
         android:id="@+id/greenButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/button_green"
         app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline"
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline" />
@@ -37,6 +39,8 @@
         android:id="@+id/redButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/button_red"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline"
@@ -46,6 +50,8 @@
         android:id="@+id/yellowButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/button_yellow"
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline" />
@@ -54,6 +60,8 @@
         android:id="@+id/blueButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/button_blue"
         app:layout_constraintStart_toStartOf="@id/verticalGuideline"
         app:layout_constraintTop_toTopOf="@id/horizontalGuideline" />
