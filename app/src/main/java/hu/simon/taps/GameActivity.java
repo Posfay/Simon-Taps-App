@@ -247,23 +247,19 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (tileId == 1) {
       yourButton = findViewById(R.id.greenButton);
-      ViewCompat.setBackgroundTintList(yourButton,
-          ContextCompat.getColorStateList(this, R.color.green));
+      yourButton.setBackgroundResource(R.drawable.button_green_active);
     }
     if (tileId == 2) {
       yourButton = findViewById(R.id.redButton);
-      ViewCompat.setBackgroundTintList(yourButton,
-          ContextCompat.getColorStateList(this, R.color.red));
+      yourButton.setBackgroundResource(R.drawable.button_red_active);
     }
     if (tileId == 3) {
       yourButton = findViewById(R.id.yellowButton);
-      ViewCompat.setBackgroundTintList(yourButton,
-          ContextCompat.getColorStateList(this, R.color.yellow));
+      yourButton.setBackgroundResource(R.drawable.button_yellow_active);
     }
     if (tileId == 4) {
       yourButton = findViewById(R.id.blueButton);
-      ViewCompat.setBackgroundTintList(yourButton,
-          ContextCompat.getColorStateList(this, R.color.blue));
+      yourButton.setBackgroundResource(R.drawable.button_blue_active);
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
@@ -304,6 +300,11 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   public void displayPattern() {
+
+    greenButton.setBackgroundResource(R.drawable.button_green);
+    redButton.setBackgroundResource(R.drawable.button_red);
+    yellowButton.setBackgroundResource(R.drawable.button_yellow);
+    blueButton.setBackgroundResource(R.drawable.button_blue);
 
     Runnable timerRunnable = new Runnable() {
 
