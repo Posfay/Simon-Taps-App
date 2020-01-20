@@ -5,9 +5,9 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-    tools:context=".activities.GameActivity"
-    android:animateLayoutChanges="true">
+    tools:context=".activities.GameActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/horizontalGuideline"
