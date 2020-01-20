@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:layout_margin="8dp"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:animateLayoutChanges="true">
 
     <Button
         android:id="@+id/joinButton"
