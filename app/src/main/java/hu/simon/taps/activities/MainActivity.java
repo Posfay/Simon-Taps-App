@@ -57,6 +57,8 @@ public class MainActivity extends Activity implements AsyncResponse {
   public static final String BASE_URL =
       ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
 
+  public static final String version = BuildConfig.VERSION_NAME;
+
   public Vibrator vibrator;
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
@@ -182,9 +184,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public void checkVersionOnCreate() {
 
-    String version = BuildConfig.VERSION_NAME;
-
-    okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION + "/" + version);
+    okHttpHandler = new OkHttpHandler(this, client);
+    okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION.toString() + "/" + version);
   }
 
   // fullscreen
@@ -397,9 +398,7 @@ public class MainActivity extends Activity implements AsyncResponse {
             "You are using an outdated version of the application! Please download the latest version!",
             true);
       }
-    }
-
-    if (status.equals("OK")) {
+    } else if (status.equals("OK")) {
 
       Log.i("name", playerId);
 
