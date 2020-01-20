@@ -68,7 +68,7 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
         .post(body)
         .header("Accept", "application/json")
         .header("Content-Type", "application/json")
-        .header("simon-auth", ServerUtil.AUTHENTICATION_KEY)
+        .header(ServerUtil.AUTHENTICATION_HEADER, ServerUtil.AUTHENTICATION_KEY)
         .build();
   }
 
@@ -76,7 +76,7 @@ public class OkHttpHandler extends AsyncTask<Request, Void, String> {
 
     return new Request.Builder()
         .url(url)
-        .header("simon-auth", ServerUtil.AUTHENTICATION_KEY)
+        .header(ServerUtil.AUTHENTICATION_HEADER, ServerUtil.AUTHENTICATION_KEY)
         .build();
   }
 

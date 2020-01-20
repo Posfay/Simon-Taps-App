@@ -6,6 +6,7 @@ public class ServerUtil {
   public static final String HOSTNAME = "szerver3.dkrmg.sulinet.hu";
   public static final Long PORT = 8081L;
   public static final String AUTHENTICATION_KEY = "rEJ1ME7MaojA4CPIOG2wJ3tX4U7lHAIgJqX6XGT3";
+  public static final String AUTHENTICATION_HEADER = "Simon-Auth";
 
   public enum Endpoint {
     CREATE("create"), JOIN("join"), LEAVE("leave"), STATE("state"), START("start"), GAME("game");
