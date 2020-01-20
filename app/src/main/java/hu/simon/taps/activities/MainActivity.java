@@ -41,28 +41,58 @@ import okhttp3.OkHttpClient;
 public class MainActivity extends Activity implements AsyncResponse {
 
   // --------------------------------------DECLARING VARIABLES--------------------------------------
-  public OkHttpClient client;
-  public OkHttpHandler okHttpHandler;
-
-  public EditText roomIdEditText;
-  public String roomId;
-  public String playerId;
-  String status;
-  String reason;
-  Random randomBetweenOneFour = new Random();
-  public Button joinBut;
-  public Button createBut;
-  public Button settingsBut;
-  boolean versionChecked = false;
-
   public static final String BASE_URL =
       ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
 
-  public static final String version = BuildConfig.VERSION_NAME;
+  public static final String VERSION = BuildConfig.VERSION_NAME;
 
-  public Vibrator vibrator;
+  public OkHttpClient client;
+  public OkHttpHandler okHttpHandler;
+
+  EditText roomIdEditText;
+
+  Vibrator vibrator;
+
+  Button joinBut;
+  Button createBut;
+  Button settingsBut;
+
+  Random randomBetweenOneFour = new Random();
+
+  String roomId;
+  String playerId;
+  String status;
+  String reason;
+
+  boolean versionChecked = false;
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
+
+  private class UppercaseTextWatcher implements TextWatcher {
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      // pass
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+      // pass
+    }
+
+    @Override
+    public void afterTextChanged(Editable et) {
+
+      String s = et.toString();
+
+      if (!s.equals(s.toUpperCase())) {
+
+        s = s.toUpperCase();
+        roomIdEditText.setText(s);
+        roomIdEditText.setSelection(roomIdEditText.length());
+      }
+    }
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -73,42 +103,17 @@ public class MainActivity extends Activity implements AsyncResponse {
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     roomIdEditText = findViewById(R.id.editText);
-
-    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-
-    // Always uppercase in textbox
-    roomIdEditText.addTextChangedListener(new TextWatcher() {
-
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        // pass
-      }
-
-      @Override
-      public void onTextChanged(CharSequence s, int start, int before, int count) {
-        // pass
-      }
-
-      @Override
-      public void afterTextChanged(Editable et) {
-
-        String s = et.toString();
-
-        if (!s.equals(s.toUpperCase())) {
-
-          s = s.toUpperCase();
-          roomIdEditText.setText(s);
-          roomIdEditText.setSelection(roomIdEditText.length());
-        }
-      }
-    });
-
-    client = new OkHttpClient();
-
-    // randomising button color
     joinBut = findViewById(R.id.joinButton);
     createBut = findViewById(R.id.createButton);
     settingsBut = findViewById(R.id.settingsButton);
+
+    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+    client = new OkHttpClient();
+
+    roomIdEditText.addTextChangedListener(new UppercaseTextWatcher());
+
+    createBut.setEnabled(true);
 
     createBut.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -116,21 +121,29 @@ public class MainActivity extends Activity implements AsyncResponse {
         createClick(v);
       }
     });
-    createBut.setEnabled(true);
-
     joinBut.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         joinClick(v);
       }
     });
-
     settingsBut.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         settingsClick(v);
       }
     });
+
+    randomButtonColor();
+
+    boolean connected = checkInternetOnCreate();
+
+    if (connected) {
+      checkVersionOnCreate();
+    }
+  }
+
+  public void randomButtonColor() {
 
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
     switch (randomSwitchNum) {
@@ -167,15 +180,9 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#ffff00" alt. yellow
         break;
     }
-
-    boolean connected = checkInternetOnCreate();
-
-    if (connected) {
-      checkVersionOnCreate();
-    }
   }
 
-  public boolean checkInternetOnCreate() {
+  private boolean checkInternetOnCreate() {
 
     boolean connected = connectionCheck();
 
@@ -188,14 +195,15 @@ public class MainActivity extends Activity implements AsyncResponse {
     return true;
   }
 
-  public void checkVersionOnCreate() {
+  private void checkVersionOnCreate() {
 
     okHttpHandler = new OkHttpHandler(this, client);
-    okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION.toString() + "/" + version);
+    okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION.toString() + "/" + VERSION);
   }
 
   // fullscreen
   public void onWindowFocusChanged(boolean hasFocus) {
+
     super.onWindowFocusChanged(hasFocus);
     if (hasFocus) {
       View decorView = getWindow().getDecorView();
@@ -204,7 +212,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Checking internet connection
-  public boolean connectionCheck() {
+  private boolean connectionCheck() {
 
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -217,7 +225,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Alert Dialog
-  public void alertDialog(String message, boolean exitActivity) {
+  private void alertDialog(String message, boolean exitActivity) {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setMessage(message);
@@ -246,7 +254,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Joining room
-  public void joinClick(View v) {
+  private void joinClick(View v) {
 
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
@@ -288,8 +296,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Creating room
-
-  public void createClick(View v) {
+  private void createClick(View v) {
 
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
@@ -323,19 +330,22 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Open settings
-  public void settingsClick(View v) {
+  private void settingsClick(View v) {
 
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
     finish();
+
     Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
     startActivity(intent);
   }
 
   // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
+
     if (keyCode == KeyEvent.KEYCODE_BACK) {
+
       VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -357,8 +367,10 @@ public class MainActivity extends Activity implements AsyncResponse {
       AlertDialog dialog = builder.create();
 
       dialog.show();
+
       return true;
     }
+
     return super.onKeyDown(keyCode, event);
   }
 
@@ -381,14 +393,6 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     } catch (JSONException e) {
       e.printStackTrace();
-    }
-
-    boolean connected = connectionCheck();
-
-    if (!connected) {
-
-      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
-      return;
     }
 
     if (!versionChecked) {

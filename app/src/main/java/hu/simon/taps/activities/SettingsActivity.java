@@ -14,7 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import hu.simon.taps.R;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.VibrationUtil;
@@ -22,13 +21,16 @@ import hu.simon.taps.utils.VibrationUtil;
 public class SettingsActivity extends AppCompatActivity {
 
   Switch vibrationsSwitch;
-  Boolean vibrationsState;
+
+  Vibrator vibrator;
+
   SharedPreferences prefs;
 
-  public Vibrator vibrator;
+  boolean vibrationsState;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
 
@@ -36,12 +38,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
+    vibrationsSwitch = findViewById(R.id.vibrationsSwitch);
+
     prefs = PreferenceManager.getDefaultSharedPreferences(this);
     final SharedPreferences.Editor editor = prefs.edit();
 
     vibrationsState = prefs.getBoolean("vibrations", true);
 
-    vibrationsSwitch = findViewById(R.id.vibrationsSwitch);
     vibrationsSwitch.setChecked(vibrationsState);
 
     vibrationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -57,6 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
   }
 
   public void onWindowFocusChanged(boolean hasFocus) {
+
     super.onWindowFocusChanged(hasFocus);
     if (hasFocus) {
       View decorView = getWindow().getDecorView();
@@ -66,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
 
   // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
+
     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
       VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
@@ -88,8 +93,10 @@ public class SettingsActivity extends AppCompatActivity {
       AlertDialog dialog = builder.create();
 
       dialog.show();
+
       return true;
     }
+
     return super.onKeyDown(keyCode, event);
   }
 

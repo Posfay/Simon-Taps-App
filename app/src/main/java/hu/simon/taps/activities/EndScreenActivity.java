@@ -21,24 +21,31 @@ public class EndScreenActivity extends AppCompatActivity {
 
   public Vibrator vibrator;
 
-  Boolean win;
-  Long successfulRounds;
   TextView resultText;
+
   ImageView resultImage;
+
+  long successfulRounds;
+
+  boolean win;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_end_screen);
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
     resultText = findViewById(R.id.result);
     resultImage = findViewById(R.id.resultImage);
-    Resources res = getResources();
+
+    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
     win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
+
+    Resources res = getResources();
 
     if (win) {
 
@@ -116,13 +123,15 @@ public class EndScreenActivity extends AppCompatActivity {
       AlertDialog dialog = builder.create();
 
       dialog.show();
+
       return true;
     }
+
     return super.onKeyDown(keyCode, event);
   }
 
   // LEAVING ACTIVITY
-  public void backToMainActivity() {
+  private void backToMainActivity() {
 
     VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);
 

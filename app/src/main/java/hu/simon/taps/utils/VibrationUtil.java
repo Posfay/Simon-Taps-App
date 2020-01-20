@@ -7,14 +7,13 @@ import android.preference.PreferenceManager;
 
 public class VibrationUtil {
 
-  public static Integer VIBRATION_LENGTH = 50;
+  public static long VIBRATION_LENGTH = 50;
 
-  // Vibrator, checking settings
   public static void preferredVibration(Context context, Vibrator vibrator) {
 
-    // Vibrations check
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean vibrationsState = prefs.getBoolean("vibrations", true);
+
     if (vibrationsState) {
       vibrator.vibrate(VIBRATION_LENGTH);
     }
