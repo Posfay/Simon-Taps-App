@@ -65,7 +65,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   Handler timerHandler = new Handler();
   Handler delayHandler = new Handler();
-  public static final long DELAY_MILLIS = 400;
+  public static final long DELAY_MILLIS = 500;
   public static final long DELAY_DISPLAY = 1000;
 
   public static final String BASE_URL =
@@ -274,6 +274,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     feedbackText.setText("");
 
+    yourButton.setEnabled(false);
+
     if (!shown) {
 
       wordPattern = payloadJson.optString(ServerUtil.ResponseParameter.PATTERN.toString());
@@ -306,6 +308,8 @@ public class GameActivity extends Activity implements AsyncResponse {
       public void run() {
         Integer current = pattern.remove(0);
         counter--;
+
+        VibrationUtil.preferredVibration(GameActivity.this, vibrator);
 
         if (current == 1) {
 
