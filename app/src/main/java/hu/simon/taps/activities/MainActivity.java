@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.activities;
 
 import java.util.Random;
 import java.util.UUID;
@@ -28,6 +28,13 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
+
+import hu.simon.taps.http.handler.AsyncResponse;
+import hu.simon.taps.http.handler.OkHttpHandler;
+import hu.simon.taps.R;
+import hu.simon.taps.utils.LayoutUtil;
+import hu.simon.taps.utils.ServerUtil;
+import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
 
 public class MainActivity extends Activity implements AsyncResponse {
@@ -159,22 +166,14 @@ public class MainActivity extends Activity implements AsyncResponse {
     }
     //fullscreen
   }
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemUI();
-        }
-    }
-    private void hideSystemUI() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
-    }
+  public void onWindowFocusChanged(boolean hasFocus) {
+      super.onWindowFocusChanged(hasFocus);
+      if (hasFocus) {
+          View decorView = getWindow().getDecorView();
+          LayoutUtil.hideSystemUI(decorView);
+      }
+  }
+
   // Checking internet connection
   public void connectionCheck() {
 

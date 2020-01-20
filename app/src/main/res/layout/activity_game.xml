@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-    tools:context=".GameActivity"
+    tools:context=".activities.GameActivity"
     android:animateLayoutChanges="true">
 
     <androidx.constraintlayout.widget.Guideline

@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.http.handler;
 
 public interface AsyncResponse {
 
