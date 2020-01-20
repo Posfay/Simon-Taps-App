@@ -28,10 +28,10 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-
+import hu.simon.taps.BuildConfig;
+import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
-import hu.simon.taps.R;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
@@ -46,13 +46,13 @@ public class MainActivity extends Activity implements AsyncResponse {
   public EditText roomIdEditText;
   public String roomId;
   public String playerId;
-  Boolean connected = false;
   String status;
   String reason;
   Random randomBetweenOneFour = new Random();
   public Button joinBut;
   public Button createBut;
   public Button settingsBut;
+  boolean versionChecked = false;
 
   public static final String BASE_URL =
       ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
@@ -164,48 +164,73 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#ffff00" alt. yellow
         break;
     }
-    //fullscreen
+
+    checkInternetOnCreate();
+
+    checkVersionOnCreate();
   }
+
+  public void checkInternetOnCreate() {
+
+    boolean connected = connectionCheck();
+
+    if (!connected) {
+
+      alertDialog("No internet connection!", true);
+    }
+  }
+
+  public void checkVersionOnCreate() {
+
+    String version = BuildConfig.VERSION_NAME;
+
+    okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION + "/" + version);
+  }
+
+  // fullscreen
   public void onWindowFocusChanged(boolean hasFocus) {
-      super.onWindowFocusChanged(hasFocus);
-      if (hasFocus) {
-          View decorView = getWindow().getDecorView();
-          LayoutUtil.hideSystemUI(decorView);
-      }
+    super.onWindowFocusChanged(hasFocus);
+    if (hasFocus) {
+      View decorView = getWindow().getDecorView();
+      LayoutUtil.hideSystemUI(decorView);
+    }
   }
 
   // Checking internet connection
-  public void connectionCheck() {
+  public boolean connectionCheck() {
 
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+    // we are connected to a network
+    return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
         .getState() == NetworkInfo.State.CONNECTED ||
         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-            .getState() == NetworkInfo.State.CONNECTED) {
-
-      // we are connected to a network
-      connected = true;
-    } else {
-
-      connected = false;
-      alertDialog();
-    }
-
-    Log.i("connected", connected.toString());
+            .getState() == NetworkInfo.State.CONNECTED;
   }
 
-  // Alert Dialog when there's no internet
-  public void alertDialog() {
+  // Alert Dialog
+  public void alertDialog(String message, boolean exitActivity) {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage("No internet connection!");
-    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int which) {
-        VibrationUtil.preferredVibration(MainActivity.this, vibrator);
-      }
-    });
+    builder.setMessage(message);
+
+    if (exitActivity) {
+
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          finish();
+        }
+      });
+    } else {
+
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          VibrationUtil.preferredVibration(MainActivity.this, vibrator);
+        }
+      });
+    }
+
     builder.setCancelable(false);
 
     AlertDialog dialog = builder.create();
@@ -219,13 +244,14 @@ public class MainActivity extends Activity implements AsyncResponse {
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
-    connectionCheck();
+    boolean connected = connectionCheck();
 
     if (!connected) {
+
+      alertDialog("No internet connection!", false);
       return;
     }
 
-    Log.i("internet", connected.toString());
     Log.i("request", "sent");
 
     String url = BASE_URL + ServerUtil.Endpoint.JOIN.toString();
@@ -263,9 +289,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     createBut.setEnabled(false);
 
-    connectionCheck();
+    boolean connected = connectionCheck();
 
     if (!connected) {
+
+      alertDialog("No internet connection!", false);
       return;
     }
 
@@ -348,9 +376,30 @@ public class MainActivity extends Activity implements AsyncResponse {
       e.printStackTrace();
     }
 
-    connectionCheck();
+    boolean connected = connectionCheck();
 
-    if ((connected) && (status.equals("OK"))) {
+    if (!connected) {
+
+      alertDialog("No internet connection!", false);
+      return;
+    }
+
+    if (!versionChecked) {
+
+      versionChecked = true;
+
+      boolean compatible =
+          payloadJson.optBoolean(ServerUtil.ResponseParameter.COMPATIBLE.toString());
+
+      if (!compatible) {
+
+        alertDialog(
+            "You are using an outdated version of the application! Please download the latest version!",
+            true);
+      }
+    }
+
+    if (status.equals("OK")) {
 
       Log.i("name", playerId);
 

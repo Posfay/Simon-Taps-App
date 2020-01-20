@@ -9,7 +9,8 @@ public class ServerUtil {
   public static final String AUTHENTICATION_HEADER = "Simon-Auth";
 
   public enum Endpoint {
-    CREATE("create"), JOIN("join"), LEAVE("leave"), STATE("state"), START("start"), GAME("game");
+    CREATE("create"), JOIN("join"), LEAVE("leave"), STATE("state"), START("start"), GAME(
+        "game"), VERSION("version");
 
     private String value;
 
@@ -25,7 +26,8 @@ public class ServerUtil {
 
   public enum ResponseParameter {
     STATUS("status"), NUMBER_OF_PLAYERS("numberOfPlayers"), LEFT("left"), TILE_ID(
-        "tileId"), PATTERN("pattern"), REASON("reason"), GAME_STATE("gameState");
+        "tileId"), PATTERN(
+            "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE("compatible");
 
     private String value;
 
