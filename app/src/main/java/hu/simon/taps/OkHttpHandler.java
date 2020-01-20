@@ -1,4 +1,4 @@
-package hu.dkrmg.a13pb.projectdusza;
+package hu.simon.taps;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package hu.dkrmg.a13pb.projectdusza;
+package hu.simon.taps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,9 +153,9 @@ public class GameActivity extends Activity implements AsyncResponse {
     // We are connected to a network
     // No internet :(
     connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-            .getState() == NetworkInfo.State.CONNECTED ||
-            connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                    .getState() == NetworkInfo.State.CONNECTED;
+        .getState() == NetworkInfo.State.CONNECTED ||
+        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            .getState() == NetworkInfo.State.CONNECTED;
     Log.i("connected", connected.toString());
   }
 
@@ -248,22 +248,22 @@ public class GameActivity extends Activity implements AsyncResponse {
     if (tileId == 1) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.green));
-          yourButton = findViewById(R.id.greenButton);
+      yourButton = findViewById(R.id.greenButton);
     }
     if (tileId == 2) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.red));
-          yourButton = findViewById(R.id.redButton);
+      yourButton = findViewById(R.id.redButton);
     }
     if (tileId == 3) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.yellow));
-          yourButton = findViewById(R.id.yellowButton);
+      yourButton = findViewById(R.id.yellowButton);
     }
     if (tileId == 4) {
       ViewCompat.setBackgroundTintList(yourButton,
           ContextCompat.getColorStateList(this, R.color.blue));
-          yourButton = findViewById(R.id.blueButton);
+      yourButton = findViewById(R.id.blueButton);
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
@@ -482,7 +482,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       intent.putExtra("successfulRounds", (long) wordPattern.length());
     } else {
       intent.putExtra("win", false);
-      intent.putExtra("successfulRounds", (long) wordPattern.length()-1);
+      intent.putExtra("successfulRounds", (long) wordPattern.length() - 1);
     }
 
     startActivity(intent);

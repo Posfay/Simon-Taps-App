@@ -1,4 +1,4 @@
-package hu.dkrmg.a13pb.projectdusza;
+package hu.simon.taps;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -34,7 +34,7 @@ public class EndScreenActivity extends AppCompatActivity {
     resultImage = findViewById(R.id.resultImage);
     Resources res = getResources();
     win = getIntent().getBooleanExtra("win", false);
-    successfulRounds = getIntent().getLongExtra("successfulRounds",0);
+    successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
 
     if (win) {
       resultText.setText("Your score: " + successfulRounds);

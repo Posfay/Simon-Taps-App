@@ -1,4 +1,4 @@
-package hu.dkrmg.a13pb.projectdusza;
+package hu.simon.taps;
 
 import java.util.Random;
 import java.util.UUID;
@@ -20,12 +20,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
@@ -69,7 +67,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
     getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
     // Always uppercase in textbox
     roomIdEditText.addTextChangedListener(new TextWatcher() {
