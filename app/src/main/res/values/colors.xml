@@ -4,12 +4,12 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="green">#FF669900</color>
-    <color name="green_pale">#80669900</color>
+    <color name="green_pale">#48669900</color>
     <color name="red">#CC0000</color>
-    <color name="red_pale">#80CC0000</color>
+    <color name="red_pale">#48CC0000</color>
     <color name="yellow">#ffffbb33</color>
-    <color name="yellow_pale">#80ffbb33</color>
+    <color name="yellow_pale">#48ffbb33</color>
     <color name="blue">#FF0099cc</color>
-    <color name="blue_pale">#800099cc</color>
+    <color name="blue_pale">#480099cc</color>
     <color name="almostBlack">#111111</color>
 </resources>
