@@ -8,7 +8,7 @@
     tools:context=".GameActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
+        android:id="@+id/horizontalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -19,21 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.75" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline6"
+        android:id="@+id/verticalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -44,8 +30,8 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_green"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toStartOf="@+id/guideline6" />
+        app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline" />
 
     <Button
         android:id="@+id/redButton"
@@ -53,47 +39,33 @@
         android:layout_height="150dp"
         android:background="@drawable/button_red"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="@+id/guideline6" />
+        app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline" />
 
     <Button
         android:id="@+id/yellowButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_yellow"
-        app:layout_constraintEnd_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline5" />
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuideline" />
 
     <Button
         android:id="@+id/blueButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_blue"
-        app:layout_constraintStart_toStartOf="@+id/guideline6"
-        app:layout_constraintTop_toTopOf="@+id/guideline5" />
-
-    <Button
-        android:id="@+id/gameButton"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:background="@drawable/button_standard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"
-        app:layout_constraintVertical_bias="0.51" />
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuideline" />
 
     <TextView
         android:id="@+id/feedBackText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="66dp"
-        android:layout_marginBottom="72dp"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/guideline3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline3" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline" />
 
     <TextView
         android:id="@+id/roomIdText"
