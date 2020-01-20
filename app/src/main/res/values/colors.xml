@@ -5,11 +5,15 @@
     <color name="colorAccent">#FFD81B60</color>
     <color name="green">#FF669900</color>
     <color name="green_pale">#48669900</color>
+    <color name="green_bg">#FF405026</color>
     <color name="red">#FFCC0000</color>
     <color name="red_pale">#48CC0000</color>
+    <color name="red_bg">#FF5D2526</color>
     <color name="yellow">#FFFFBB33</color>
     <color name="yellow_pale">#48FFBB33</color>
+    <color name="yellow_bg">#FF6B5A34</color>
     <color name="blue">#FF0099CC</color>
     <color name="blue_pale">#480099CC</color>
+    <color name="blue_bg">#FF244F5E</color>
     <color name="almostBlack">#FF111111</color>
 </resources>
