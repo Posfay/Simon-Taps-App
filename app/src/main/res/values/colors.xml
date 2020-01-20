@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#fffafafa</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#FFFAFAFA</color>
+    <color name="colorPrimaryDark">#FF00574B</color>
+    <color name="colorAccent">#FFD81B60</color>
     <color name="green">#FF669900</color>
     <color name="green_pale">#48669900</color>
-    <color name="red">#CC0000</color>
+    <color name="red">#FFCC0000</color>
     <color name="red_pale">#48CC0000</color>
-    <color name="yellow">#ffffbb33</color>
-    <color name="yellow_pale">#48ffbb33</color>
-    <color name="blue">#FF0099cc</color>
-    <color name="blue_pale">#480099cc</color>
-    <color name="almostBlack">#111111</color>
+    <color name="yellow">#FFFFBB33</color>
+    <color name="yellow_pale">#48FFBB33</color>
+    <color name="blue">#FF0099CC</color>
+    <color name="blue_pale">#480099CC</color>
+    <color name="almostBlack">#FF111111</color>
 </resources>
