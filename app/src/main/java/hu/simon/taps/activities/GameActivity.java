@@ -253,8 +253,8 @@ public class GameActivity extends Activity implements AsyncResponse {
     feedbackText.setText("Prepare for the game (10 s)");
     roomIdText.setText("");
 
-    View randomNameSoItsNotInTheWay = findViewById(R.id.screen);
-    View root = randomNameSoItsNotInTheWay.getRootView();
+    ConstraintLayout layout = findViewById(R.id.layout);
+
 
     intervalMilli = 250;
 
@@ -263,22 +263,22 @@ public class GameActivity extends Activity implements AsyncResponse {
     if (tileId == 1) {
       yourButton = findViewById(R.id.greenButton);
       yourButton.setBackgroundResource(R.drawable.button_green_active);
-      root.setBackgroundColor(ContextCompat.getColor(this, R.color.green_pale));
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.green_pale));
     }
     if (tileId == 2) {
       yourButton = findViewById(R.id.redButton);
       yourButton.setBackgroundResource(R.drawable.button_red_active);
-      root.setBackgroundColor(ContextCompat.getColor(this, R.color.red_pale));
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.red_pale));
     }
     if (tileId == 3) {
       yourButton = findViewById(R.id.yellowButton);
       yourButton.setBackgroundResource(R.drawable.button_yellow_active);
-      root.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow_pale));
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow_pale));
     }
     if (tileId == 4) {
       yourButton = findViewById(R.id.blueButton);
       yourButton.setBackgroundResource(R.drawable.button_blue_active);
-      root.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_pale));
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_pale));
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
