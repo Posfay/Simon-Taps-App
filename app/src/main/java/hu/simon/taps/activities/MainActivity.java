@@ -32,6 +32,7 @@ import hu.simon.taps.BuildConfig;
 import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
+import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
@@ -178,7 +179,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (!connected) {
 
-      alertDialog("No internet connection!", true);
+      alertDialog(GameUtil.NO_INTERNET_CONNECTION, true);
     }
   }
 
@@ -249,7 +250,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (!connected) {
 
-      alertDialog("No internet connection!", false);
+      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
       return;
     }
 
@@ -294,7 +295,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (!connected) {
 
-      alertDialog("No internet connection!", false);
+      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
       return;
     }
 
@@ -381,7 +382,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (!connected) {
 
-      alertDialog("No internet connection!", false);
+      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
       return;
     }
 
@@ -394,9 +395,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
       if (!compatible) {
 
-        alertDialog(
-            "You are using an outdated version of the application! Please download the latest version!",
-            true);
+        alertDialog(GameUtil.OUTDATED_VERSION, true);
       }
     } else if (status.equals("OK")) {
 

@@ -27,10 +27,9 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-
+import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
-import hu.simon.taps.R;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
@@ -105,11 +104,12 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     leavable = true;
 
-    // Getting Player ID and Room ID from MainACtivity
+    // Getting Player ID and Room ID from MainActivity
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
     roomIdText.setText(getString(R.string.room_id) + roomId);
   }
+
   public void onWindowFocusChanged(boolean hasFocus) {
     super.onWindowFocusChanged(hasFocus);
     if (hasFocus) {
@@ -117,6 +117,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       LayoutUtil.hideSystemUI(decorView);
     }
   }
+
   // -----------------------------------GETSTATE REQUEST (REPEATED)---------------------------------
   Runnable getStateTimerRunnable = new Runnable() {
     @Override
@@ -254,7 +255,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     roomIdText.setText("");
 
     ConstraintLayout layout = findViewById(R.id.layout);
-
 
     intervalMilli = 250;
 
