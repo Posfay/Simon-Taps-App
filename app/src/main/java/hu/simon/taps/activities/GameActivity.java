@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
+
+import hu.simon.taps.http.handler.AsyncResponse;
+import hu.simon.taps.http.handler.OkHttpHandler;
+import hu.simon.taps.R;
+import hu.simon.taps.utils.LayoutUtil;
+import hu.simon.taps.utils.ServerUtil;
+import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
@@ -104,7 +109,13 @@ public class GameActivity extends Activity implements AsyncResponse {
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
     roomIdText.setText(getString(R.string.room_id) + roomId);
   }
-
+  public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+    if (hasFocus) {
+      View decorView = getWindow().getDecorView();
+      LayoutUtil.hideSystemUI(decorView);
+    }
+  }
   // -----------------------------------GETSTATE REQUEST (REPEATED)---------------------------------
   Runnable getStateTimerRunnable = new Runnable() {
     @Override

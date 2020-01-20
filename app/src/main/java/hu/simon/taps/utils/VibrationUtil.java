@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

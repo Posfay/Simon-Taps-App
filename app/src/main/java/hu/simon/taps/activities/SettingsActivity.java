@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -8,11 +8,16 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import hu.simon.taps.R;
+import hu.simon.taps.utils.LayoutUtil;
+import hu.simon.taps.utils.VibrationUtil;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -49,6 +54,14 @@ public class SettingsActivity extends AppCompatActivity {
         editor.apply();
       }
     });
+  }
+
+  public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+    if (hasFocus) {
+      View decorView = getWindow().getDecorView();
+      LayoutUtil.hideSystemUI(decorView);
+    }
   }
 
   // BACK BUTTON PRESSED
