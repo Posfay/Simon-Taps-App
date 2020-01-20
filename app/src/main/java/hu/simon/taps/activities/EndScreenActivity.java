@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import hu.simon.taps.R;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.VibrationUtil;
@@ -42,19 +41,49 @@ public class EndScreenActivity extends AppCompatActivity {
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
 
     if (win) {
-      resultText.setText("Your score: " + successfulRounds);
-      if (successfulRounds >= 10) {
-        resultText.setText("You're amazing! " + resultText.toString());
-      }
-      resultImage.setImageDrawable(res.getDrawable(R.drawable.godfathercat));
 
-    } else {
       resultText.setText("Your score: " + successfulRounds);
+
+      resultImage.setImageDrawable(res.getDrawable(R.drawable.godfathercat));
+    } else {
+
+      resultText.setText("Your score: " + successfulRounds);
+
+      if (successfulRounds >= 8) {
+
+        resultText.setText("Nice!\n" + "Your score: " + successfulRounds);
+      }
+      if (successfulRounds >= 10) {
+
+        resultText.setText("Good job!\n" + "Your score: " + successfulRounds);
+      }
+      if (successfulRounds >= 13) {
+
+        resultText.setText("Great job!\n" + "Your score: " + successfulRounds);
+      }
+      if (successfulRounds >= 16) {
+
+        resultText.setText("Impressive!\n" + "Your score: " + successfulRounds);
+      }
+      if (successfulRounds >= 20) {
+
+        resultText.setText("Nailed it!\n" + "Your score: " + successfulRounds);
+      }
+      if (successfulRounds >= 25) {
+
+        resultText.setText("wtf\n" + "Your score: " + successfulRounds);
+      }
+      if (successfulRounds >= 30) {
+
+        resultText.setText("hacker!\n" + "Your score: " + successfulRounds);
+      }
+
       resultImage.setImageResource(R.drawable.cryingcat);
     }
   }
 
   public void onWindowFocusChanged(boolean hasFocus) {
+
     super.onWindowFocusChanged(hasFocus);
     if (hasFocus) {
       View decorView = getWindow().getDecorView();
@@ -64,6 +93,7 @@ public class EndScreenActivity extends AppCompatActivity {
 
   // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
+
     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
       VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);
