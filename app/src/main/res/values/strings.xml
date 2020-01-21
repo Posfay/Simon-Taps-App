@@ -4,10 +4,10 @@
     <string name="create_button">CREATE</string>
     <string name="edit_text">Room ID</string>
     <string name="settings">Settings</string>
-    <string name="room_id">ROOMID: </string>
+    <string name="room_id">Room ID:</string>
     <string name="exit_button">Exit</string>
     <string name="simon_taps">This is the simon taps logo</string>
     <string name="scan_button">SCAN</string>
-    <string name="round">ROUND: </string>
+    <string name="round">Round:</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.activities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,49 +27,57 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
+import hu.simon.taps.R;
+import hu.simon.taps.http.handler.AsyncResponse;
+import hu.simon.taps.http.handler.OkHttpHandler;
+import hu.simon.taps.utils.GameUtil;
+import hu.simon.taps.utils.LayoutUtil;
+import hu.simon.taps.utils.ServerUtil;
+import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
 
 public class GameActivity extends Activity implements AsyncResponse {
 
   // ------------------------------------DECLARING VARIABLES---------------------------------------
+  public static final String BASE_URL =
+      ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
+
   public OkHttpHandler okHttpHandler;
   public OkHttpClient client;
-  public String playerId;
-  public String roomId;
-  public Vibrator vibrator;
 
   TextView feedbackText;
   TextView roomIdText;
   TextView roundText;
+
   Button greenButton;
   Button redButton;
   Button yellowButton;
   Button blueButton;
   Button yourButton;
+
+  Vibrator vibrator;
+
   ConstraintLayout layout;
+
+  String playerId;
+  String roomId;
+  String wordPattern = "";
 
   long numOfPlayers = -1;
   long prevNumOfPlayers = 5;
-  Long tileId = null;
-  List<Integer> pattern;
-  String wordPattern = "";
-  Boolean shown = false;
-  Boolean exitCondition = false;
-  Boolean connected = false;
-  Boolean leavable = false;
-
-  Handler getStateTimerHandler = new Handler();
   long intervalMilli = 1000;
   long offlineTime = 0;
+  long tileId = 0;
 
+  boolean shown = false;
+  boolean exitCondition = false;
+  boolean leavable = false;
+
+  List<Integer> pattern;
+
+  Handler getStateTimerHandler = new Handler();
   Handler timerHandler = new Handler();
   Handler delayHandler = new Handler();
-  public static final long DELAY_MILLIS = 500;
-  public static final long DELAY_DISPLAY = 1000;
-
-  public static final String BASE_URL =
-      ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
 
@@ -94,15 +102,26 @@ public class GameActivity extends Activity implements AsyncResponse {
     pattern = new ArrayList<>();
 
     client = new OkHttpClient();
+
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
     getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
 
     leavable = true;
 
-    // Getting Player ID and Room ID from MainACtivity
+    // Getting Player ID and Room ID from MainActivity
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
-    roomIdText.setText(getString(R.string.room_id) + roomId);
+    roomIdText.setText(getString(R.string.room_id) + " " + roomId);
+  }
+
+  public void onWindowFocusChanged(boolean hasFocus) {
+
+    super.onWindowFocusChanged(hasFocus);
+    if (hasFocus) {
+      View decorView = getWindow().getDecorView();
+      LayoutUtil.hideSystemUI(decorView);
+    }
   }
 
   // -----------------------------------GETSTATE REQUEST (REPEATED)---------------------------------
@@ -114,19 +133,24 @@ public class GameActivity extends Activity implements AsyncResponse {
         return;
       }
 
-      connectionCheck();
+      boolean connected = connectionCheck();
+
       if (!connected) {
+
         offlineTime += intervalMilli;
-        Toast.makeText(GameActivity.this, "No connection!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(GameActivity.this, GameUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
+            .show();
       }
 
       if (offlineTime >= 3000) {
+
         Log.i("offline", String.valueOf(offlineTime));
         backToMainActivity();
       }
 
       // Getstate request
       if (connected) {
+
         offlineTime = 0;
         String url =
             BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
@@ -141,25 +165,24 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   @Override
   protected void onPause() {
+
     super.onPause();
-    exitCondition = true; // No more getstate requests, when exits this activity
+
+    // No more getstate requests, when exits this activity
+    exitCondition = true;
   }
 
-  // Checking internet connection
-  public void connectionCheck() {
+  private boolean connectionCheck() {
 
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-    // We are connected to a network
-    // No internet :(
-    connected = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+
+    return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
         .getState() == NetworkInfo.State.CONNECTED ||
         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
             .getState() == NetworkInfo.State.CONNECTED;
-    Log.i("connected", connected.toString());
   }
 
-  // SUCCESSFUL REQUEST
   @Override
   public void onRequestComplete(String responseJsonString) {
 
@@ -225,14 +248,13 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gameWaiting(JSONObject payloadJson) {
 
     numOfPlayers = payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_PLAYERS.toString());
-    feedbackText.setText("Players in room: " + numOfPlayers + " ");
+    feedbackText.setText("Players in room: " + numOfPlayers);
 
     if (numOfPlayers > prevNumOfPlayers) {
       VibrationUtil.preferredVibration(GameActivity.this, vibrator);
     }
 
     prevNumOfPlayers = numOfPlayers;
-
   }
 
   public void gamePreparing(JSONObject payloadJson) {
@@ -241,25 +263,31 @@ public class GameActivity extends Activity implements AsyncResponse {
     feedbackText.setText("Prepare for the game (10 s)");
     roomIdText.setText("");
 
+    ConstraintLayout layout = findViewById(R.id.layout);
+
     intervalMilli = 250;
 
     tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
 
     if (tileId == 1) {
       yourButton = findViewById(R.id.greenButton);
-      yourButton.setBackgroundResource(R.drawable.button_green_active);
+      // yourButton.setBackgroundResource(R.drawable.button_green_active);
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.green_bg));
     }
     if (tileId == 2) {
       yourButton = findViewById(R.id.redButton);
-      yourButton.setBackgroundResource(R.drawable.button_red_active);
+      // yourButton.setBackgroundResource(R.drawable.button_red_active);
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.red_bg));
     }
     if (tileId == 3) {
       yourButton = findViewById(R.id.yellowButton);
-      yourButton.setBackgroundResource(R.drawable.button_yellow_active);
+      // yourButton.setBackgroundResource(R.drawable.button_yellow_active);
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow_bg));
     }
     if (tileId == 4) {
       yourButton = findViewById(R.id.blueButton);
-      yourButton.setBackgroundResource(R.drawable.button_blue_active);
+      // yourButton.setBackgroundResource(R.drawable.button_blue_active);
+      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_bg));
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
@@ -291,9 +319,9 @@ public class GameActivity extends Activity implements AsyncResponse {
         public void run() {
           displayPattern();
         }
-      }, DELAY_DISPLAY);
+      }, GameUtil.DELAY_BETWEEN_ROUNDS);
 
-      roundText.setText(getString(R.string.round) + wordPattern.length());
+      roundText.setText(getString(R.string.round) + " " + wordPattern.length());
 
       shown = true;
     }
@@ -325,7 +353,7 @@ public class GameActivity extends Activity implements AsyncResponse {
             public void run() {
               greenButton.setBackgroundResource(R.drawable.button_green);
             }
-          }, DELAY_MILLIS);
+          }, GameUtil.FLASH_DURATION);
         }
         if (current == 2) {
 
@@ -335,7 +363,7 @@ public class GameActivity extends Activity implements AsyncResponse {
             public void run() {
               redButton.setBackgroundResource(R.drawable.button_red);
             }
-          }, DELAY_MILLIS);
+          }, GameUtil.FLASH_DURATION);
         }
         if (current == 3) {
 
@@ -345,7 +373,7 @@ public class GameActivity extends Activity implements AsyncResponse {
             public void run() {
               yellowButton.setBackgroundResource(R.drawable.button_yellow);
             }
-          }, DELAY_MILLIS);
+          }, GameUtil.FLASH_DURATION);
         }
         if (current == 4) {
 
@@ -355,14 +383,15 @@ public class GameActivity extends Activity implements AsyncResponse {
             public void run() {
               blueButton.setBackgroundResource(R.drawable.button_blue);
             }
-          }, DELAY_MILLIS);
+          }, GameUtil.FLASH_DURATION);
         }
         if (counter <= 0) {
+
           startGame();
           return;
         }
 
-        timerHandler.postDelayed(this, DELAY_MILLIS + 100);
+        timerHandler.postDelayed(this, GameUtil.FLASH_DURATION + GameUtil.DELAY_BETWEEN_FLASHES);
       }
     };
 
@@ -437,6 +466,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
+
     if (keyCode == KeyEvent.KEYCODE_BACK) {
 
       VibrationUtil.preferredVibration(GameActivity.this, vibrator);
@@ -446,7 +476,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       }
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage("Do you want to leave the room?");
+      builder.setMessage(GameUtil.LEAVE_DIALOG);
       builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
           VibrationUtil.preferredVibration(GameActivity.this, vibrator);
@@ -463,25 +493,32 @@ public class GameActivity extends Activity implements AsyncResponse {
       AlertDialog dialog = builder.create();
 
       dialog.show();
+
       return true;
     }
+
     return super.onKeyDown(keyCode, event);
   }
 
   // END OF THE GAME
   public void gameEnd(Boolean success) {
 
-    feedbackText.setText("");
-    yourButton.setEnabled(false);
     exitCondition = true;
 
+    feedbackText.setText("");
+
+    yourButton.setEnabled(false);
+
     finish();
+
     Intent intent = new Intent(getBaseContext(), EndScreenActivity.class);
 
     if (success) {
+
       intent.putExtra("win", true);
       intent.putExtra("successfulRounds", (long) wordPattern.length());
     } else {
+
       intent.putExtra("win", false);
       intent.putExtra("successfulRounds", (long) wordPattern.length() - 1);
     }
@@ -491,8 +528,6 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   // LEAVING ROOM
   public void backToMainActivity() {
-
-    Log.i("leave", "true");
 
     finish();
 

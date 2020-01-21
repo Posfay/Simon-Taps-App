@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.http.handler;
 
 import java.io.IOException;
 
@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
+import hu.simon.taps.http.handler.AsyncResponse;
+import hu.simon.taps.utils.ServerUtil;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

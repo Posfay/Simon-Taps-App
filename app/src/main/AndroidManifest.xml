@@ -14,14 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EndScreenActivity"></activity>
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".activities.EndScreenActivity"></activity>
+        <activity android:name=".activities.SettingsActivity" />
         <activity
-            android:name=".GameActivity"
+            android:name=".activities.GameActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>

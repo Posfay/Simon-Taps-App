@@ -1,4 +1,4 @@
-package hu.simon.taps;
+package hu.simon.taps.activities;
 
 import java.util.Random;
 import java.util.UUID;
@@ -28,31 +28,72 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
+import hu.simon.taps.BuildConfig;
+import hu.simon.taps.R;
+import hu.simon.taps.http.handler.AsyncResponse;
+import hu.simon.taps.http.handler.OkHttpHandler;
+import hu.simon.taps.utils.GameUtil;
+import hu.simon.taps.utils.LayoutUtil;
+import hu.simon.taps.utils.ServerUtil;
+import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
 
 public class MainActivity extends Activity implements AsyncResponse {
 
   // --------------------------------------DECLARING VARIABLES--------------------------------------
-  public OkHttpClient client;
-  public OkHttpHandler okHttpHandler;
-
-  public EditText roomIdEditText;
-  public String roomId;
-  public String playerId;
-  Boolean connected = false;
-  String status;
-  String reason;
-  Random randomBetweenOneFour = new Random();
-  public Button joinBut;
-  public Button createBut;
-  public Button settingsBut;
-
   public static final String BASE_URL =
       ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
 
-  public Vibrator vibrator;
+  public static final String VERSION = BuildConfig.VERSION_NAME;
+
+  public OkHttpClient client;
+  public OkHttpHandler okHttpHandler;
+
+  EditText roomIdEditText;
+
+  Vibrator vibrator;
+
+  Button joinBut;
+  Button createBut;
+  Button settingsBut;
+  Button notABut;
+
+  Random randomBetweenOneFour = new Random();
+
+  String roomId;
+  String playerId;
+  String status;
+  String reason;
+
+  boolean versionChecked = false;
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
+
+  private class UppercaseTextWatcher implements TextWatcher {
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+      // pass
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+      // pass
+    }
+
+    @Override
+    public void afterTextChanged(Editable et) {
+
+      String s = et.toString();
+
+      if (!s.equals(s.toUpperCase())) {
+
+        s = s.toUpperCase();
+        roomIdEditText.setText(s);
+        roomIdEditText.setSelection(roomIdEditText.length());
+      }
+    }
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,42 +104,18 @@ public class MainActivity extends Activity implements AsyncResponse {
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     roomIdEditText = findViewById(R.id.editText);
+    joinBut = findViewById(R.id.joinButton);
+    notABut = findViewById(R.id.unusedLayoutButton);
+    createBut = findViewById(R.id.createButton);
+    settingsBut = findViewById(R.id.settingsButton);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-    // Always uppercase in textbox
-    roomIdEditText.addTextChangedListener(new TextWatcher() {
-
-      @Override
-      public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        // pass
-      }
-
-      @Override
-      public void onTextChanged(CharSequence s, int start, int before, int count) {
-        // pass
-      }
-
-      @Override
-      public void afterTextChanged(Editable et) {
-
-        String s = et.toString();
-
-        if (!s.equals(s.toUpperCase())) {
-
-          s = s.toUpperCase();
-          roomIdEditText.setText(s);
-          roomIdEditText.setSelection(roomIdEditText.length());
-        }
-      }
-    });
-
     client = new OkHttpClient();
 
-    // randomising button color
-    joinBut = findViewById(R.id.joinButton);
-    createBut = findViewById(R.id.createButton);
-    settingsBut = findViewById(R.id.settingsButton);
+    roomIdEditText.addTextChangedListener(new UppercaseTextWatcher());
+
+    createBut.setEnabled(true);
 
     createBut.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -106,15 +123,12 @@ public class MainActivity extends Activity implements AsyncResponse {
         createClick(v);
       }
     });
-    createBut.setEnabled(true);
-
     joinBut.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         joinClick(v);
       }
     });
-
     settingsBut.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -122,9 +136,22 @@ public class MainActivity extends Activity implements AsyncResponse {
       }
     });
 
+    randomButtonColor();
+
+    boolean connected = checkInternetOnCreate();
+
+    if (connected) {
+      checkVersionOnCreate();
+    }
+  }
+
+  public void randomButtonColor() {
+
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
     switch (randomSwitchNum) {
       case 1:
+        ViewCompat.setBackgroundTintList(notABut,
+            ContextCompat.getColorStateList(this, R.color.blue));
         ViewCompat.setBackgroundTintList(joinBut,
             ContextCompat.getColorStateList(this, R.color.blue));
         ViewCompat.setBackgroundTintList(createBut,
@@ -133,6 +160,8 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#00b0ff" alt. blue
         break;
       case 2:
+        ViewCompat.setBackgroundTintList(notABut,
+            ContextCompat.getColorStateList(this, R.color.red));
         ViewCompat.setBackgroundTintList(joinBut,
             ContextCompat.getColorStateList(this, R.color.red));
         ViewCompat.setBackgroundTintList(createBut,
@@ -141,6 +170,8 @@ public class MainActivity extends Activity implements AsyncResponse {
         // #f44336" alt. red
         break;
       case 3:
+        ViewCompat.setBackgroundTintList(notABut,
+            ContextCompat.getColorStateList(this, R.color.green));
         ViewCompat.setBackgroundTintList(joinBut,
             ContextCompat.getColorStateList(this, R.color.green));
         ViewCompat.setBackgroundTintList(createBut,
@@ -149,6 +180,8 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#64dd17" alt. green
         break;
       case 4:
+        ViewCompat.setBackgroundTintList(notABut,
+            ContextCompat.getColorStateList(this, R.color.yellow));
         ViewCompat.setBackgroundTintList(joinBut,
             ContextCompat.getColorStateList(this, R.color.yellow));
         ViewCompat.setBackgroundTintList(createBut,
@@ -157,56 +190,72 @@ public class MainActivity extends Activity implements AsyncResponse {
         // "#ffff00" alt. yellow
         break;
     }
-    //fullscreen
   }
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemUI();
-        }
+
+  private boolean checkInternetOnCreate() {
+
+    boolean connected = connectionCheck();
+
+    if (!connected) {
+
+      alertDialog(GameUtil.NO_INTERNET_CONNECTION, true);
+      return false;
     }
-    private void hideSystemUI() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+    return true;
+  }
+
+  private void checkVersionOnCreate() {
+
+    okHttpHandler = new OkHttpHandler(this, client);
+    okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION.toString() + "/" + VERSION);
+  }
+
+  // fullscreen
+  public void onWindowFocusChanged(boolean hasFocus) {
+
+    super.onWindowFocusChanged(hasFocus);
+    if (hasFocus) {
+      View decorView = getWindow().getDecorView();
+      LayoutUtil.hideSystemUI(decorView);
     }
+  }
+
   // Checking internet connection
-  public void connectionCheck() {
+  private boolean connectionCheck() {
 
     ConnectivityManager connectivityManager =
         (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+    // we are connected to a network
+    return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
         .getState() == NetworkInfo.State.CONNECTED ||
         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-            .getState() == NetworkInfo.State.CONNECTED) {
-
-      // we are connected to a network
-      connected = true;
-    } else {
-
-      connected = false;
-      alertDialog();
-    }
-
-    Log.i("connected", connected.toString());
+            .getState() == NetworkInfo.State.CONNECTED;
   }
 
-  // Alert Dialog when there's no internet
-  public void alertDialog() {
+  // Alert Dialog
+  private void alertDialog(String message, boolean exitActivity) {
 
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setMessage("No internet connection!");
-    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-      public void onClick(DialogInterface dialog, int which) {
-        VibrationUtil.preferredVibration(MainActivity.this, vibrator);
-      }
-    });
+    builder.setMessage(message);
+
+    if (exitActivity) {
+
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          finish();
+        }
+      });
+    } else {
+
+      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        public void onClick(DialogInterface dialog, int which) {
+          VibrationUtil.preferredVibration(MainActivity.this, vibrator);
+        }
+      });
+    }
+
     builder.setCancelable(false);
 
     AlertDialog dialog = builder.create();
@@ -215,18 +264,19 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Joining room
-  public void joinClick(View v) {
+  private void joinClick(View v) {
 
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
-    connectionCheck();
+    boolean connected = connectionCheck();
 
     if (!connected) {
+
+      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
       return;
     }
 
-    Log.i("internet", connected.toString());
     Log.i("request", "sent");
 
     String url = BASE_URL + ServerUtil.Endpoint.JOIN.toString();
@@ -256,17 +306,18 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Creating room
-
-  public void createClick(View v) {
+  private void createClick(View v) {
 
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
     createBut.setEnabled(false);
 
-    connectionCheck();
+    boolean connected = connectionCheck();
 
     if (!connected) {
+
+      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
       return;
     }
 
@@ -289,19 +340,22 @@ public class MainActivity extends Activity implements AsyncResponse {
   }
 
   // Open settings
-  public void settingsClick(View v) {
+  private void settingsClick(View v) {
 
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
     finish();
+
     Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
     startActivity(intent);
   }
 
   // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
+
     if (keyCode == KeyEvent.KEYCODE_BACK) {
+
       VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -323,8 +377,10 @@ public class MainActivity extends Activity implements AsyncResponse {
       AlertDialog dialog = builder.create();
 
       dialog.show();
+
       return true;
     }
+
     return super.onKeyDown(keyCode, event);
   }
 
@@ -349,9 +405,18 @@ public class MainActivity extends Activity implements AsyncResponse {
       e.printStackTrace();
     }
 
-    connectionCheck();
+    if (!versionChecked) {
 
-    if ((connected) && (status.equals("OK"))) {
+      versionChecked = true;
+
+      boolean compatible =
+          payloadJson.optBoolean(ServerUtil.ResponseParameter.COMPATIBLE.toString());
+
+      if (!compatible) {
+
+        alertDialog(GameUtil.OUTDATED_VERSION, true);
+      }
+    } else if (status.equals("OK")) {
 
       Log.i("name", playerId);
 
