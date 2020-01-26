@@ -3,6 +3,7 @@ package hu.simon.taps.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import hu.simon.taps.R;
+import hu.simon.taps.utils.LanguageUtil;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.VibrationUtil;
 
@@ -32,6 +34,10 @@ public class EndScreenActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
+    //Changing language
+    Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_end_screen);
 
@@ -49,40 +55,40 @@ public class EndScreenActivity extends AppCompatActivity {
 
     if (win) {
 
-      resultText.setText("Your score: " + successfulRounds);
+      resultText.setText(getString(R.string.score) + successfulRounds);
 
       resultImage.setImageDrawable(res.getDrawable(R.drawable.godfathercat));
     } else {
 
-      resultText.setText("Your score: " + successfulRounds);
+      resultText.setText(getString(R.string.score) + successfulRounds);
 
       if (successfulRounds >= 8) {
 
-        resultText.setText("Nice!\n" + "Your score: " + successfulRounds);
+        resultText.setText(getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 10) {
 
-        resultText.setText("Good job!\n" + "Your score: " + successfulRounds);
+        resultText.setText(getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 13) {
 
-        resultText.setText("Great job!\n" + "Your score: " + successfulRounds);
+        resultText.setText(getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 16) {
 
-        resultText.setText("Impressive!\n" + "Your score: " + successfulRounds);
+        resultText.setText(getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 20) {
 
-        resultText.setText("Nailed it!\n" + "Your score: " + successfulRounds);
+        resultText.setText(getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 25) {
 
-        resultText.setText("wtf\n" + "Your score: " + successfulRounds);
+        resultText.setText(getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 30) {
 
-        resultText.setText("hacker!\n" + "Your score: " + successfulRounds);
+        resultText.setText(getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
       }
 
       resultImage.setImageResource(R.drawable.cryingcat);
@@ -106,7 +112,7 @@ public class EndScreenActivity extends AppCompatActivity {
       VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage("Back to menu?");
+      builder.setMessage(getString(R.string.back_to_menu));
       builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
           VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);

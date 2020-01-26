@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
+import hu.simon.taps.utils.LanguageUtil;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
@@ -97,6 +99,10 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+
+    //Changing language
+    Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
@@ -288,7 +294,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (roomId.equals("") || (roomId.length() != 5)) {
 
-      Toast.makeText(this, "Invalid room name", Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, getString(R.string.invalid_room), Toast.LENGTH_SHORT).show();
       return;
     }
 
@@ -359,7 +365,7 @@ public class MainActivity extends Activity implements AsyncResponse {
       VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage("Do you want to exit?");
+      builder.setMessage(getString(R.string.exit));
       builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
           VibrationUtil.preferredVibration(MainActivity.this, vibrator);
@@ -431,13 +437,13 @@ public class MainActivity extends Activity implements AsyncResponse {
       reason = payloadJson.optString(ServerUtil.ResponseParameter.REASON.toString());
 
       if (reason.equals("ROOM_ALREADY_EXISTS")) {
-        reason = "Room already exists";
+        reason = getString(R.string.room_exists);
       }
       if (reason.equals("ROOM_DOES_NOT_EXIST")) {
-        reason = "Room does not exist";
+        reason = getString(R.string.room_not_exists);
       }
       if (reason.equals("ROOM_IS_FULL")) {
-        reason = "Room is full";
+        reason = getString(R.string.room_full);
       }
 
       Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();
