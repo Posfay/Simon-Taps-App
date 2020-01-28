@@ -247,6 +247,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+
+    getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
   }
 
   public void onRequestComplete(String responseJsonString) {
@@ -258,6 +260,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     try {
 
       payloadJson = new JSONObject(responseJsonString);
+
+      Log.i("restartResponse", responseJsonString);
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
       state = payloadJson.getString(ServerUtil.ResponseParameter.GAME_STATE.toString());
@@ -274,9 +278,6 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     if (ServerUtil.State.PREPARING.toString().equals(state)) {
       backToGameActivity();
     }
-
-    payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_RESTART_PLAYERS.toString());
-
   }
 
   public void onWindowFocusChanged(boolean hasFocus) {
