@@ -1,11 +1,13 @@
 package hu.simon.taps.activities;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -18,11 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -40,7 +37,7 @@ import okhttp3.OkHttpClient;
 public class EndScreenActivity extends AppCompatActivity implements AsyncResponse {
 
   public static final String BASE_URL =
-          ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
+      ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
 
   public OkHttpHandler okHttpHandler;
   public OkHttpClient client;
@@ -68,9 +65,10 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    //Changing language
+    // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+        getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_end_screen);
@@ -94,7 +92,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
-    colourCode = getIntent().getLongExtra("playerColourCode",0);
+    colourCode = getIntent().getLongExtra("playerColourCode", 0);
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
@@ -109,6 +107,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     // No more getstate requests, when exits this activity
     exitCondition = true;
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
   }
 
   Runnable getStateTimerRunnable = new Runnable() {
@@ -129,8 +128,9 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
       if (offlineTime >= GameUtil.MAX_OFFLINE_TIME) {
 
-        Toast.makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
-                .show();
+        Toast
+            .makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
+            .show();
       }
 
       // Getstate request
@@ -138,13 +138,14 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
         offlineTime = 0;
         String url =
-                BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
+            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
 
         okHttpHandler = new OkHttpHandler(EndScreenActivity.this, client);
         okHttpHandler.getRequest(url);
       }
 
-      getStateTimerHandler.postDelayed(getStateTimerRunnable, ServerUtil.END_SCREEN_REQUEST_INTERVAL);
+      getStateTimerHandler.postDelayed(getStateTimerRunnable,
+          ServerUtil.END_SCREEN_REQUEST_INTERVAL);
     }
   };
 
@@ -162,31 +163,38 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
       if (successfulRounds >= 8) {
 
-        resultText.setText(getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 10) {
 
-        resultText.setText(getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 13) {
 
-        resultText.setText(getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 16) {
 
-        resultText.setText(getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 20) {
 
-        resultText.setText(getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 25) {
 
-        resultText.setText(getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 30) {
 
-        resultText.setText(getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
       }
 
       resultImage.setImageResource(R.drawable.cryingcat);
@@ -202,19 +210,19 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
         break;
       case 1:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.green));
+            ContextCompat.getColorStateList(this, R.color.green));
         break;
       case 2:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.red));
+            ContextCompat.getColorStateList(this, R.color.red));
         break;
       case 3:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.yellow));
+            ContextCompat.getColorStateList(this, R.color.yellow));
         break;
       case 4:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.blue));
+            ContextCompat.getColorStateList(this, R.color.blue));
         break;
     }
   }
@@ -233,7 +241,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     if (!ServerUtil.connectionCheck(this)) {
 
       Toast.makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
-              .show();
+          .show();
     } else {
       restartButton.setEnabled(false);
     }
@@ -253,7 +261,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   public void onRequestComplete(String responseJsonString) {
 
-    JSONObject payloadJson = null;
+    JSONObject payloadJson;
     String status = null;
     String state = null;
 
@@ -271,7 +279,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     }
 
     if (!status.equals("OK")) {
-      //TODO error response
+      // TODO error response
       return;
     }
 
@@ -326,6 +334,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);
 
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
+
     finish();
 
     Intent intent = new Intent(getBaseContext(), MainActivity.class);
@@ -335,6 +345,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   private void backToGameActivity() {
 
     VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);
+
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
 
     finish();
 

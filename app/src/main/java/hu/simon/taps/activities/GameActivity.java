@@ -8,12 +8,9 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -90,9 +87,10 @@ public class GameActivity extends Activity implements AsyncResponse {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    //Changing language
+    // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+        getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
@@ -183,6 +181,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     // No more getstate requests, when exits this activity
     exitCondition = true;
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
   }
 
   @Override
@@ -508,6 +507,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gameEnd(Boolean success) {
 
     exitCondition = true;
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
 
     feedbackText.setText("");
 
