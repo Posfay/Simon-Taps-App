@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -52,7 +53,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   long successfulRounds;
   long offlineTime = 0;
-  int colourCode;
+  long colourCode;
 
   String roomId;
   String playerId;
@@ -89,9 +90,11 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
+    client = new OkHttpClient();
+
     win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
-    colourCode = getIntent().getIntExtra("playerColourCode",0);
+    colourCode = getIntent().getLongExtra("playerColourCode",0);
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
@@ -192,9 +195,10 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   public void restartButtonColour() {
 
-    switch (colourCode) {
+    switch ((int) colourCode) {
       case 0:
         Log.i("intentExtra", "couldn't process");
+        Log.i("colorCode", String.valueOf(colourCode));
         break;
       case 1:
         ViewCompat.setBackgroundTintList(restartButton,
@@ -236,7 +240,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), this.playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
     } catch (JSONException e) {
       e.printStackTrace();
     }
