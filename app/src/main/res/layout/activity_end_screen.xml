@@ -45,7 +45,7 @@
         android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="28sp"
+        android:textSize="28dp"
         app:layout_constraintBottom_toBottomOf="@id/topHorizontalGuideline"
         app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideline"
         app:layout_constraintStart_toStartOf="@id/middleVerticalGuideline"
@@ -63,11 +63,12 @@
         app:srcCompat="@drawable/godfathercat" />
 
     <Button
-        android:id="@+id/replayButton"
+        android:id="@+id/restartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_standard"
-        android:text="Replay"
+        android:text="@string/restart"
+        android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="@id/bottomHorizontalGuideline"
         app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideline"
         app:layout_constraintStart_toStartOf="@id/middleVerticalGuideline"

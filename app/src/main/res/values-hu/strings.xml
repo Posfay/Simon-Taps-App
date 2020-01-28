@@ -28,4 +28,5 @@
     <string name="back_to_menu">Vissza a menübe?</string>
     <string name="round_started">A kör elkezdődött!</string>
     <string name="score">Pontjaitok:</string>
+    <string name="restart">Újrakezdés</string>
 </resources>
