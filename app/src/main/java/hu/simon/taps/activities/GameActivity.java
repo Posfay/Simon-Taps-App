@@ -325,7 +325,7 @@ public class GameActivity extends Activity implements AsyncResponse {
         }
       }, GameUtil.DELAY_BETWEEN_ROUNDS);
 
-      roundText.setText(getString(R.string.round) + " " + wordPattern.length());
+      roundText.setText(getString(R.string.round) + ": " + wordPattern.length());
 
       shown = true;
     }

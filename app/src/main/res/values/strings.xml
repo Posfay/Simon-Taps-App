@@ -23,7 +23,7 @@
 
     //----------------GameActivity------------------------
     <string name="room_id">Room ID:</string>
-    <string name="round">Round:</string>
+    <string name="round">Round</string>
     <string name="bust">Bust image</string>
     <string name="leave">Do you want to leave the room?</string>
 
@@ -43,6 +43,8 @@
     <string name="pos5">Nailed it!</string>
     <string name="pos6" translatable="false">wtf</string>
     <string name="pos7" translatable="false">hacker!</string>
+
+    <string name="restart">Restart</string>
 
     <string name="back_to_menu">Back to menu?</string>
     

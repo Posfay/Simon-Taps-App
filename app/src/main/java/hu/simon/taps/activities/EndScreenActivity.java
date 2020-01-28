@@ -193,6 +193,9 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   public void restartButtonColour() {
 
     switch (colourCode) {
+      case 0:
+        Log.i("intentExtra", "couldn't process");
+        break;
       case 1:
         ViewCompat.setBackgroundTintList(restartButton,
                 ContextCompat.getColorStateList(this, R.color.green));
