@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.EndScreenActivity"></activity>
+        <activity android:name=".activities.EndScreenActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity
             android:name=".activities.GameActivity"

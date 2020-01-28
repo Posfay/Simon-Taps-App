@@ -1,13 +1,47 @@
 <resources>
-    <string name="app_name">Simon Taps</string>
+    <string name="app_name" translatable="false">Simon Taps</string>
+
+    //---------------MainActivity--------------------------
     <string name="join_button">JOIN</string>
     <string name="create_button">CREATE</string>
     <string name="edit_text">Room ID</string>
-    <string name="settings">Settings</string>
-    <string name="room_id">Room ID:</string>
-    <string name="exit_button">Exit</string>
     <string name="simon_taps">This is the simon taps logo</string>
-    <string name="scan_button">SCAN</string>
-    <string name="round">Round:</string>
 
+    <string name="invalid_room">Invalid room ID</string>
+    <string name="exit">Do you want to exit?</string>
+    <string name="room_exists">Room already exists</string>
+    <string name="room_not_exists">Room doesn\'t exist</string>
+    <string name="room_full">Room is full</string>
+
+    <string name="no_internet">No internet connection!</string>
+    <string name="outdated">You are using an outdated version of the application! Please download the latest version!</string>
+
+    //---------------SettingsActivity------------------------------
+    <string name="settings">Settings</string>
+    <string name="vibrations">Vibrations</string>
+    <string name="language">Language: English</string>
+
+    //----------------GameActivity------------------------
+    <string name="room_id">Room ID:</string>
+    <string name="round">Round:</string>
+    <string name="bust">Bust image</string>
+    <string name="leave">Do you want to leave the room?</string>
+
+    <string name="prepare">Prepare for the game (10 s)</string>
+    <string name="round_started">The round has started!</string>
+
+
+
+    //-----------------EndScreenActivity---------------------
+    <string name="result_picture">Picture about a cat</string>
+    <string name="score">"Your score: "</string>
+    <string name="pos1">Nice!</string>
+    <string name="pos2">Good job!</string>
+    <string name="pos3">Great job!</string>
+    <string name="pos4">Impressive!</string>
+    <string name="pos5">Nailed it!</string>
+    <string name="pos6" translatable="false">wtf</string>
+    <string name="pos7" translatable="false">hacker!</string>
+    <string name="back_to_menu">Back to menu?</string>
+    
 </resources>

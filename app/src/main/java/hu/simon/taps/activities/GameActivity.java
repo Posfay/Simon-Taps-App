@@ -11,6 +11,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
+import hu.simon.taps.utils.LanguageUtil;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
@@ -48,6 +52,9 @@ public class GameActivity extends Activity implements AsyncResponse {
   TextView feedbackText;
   TextView roomIdText;
   TextView roundText;
+  TextView playersText;
+
+  ImageView bustImage;
 
   Button greenButton;
   Button redButton;
@@ -84,6 +91,10 @@ public class GameActivity extends Activity implements AsyncResponse {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
+    //Changing language
+    Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
@@ -93,11 +104,14 @@ public class GameActivity extends Activity implements AsyncResponse {
     feedbackText = findViewById(R.id.feedBackText);
     roomIdText = findViewById(R.id.roomIdText);
     roundText = findViewById(R.id.roundText);
+    playersText = findViewById(R.id.playersNumber);
     greenButton = findViewById(R.id.greenButton);
     redButton = findViewById(R.id.redButton);
     yellowButton = findViewById(R.id.yellowButton);
     blueButton = findViewById(R.id.blueButton);
     layout = findViewById(R.id.layout);
+
+    bustImage = findViewById(R.id.bustImage);
 
     pattern = new ArrayList<>();
 
@@ -248,7 +262,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gameWaiting(JSONObject payloadJson) {
 
     numOfPlayers = payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_PLAYERS.toString());
-    feedbackText.setText("Players in room: " + numOfPlayers);
+    playersText.setText(numOfPlayers + "/4");
 
     if (numOfPlayers > prevNumOfPlayers) {
       VibrationUtil.preferredVibration(GameActivity.this, vibrator);
@@ -260,7 +274,9 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gamePreparing(JSONObject payloadJson) {
 
     leavable = false;
-    feedbackText.setText("Prepare for the game (10 s)");
+    bustImage.setVisibility(View.INVISIBLE);
+    playersText.setVisibility(View.INVISIBLE);
+    feedbackText.setText(getString(R.string.prepare));
     roomIdText.setText("");
 
     ConstraintLayout layout = findViewById(R.id.layout);
@@ -417,7 +433,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   public void gamePlaying() {
 
-    feedbackText.setText("The round has started!");
+    feedbackText.setText(getString(R.string.round_started));
     yourButton.setEnabled(true);
 
     shown = false;
@@ -476,7 +492,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       }
 
       AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage(GameUtil.LEAVE_DIALOG);
+      builder.setMessage(getString(R.string.leave));
       builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
           VibrationUtil.preferredVibration(GameActivity.this, vibrator);
@@ -522,6 +538,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       intent.putExtra("win", false);
       intent.putExtra("successfulRounds", (long) wordPattern.length() - 1);
     }
+    intent.putExtra("playerColourCode", tileId);
 
     startActivity(intent);
   }

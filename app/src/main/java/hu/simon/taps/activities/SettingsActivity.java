@@ -4,32 +4,51 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import java.util.Locale;
+
 import androidx.appcompat.app.AppCompatActivity;
 import hu.simon.taps.R;
+import hu.simon.taps.utils.GameUtil;
+import hu.simon.taps.utils.LanguageUtil;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.VibrationUtil;
 
 public class SettingsActivity extends AppCompatActivity {
 
-  Switch vibrationsSwitch;
+  SharedPreferences prefs;
+  SharedPreferences.Editor editor;
 
   Vibrator vibrator;
 
-  SharedPreferences prefs;
+  Switch vibrationsSwitch;
+  Switch languageSwitch;
 
   boolean vibrationsState;
 
+  String languageToLoad;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+
+    //Changing language
+    Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
@@ -38,12 +57,14 @@ public class SettingsActivity extends AppCompatActivity {
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-    vibrationsSwitch = findViewById(R.id.vibrationsSwitch);
-
     prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    final SharedPreferences.Editor editor = prefs.edit();
+    editor = prefs.edit();
+
+    vibrationsSwitch = findViewById(R.id.vibrationsSwitch);
+    languageSwitch = findViewById(R.id.languageSwitch);
 
     vibrationsState = prefs.getBoolean("vibrations", true);
+    languageToLoad = prefs.getString("language", Locale.getDefault().getDisplayLanguage());
 
     vibrationsSwitch.setChecked(vibrationsState);
 
@@ -55,6 +76,21 @@ public class SettingsActivity extends AppCompatActivity {
           editor.putBoolean("vibrations", false);
         }
         editor.apply();
+      }
+    });
+
+    languageSwitch.setChecked(languageToLoad.equals("hu"));
+
+    languageSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+          editor.putString("language", "hu");
+        } else {
+          editor.putString("language", "en");
+        }
+        editor.apply();
+
+        backToMainActivity();
       }
     });
   }
@@ -72,28 +108,9 @@ public class SettingsActivity extends AppCompatActivity {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
 
     if (keyCode == KeyEvent.KEYCODE_BACK) {
-
       VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
 
-      AlertDialog.Builder builder = new AlertDialog.Builder(this);
-      builder.setMessage("Back to menu?");
-      builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int which) {
-          VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
-          backToMainActivity();
-        }
-      });
-      builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int which) {
-          VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
-        }
-      });
-      builder.setCancelable(false);
-
-      AlertDialog dialog = builder.create();
-
-      dialog.show();
-
+      backToMainActivity();
       return true;
     }
 

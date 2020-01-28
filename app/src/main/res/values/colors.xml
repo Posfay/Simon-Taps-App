@@ -20,5 +20,5 @@
     <color name="blue_pale">#FF94D2E7</color>
     <color name="blue_bg">#FF244F5E</color>
 
-    <color name="almostBlack">#FF111111</color>
+    <color name="almostBlack">#111111</color>
 </resources>

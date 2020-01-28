@@ -94,4 +94,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/bustImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/bust"
+        android:src="@drawable/bust"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/bust" />
+
+    <TextView
+        android:id="@+id/playersNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/bustImage"
+        app:layout_constraintStart_toEndOf="@+id/bustImage"
+        app:layout_constraintTop_toTopOf="@id/bustImage" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
