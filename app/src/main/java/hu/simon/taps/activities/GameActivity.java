@@ -6,14 +6,13 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -34,7 +33,6 @@ import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
-import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
@@ -74,10 +72,13 @@ public class GameActivity extends Activity implements AsyncResponse {
   long intervalMilli = ServerUtil.WAITING_STATE_REQUEST_INTERVAL;
   long offlineTime = 0;
   long tileId = 0;
+  long colorFrom;
+  long colorTo;
 
   boolean shown = false;
   boolean exitCondition = false;
   boolean leavable = false;
+  boolean didColorAnimate = false;
 
   List<Integer> pattern;
 
@@ -98,6 +99,10 @@ public class GameActivity extends Activity implements AsyncResponse {
     setContentView(R.layout.activity_game);
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedBackText);
@@ -126,15 +131,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
     roomIdText.setText(getString(R.string.room_id) + " " + roomId);
-  }
-
-  public void onWindowFocusChanged(boolean hasFocus) {
-
-    super.onWindowFocusChanged(hasFocus);
-    if (hasFocus) {
-      View decorView = getWindow().getDecorView();
-      LayoutUtil.hideSystemUI(decorView);
-    }
   }
 
   // -----------------------------------GETSTATE REQUEST (REPEATED)---------------------------------
@@ -267,7 +263,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     feedbackText.setText(getString(R.string.prepare));
     roomIdText.setText("");
 
-    ConstraintLayout layout = findViewById(R.id.layout);
+    final ConstraintLayout layout = findViewById(R.id.layout);
 
     intervalMilli = ServerUtil.GAME_STATE_REQUEST_INTERVAL;
 
@@ -275,23 +271,23 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (tileId == 1) {
       yourButton = findViewById(R.id.greenButton);
-      // yourButton.setBackgroundResource(R.drawable.button_green_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.green_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary);
+      colorTo = getResources().getColor(R.color.green_bg);
     }
     if (tileId == 2) {
       yourButton = findViewById(R.id.redButton);
-      // yourButton.setBackgroundResource(R.drawable.button_red_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.red_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary);
+      colorTo = getResources().getColor(R.color.red_bg);
     }
     if (tileId == 3) {
       yourButton = findViewById(R.id.yellowButton);
-      // yourButton.setBackgroundResource(R.drawable.button_yellow_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary);
+      colorTo = getResources().getColor(R.color.yellow_bg);
     }
     if (tileId == 4) {
       yourButton = findViewById(R.id.blueButton);
-      // yourButton.setBackgroundResource(R.drawable.button_blue_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary);
+      colorTo = getResources().getColor(R.color.blue_bg);
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
@@ -301,6 +297,23 @@ public class GameActivity extends Activity implements AsyncResponse {
       }
     });
     yourButton.setEnabled(false);
+
+    if (!didColorAnimate) {
+
+      didColorAnimate = true;
+      ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+      colorAnimation.setDuration(250); // milliseconds
+      colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+        @Override
+        public void onAnimationUpdate(ValueAnimator animator) {
+          layout.setBackgroundColor((int) animator.getAnimatedValue());
+        }
+
+      });
+      colorAnimation.start();
+    }
+
   }
 
   public void gameShowingPattern(JSONObject payloadJson) {

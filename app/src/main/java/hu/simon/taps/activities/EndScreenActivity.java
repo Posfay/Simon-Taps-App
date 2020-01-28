@@ -21,8 +21,6 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.UUID;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
@@ -31,7 +29,6 @@ import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
-import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
@@ -75,6 +72,10 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     setContentView(R.layout.activity_end_screen);
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
     resultText = findViewById(R.id.result);
     resultImage = findViewById(R.id.resultImage);
@@ -273,15 +274,6 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_RESTART_PLAYERS.toString());
 
-  }
-
-  public void onWindowFocusChanged(boolean hasFocus) {
-
-    super.onWindowFocusChanged(hasFocus);
-    if (hasFocus) {
-      View decorView = getWindow().getDecorView();
-      LayoutUtil.hideSystemUI(decorView);
-    }
   }
 
   // BACK BUTTON PRESSED

@@ -7,20 +7,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.Fade;
+import android.transition.Scene;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -33,13 +34,10 @@ import hu.simon.taps.BuildConfig;
 import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
-import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
-import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
-import okhttp3.internal.Util;
 
 public class MainActivity extends Activity implements AsyncResponse {
 
@@ -51,6 +49,8 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public OkHttpClient client;
   public OkHttpHandler okHttpHandler;
+
+  public Scene mainScene;
 
   EditText roomIdEditText;
 
@@ -109,6 +109,10 @@ public class MainActivity extends Activity implements AsyncResponse {
     setContentView(R.layout.activity_main);
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
     roomIdEditText = findViewById(R.id.editText);
     joinBut = findViewById(R.id.joinButton);
@@ -144,6 +148,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     });
 
     randomButtonColor();
+
 
     boolean connected = checkInternetOnCreate();
 
@@ -218,15 +223,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION.toString() + "/" + VERSION);
   }
 
-  // fullscreen
-  public void onWindowFocusChanged(boolean hasFocus) {
 
-    super.onWindowFocusChanged(hasFocus);
-    if (hasFocus) {
-      View decorView = getWindow().getDecorView();
-      LayoutUtil.hideSystemUI(decorView);
-    }
-  }
 
   // Alert Dialog
   private void alertDialog(String message, boolean exitActivity) {

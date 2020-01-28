@@ -26,7 +26,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import hu.simon.taps.R;
 import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
-import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.VibrationUtil;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -54,6 +53,10 @@ public class SettingsActivity extends AppCompatActivity {
     setContentView(R.layout.activity_settings);
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -90,18 +93,9 @@ public class SettingsActivity extends AppCompatActivity {
         }
         editor.apply();
 
-        backToMainActivity();
+        reloadActivity();
       }
     });
-  }
-
-  public void onWindowFocusChanged(boolean hasFocus) {
-
-    super.onWindowFocusChanged(hasFocus);
-    if (hasFocus) {
-      View decorView = getWindow().getDecorView();
-      LayoutUtil.hideSystemUI(decorView);
-    }
   }
 
   // BACK BUTTON PRESSED
@@ -125,6 +119,15 @@ public class SettingsActivity extends AppCompatActivity {
     finish();
 
     Intent intent = new Intent(getBaseContext(), MainActivity.class);
+    startActivity(intent);
+  }
+  public void reloadActivity() {
+
+    VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
+
+    finish();
+
+    Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
     startActivity(intent);
   }
 }
