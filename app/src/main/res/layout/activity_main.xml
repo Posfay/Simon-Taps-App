@@ -9,6 +9,37 @@
         tools:context=".activities.MainActivity"
         android:animateLayoutChanges="true">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleVerticalGuideline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@id/editText"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintTop_toTopOf="@id/joinButton" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/settings_icon"
+        android:textColor="#707070"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/simonTapsLogo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/simon_taps"
+        android:src="@drawable/simon_taps_no_bg_cut"
+        app:layout_constraintBottom_toTopOf="@+id/joinButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/unusedLayoutButton"
         android:layout_width="0dp"
@@ -75,36 +106,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
-
-    <Button
-        android:id="@+id/settingsButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/settings_icon"
-        android:textColor="#707070"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:textSize="24sp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="@id/editText"
-        app:layout_constraintGuide_percent="0.5"
-        app:layout_constraintTop_toTopOf="@id/joinButton" />
-
-    <ImageView
-        android:id="@+id/simonTapsLogo"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/simon_taps"
-        android:src="@drawable/simon_taps_no_bg_cut"
-        app:layout_constraintBottom_toTopOf="@+id/joinButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

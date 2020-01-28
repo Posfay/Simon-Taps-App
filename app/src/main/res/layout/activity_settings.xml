@@ -62,17 +62,6 @@
         app:layout_constraintTop_toBottomOf="@id/greyRectangle" />
 
     <Switch
-        android:id="@+id/vibrationsSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/vibrations"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@id/secondHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/secondHorizontalGuideline" />
-
-    <Switch
         android:id="@+id/languageSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -83,5 +72,16 @@
         app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideline"
         app:layout_constraintStart_toStartOf="@id/middleVerticalGuideline"
         app:layout_constraintTop_toBottomOf="@id/firstHorizontalGuideline" />
+
+    <Switch
+        android:id="@+id/vibrationsSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/vibrations"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/secondHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/secondHorizontalGuideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

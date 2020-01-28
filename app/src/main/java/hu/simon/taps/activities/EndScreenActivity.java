@@ -7,13 +7,17 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import hu.simon.taps.R;
 import hu.simon.taps.utils.LanguageUtil;
 import hu.simon.taps.utils.LayoutUtil;
@@ -28,8 +32,11 @@ public class EndScreenActivity extends AppCompatActivity {
   ImageView resultImage;
 
   long successfulRounds;
+  int colourCode;
 
   boolean win;
+
+  Button replayButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +53,25 @@ public class EndScreenActivity extends AppCompatActivity {
     resultText = findViewById(R.id.result);
     resultImage = findViewById(R.id.resultImage);
 
+    replayButton = findViewById(R.id.replayButton);
+    replayButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        replayButtonOnClick();
+      }
+    });
+
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
     win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
+    colourCode = getIntent().getIntExtra("playerColourCode",0);
 
+    setResultText();
+    replayButtonColour();
+  }
+
+  public void setResultText() {
     Resources res = getResources();
 
     if (win) {
@@ -93,6 +114,33 @@ public class EndScreenActivity extends AppCompatActivity {
 
       resultImage.setImageResource(R.drawable.cryingcat);
     }
+  }
+
+  public void replayButtonColour() {
+
+    switch (colourCode) {
+      case 1:
+        ViewCompat.setBackgroundTintList(replayButton,
+                ContextCompat.getColorStateList(this, R.color.green));
+        break;
+      case 2:
+        ViewCompat.setBackgroundTintList(replayButton,
+                ContextCompat.getColorStateList(this, R.color.red));
+        break;
+      case 3:
+        ViewCompat.setBackgroundTintList(replayButton,
+                ContextCompat.getColorStateList(this, R.color.yellow));
+        break;
+      case 4:
+        ViewCompat.setBackgroundTintList(replayButton,
+                ContextCompat.getColorStateList(this, R.color.blue));
+        break;
+    }
+  }
+
+  public void replayButtonOnClick() {
+
+    Log.i("replay", "pressed");
   }
 
   public void onWindowFocusChanged(boolean hasFocus) {
