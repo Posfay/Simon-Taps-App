@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -72,7 +71,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   long numOfPlayers = -1;
   long prevNumOfPlayers = 5;
-  long intervalMilli = 1000;
+  long intervalMilli = ServerUtil.WAITING_STATE_REQUEST_INTERVAL;
   long offlineTime = 0;
   long tileId = 0;
 
@@ -147,16 +146,16 @@ public class GameActivity extends Activity implements AsyncResponse {
         return;
       }
 
-      boolean connected = connectionCheck();
+      boolean connected = ServerUtil.connectionCheck(GameActivity.this);
 
       if (!connected) {
 
         offlineTime += intervalMilli;
-        Toast.makeText(GameActivity.this, GameUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
+        Toast.makeText(GameActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
             .show();
       }
 
-      if (offlineTime >= 3000) {
+      if (offlineTime >= GameUtil.MAX_OFFLINE_TIME) {
 
         Log.i("offline", String.valueOf(offlineTime));
         backToMainActivity();
@@ -184,17 +183,6 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     // No more getstate requests, when exits this activity
     exitCondition = true;
-  }
-
-  private boolean connectionCheck() {
-
-    ConnectivityManager connectivityManager =
-        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-    return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-        .getState() == NetworkInfo.State.CONNECTED ||
-        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-            .getState() == NetworkInfo.State.CONNECTED;
   }
 
   @Override
@@ -281,7 +269,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     ConstraintLayout layout = findViewById(R.id.layout);
 
-    intervalMilli = 250;
+    intervalMilli = ServerUtil.GAME_STATE_REQUEST_INTERVAL;
 
     tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
 
@@ -539,6 +527,8 @@ public class GameActivity extends Activity implements AsyncResponse {
       intent.putExtra("successfulRounds", (long) wordPattern.length() - 1);
     }
     intent.putExtra("playerColourCode", tileId);
+    intent.putExtra("EXTRA_PLAYER_ID", playerId);
+    intent.putExtra("EXTRA_ROOM_ID", roomId);
 
     startActivity(intent);
   }

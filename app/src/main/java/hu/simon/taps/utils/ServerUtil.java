@@ -1,5 +1,12 @@
 package hu.simon.taps.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import hu.simon.taps.R;
+
 public class ServerUtil {
 
   public static final String PROTOCOL = "http://";
@@ -12,9 +19,19 @@ public class ServerUtil {
 
   public static final String AUTHENTICATION_HEADER = "Simon-Auth";
 
+  public static final String NO_INTERNET_CONNECTION = String.valueOf(R.string.no_internet);
+
+  public static final String OUTDATED_VERSION = String.valueOf(R.string.outdated);
+
+  public static final long WAITING_STATE_REQUEST_INTERVAL = 1000;
+
+  public static final long GAME_STATE_REQUEST_INTERVAL = 250;
+
+  public static final long END_SCREEN_REQUEST_INTERVAL = 1000;
+
   public enum Endpoint {
     CREATE("create"), JOIN("join"), LEAVE("leave"), STATE("state"), START("start"), GAME(
-        "game"), VERSION("version");
+        "game"), VERSION("version"), RESTART("restart");
 
     private String value;
 
@@ -31,7 +48,7 @@ public class ServerUtil {
   public enum ResponseParameter {
     STATUS("status"), NUMBER_OF_PLAYERS("numberOfPlayers"), LEFT("left"), TILE_ID(
         "tileId"), PATTERN(
-            "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE("compatible");
+            "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE("compatible"), NUMBER_OF_RESTART_PLAYERS ("numberOfRestartPlayers");
 
     private String value;
 
@@ -74,6 +91,19 @@ public class ServerUtil {
     public String toString() {
       return this.value;
     }
+  }
+
+  // Checking internet connection
+  public static boolean connectionCheck(Activity myActivity) {
+
+    ConnectivityManager connectivityManager =
+            (ConnectivityManager) myActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    // we are connected to a network
+    return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
+            .getState() == NetworkInfo.State.CONNECTED ||
+            connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+                    .getState() == NetworkInfo.State.CONNECTED;
   }
 
   private ServerUtil() {

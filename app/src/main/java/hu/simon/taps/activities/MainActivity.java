@@ -39,6 +39,7 @@ import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
+import okhttp3.internal.Util;
 
 public class MainActivity extends Activity implements AsyncResponse {
 
@@ -200,11 +201,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   private boolean checkInternetOnCreate() {
 
-    boolean connected = connectionCheck();
+    boolean connected = ServerUtil.connectionCheck(this);
 
     if (!connected) {
 
-      alertDialog(GameUtil.NO_INTERNET_CONNECTION, true);
+      alertDialog(ServerUtil.NO_INTERNET_CONNECTION, true);
       return false;
     }
 
@@ -225,19 +226,6 @@ public class MainActivity extends Activity implements AsyncResponse {
       View decorView = getWindow().getDecorView();
       LayoutUtil.hideSystemUI(decorView);
     }
-  }
-
-  // Checking internet connection
-  private boolean connectionCheck() {
-
-    ConnectivityManager connectivityManager =
-        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-    // we are connected to a network
-    return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-        .getState() == NetworkInfo.State.CONNECTED ||
-        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-            .getState() == NetworkInfo.State.CONNECTED;
   }
 
   // Alert Dialog
@@ -275,11 +263,11 @@ public class MainActivity extends Activity implements AsyncResponse {
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
-    boolean connected = connectionCheck();
+    boolean connected = ServerUtil.connectionCheck(this);
 
     if (!connected) {
 
-      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
+      alertDialog(ServerUtil.NO_INTERNET_CONNECTION, false);
       return;
     }
 
@@ -319,11 +307,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     createBut.setEnabled(false);
 
-    boolean connected = connectionCheck();
+    boolean connected = ServerUtil.connectionCheck(this);
 
     if (!connected) {
 
-      alertDialog(GameUtil.NO_INTERNET_CONNECTION, false);
+      alertDialog(ServerUtil.NO_INTERNET_CONNECTION, false);
       return;
     }
 
@@ -420,7 +408,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
       if (!compatible) {
 
-        alertDialog(GameUtil.OUTDATED_VERSION, true);
+        alertDialog(ServerUtil.OUTDATED_VERSION, true);
       }
     } else if (status.equals("OK")) {
 

@@ -34,6 +34,7 @@
 
     //-----------------EndScreenActivity---------------------
     <string name="result_picture">Picture about a cat</string>
+
     <string name="score">"Your score: "</string>
     <string name="pos1">Nice!</string>
     <string name="pos2">Good job!</string>
@@ -42,6 +43,7 @@
     <string name="pos5">Nailed it!</string>
     <string name="pos6" translatable="false">wtf</string>
     <string name="pos7" translatable="false">hacker!</string>
+
     <string name="back_to_menu">Back to menu?</string>
     
 </resources>
