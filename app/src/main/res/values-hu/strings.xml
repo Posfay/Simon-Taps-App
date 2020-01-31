@@ -24,7 +24,7 @@
     <string name="pos3">Remek munka!</string>
     <string name="pos2">Szép munka!</string>
     <string name="pos1">Ügyes!</string>
-    <string name="prepare">Készüljetek fel a játékra (10 mp)</string>
+    <string name="prepare">Készüljetek fel a játékra</string>
     <string name="back_to_menu">Vissza a menübe?</string>
     <string name="round_started">A kör elkezdődött!</string>
     <string name="score">Pontjaitok:</string>
