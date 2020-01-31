@@ -7,14 +7,14 @@
     tools:context=".activities.EndScreenActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleVerticalGuideline"
+        android:id="@+id/thirdVerticalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/topHorizontalGuideline"
+        android:id="@+id/firstHorizontalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="216dp"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleHorizontalGuideline"
+        android:id="@+id/secondHorizontalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -46,20 +46,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="28dp"
-        app:layout_constraintBottom_toBottomOf="@id/topHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideline"
-        app:layout_constraintStart_toStartOf="@id/middleVerticalGuideline"
-        app:layout_constraintTop_toTopOf="@id/topHorizontalGuideline" />
+        app:layout_constraintBottom_toBottomOf="@id/firstHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="@id/thirdVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@id/thirdVerticalGuideline"
+        app:layout_constraintTop_toTopOf="@id/firstHorizontalGuideline" />
 
     <ImageView
         android:id="@+id/resultImage"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:contentDescription="@string/result_picture"
-        app:layout_constraintBottom_toBottomOf="@id/middleHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideline"
-        app:layout_constraintStart_toStartOf="@id/middleVerticalGuideline"
-        app:layout_constraintTop_toTopOf="@id/middleHorizontalGuideline"
+        app:layout_constraintBottom_toBottomOf="@id/secondHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="@id/thirdVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@id/thirdVerticalGuideline"
+        app:layout_constraintTop_toTopOf="@id/secondHorizontalGuideline"
         app:srcCompat="@drawable/godfathercat" />
 
     <Button
@@ -70,8 +70,8 @@
         android:text="@string/restart"
         android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="@id/bottomHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="@id/middleVerticalGuideline"
-        app:layout_constraintStart_toStartOf="@id/middleVerticalGuideline"
+        app:layout_constraintEnd_toEndOf="@id/thirdVerticalGuideline"
+        app:layout_constraintStart_toStartOf="@id/thirdVerticalGuideline"
         app:layout_constraintTop_toTopOf="@id/bottomHorizontalGuideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
