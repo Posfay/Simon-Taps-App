@@ -1,130 +1,78 @@
 package hu.simon.taps.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Vibrator;
-import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.AlphaAnimation;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-
-import java.util.Locale;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 import hu.simon.taps.R;
-import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.VibrationUtil;
+import hu.simon.taps.activities.SettingsActivity;
+
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.os.Vibrator;
+import android.view.KeyEvent;
+import android.view.View;
 
 public class SettingsActivity extends AppCompatActivity {
 
-  SharedPreferences prefs;
-  SharedPreferences.Editor editor;
+    Vibrator vibrator;
+    Toolbar toolbar;
 
-  Vibrator vibrator;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-  Switch vibrationsSwitch;
-  Switch languageSwitch;
+        //Changing language
+        Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
+        getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
 
-  boolean vibrationsState;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
 
-  String languageToLoad;
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+        toolbar = findViewById(R.id.toolbar);
 
-    //Changing language
-    Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(getString(R.string.settings));
 
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_settings);
+        PreferenceManager.setDefaultValues(this,R.xml.preference_main,false);
 
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-
-    prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    editor = prefs.edit();
-
-    vibrationsSwitch = findViewById(R.id.vibrationsSwitch);
-    languageSwitch = findViewById(R.id.languageSwitch);
-
-    vibrationsState = prefs.getBoolean("vibrations", true);
-    languageToLoad = prefs.getString("language", Locale.getDefault().getDisplayLanguage());
-
-    vibrationsSwitch.setChecked(vibrationsState);
-
-    vibrationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-          editor.putBoolean("vibrations", true);
-        } else {
-          editor.putBoolean("vibrations", false);
-        }
-        editor.apply();
-      }
-    });
-
-    languageSwitch.setChecked(languageToLoad.equals("hu"));
-
-    languageSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-          editor.putString("language", "hu");
-        } else {
-          editor.putString("language", "en");
-        }
-        editor.apply();
-
-        backToMainActivity();
-      }
-    });
-  }
-
-  public void onWindowFocusChanged(boolean hasFocus) {
-
-    super.onWindowFocusChanged(hasFocus);
-    if (hasFocus) {
-      View decorView = getWindow().getDecorView();
-      LayoutUtil.hideSystemUI(decorView);
-    }
-  }
-
-  // BACK BUTTON PRESSED
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
-
-      backToMainActivity();
-      return true;
     }
 
-    return super.onKeyDown(keyCode, event);
-  }
+    // fullscreen
+    public void onWindowFocusChanged(boolean hasFocus) {
 
-  // LEAVING ACTIVITY
-  public void backToMainActivity() {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            View decorView = getWindow().getDecorView();
+            LayoutUtil.hideSystemUI(decorView);
+        }
+    }
 
-    VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
+    // BACK BUTTON PRESSED
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-    finish();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
 
-    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-    startActivity(intent);
-  }
+            backToMainActivity();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    // LEAVING ACTIVITY
+    public void backToMainActivity() {
+
+        VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
+
+        finish();
+
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
+    }
 }

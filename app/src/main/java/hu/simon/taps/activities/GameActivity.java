@@ -71,16 +71,20 @@ public class GameActivity extends Activity implements AsyncResponse {
   long intervalMilli = ServerUtil.WAITING_STATE_REQUEST_INTERVAL;
   long offlineTime = 0;
   long tileId = 0;
+  long countdownTime = GameUtil.PREPARING_TIME;
 
   boolean shown = false;
   boolean exitCondition = false;
   boolean leavable = false;
+  boolean counted = false;
+  boolean counting = false;
 
   List<Integer> pattern;
 
   Handler getStateTimerHandler = new Handler();
   Handler timerHandler = new Handler();
   Handler delayHandler = new Handler();
+  Handler countdownHandler = new Handler();
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
 
@@ -174,6 +178,26 @@ public class GameActivity extends Activity implements AsyncResponse {
     }
   };
 
+  Runnable countdownRunnable = new Runnable() {
+    @Override
+    public void run() {
+
+      if (counted) {
+        return;
+      }
+
+      counting = true;
+      feedbackText.setText(getString(R.string.prepare) + "\n" + countdownTime);
+      countdownTime--;
+
+      if (countdownTime >= 0) {
+        countdownHandler.postDelayed(countdownRunnable, 1000);
+      } else {
+        counted = true;
+      }
+    }
+  };
+
   @Override
   protected void onPause() {
 
@@ -182,6 +206,8 @@ public class GameActivity extends Activity implements AsyncResponse {
     // No more getstate requests, when exits this activity
     exitCondition = true;
     getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
+
+    countdownHandler.removeCallbacks(countdownRunnable);
   }
 
   @Override
@@ -263,8 +289,12 @@ public class GameActivity extends Activity implements AsyncResponse {
     leavable = false;
     bustImage.setVisibility(View.INVISIBLE);
     playersText.setVisibility(View.INVISIBLE);
-    feedbackText.setText(getString(R.string.prepare));
-    roomIdText.setText("");
+
+    if (!counting) {
+      countdownHandler.postDelayed(countdownRunnable, 0);
+    }
+
+    roomIdText.setVisibility(View.INVISIBLE);
 
     ConstraintLayout layout = findViewById(R.id.layout);
 
@@ -421,6 +451,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gamePlaying() {
 
     feedbackText.setText(getString(R.string.round_started));
+
     yourButton.setEnabled(true);
 
     shown = false;
