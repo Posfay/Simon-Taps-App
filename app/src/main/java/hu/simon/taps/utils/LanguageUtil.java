@@ -8,13 +8,14 @@ import android.preference.PreferenceManager;
 import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
+import hu.simon.taps.fragments.SettingsFragment;
 
 public class LanguageUtil extends AppCompatActivity {
 
     public static Configuration preferredLanguage(Context context, Configuration mainConfiguration) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String languageToLoad = prefs.getString("language","en");
+        String languageToLoad = prefs.getString(SettingsFragment.PREF_LANGUAGE,"en");
         Locale locale = new Locale(languageToLoad);
         Locale.setDefault(locale);
 

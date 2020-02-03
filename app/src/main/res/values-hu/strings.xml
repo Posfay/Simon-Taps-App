@@ -7,7 +7,6 @@
     <string name="room_id">Szobakód:</string>
     <string name="settings">Beállítások</string>
     <string name="simon_taps">Simon Taps logó</string>
-    <string name="vibrations">Rezgések</string>
     <string name="round">Kör</string>
     <string name="invalid_room">Hibás szobakód</string>
     <string name="exit">Biztosan ki szeretnél lépni?</string>
@@ -17,7 +16,6 @@
     <string name="room_exists">A szoba már létezik</string>
     <string name="room_full">A szoba tele van</string>
     <string name="room_not_exists">A szoba nem létezik</string>
-    <string name="language">Nyelv: Magyar</string>
     <string name="bust">Felsőtest kép</string>
     <string name="pos4">Lenyűgöző!</string>
     <string name="pos5">Királyul csináltad!</string>
@@ -29,4 +27,11 @@
     <string name="round_started">A kör elkezdődött!</string>
     <string name="score">Pontjaitok:</string>
     <string name="restart">Újrakezdés</string>
+    <string name="language_dialog_title">Válassz nyelvet!</string>
+    <string name="general_category">Általános</string>
+    <string name="language_title">Nyelv</string>
+    <string name="vibration_title">Rezgések</string>
+    <string name="contact_us_title">Elérhetőségünk</string>
+    <string name="version_title">Aktuális verzió</string>
+    <string name="other_category">Egyéb</string>
 </resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <PreferenceCategory android:title="@string/general_category">
+
+        <ListPreference
+            android:key="preferred_language"
+            android:title="@string/language_title"
+            android:defaultValue="en"
+            android:dialogTitle="@string/language_dialog_title"
+            android:entries="@array/preferred_languages_entries"
+            android:entryValues="@array/preferred_languages_values"/>
+
+        <SwitchPreference
+            android:key="preferred_vibration"
+            android:title="@string/vibration_title"
+            android:defaultValue="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/other_category">
+
+        <Preference
+            android:title="@string/contact_us_title"
+            android:summary="@string/email_address"/>
+
+
+        <Preference
+            android:key="current_version"
+            android:title="@string/version_title"
+            android:summary="" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -18,8 +18,24 @@
 
     //---------------SettingsActivity------------------------------
     <string name="settings">Settings</string>
-    <string name="vibrations">Vibrations</string>
-    <string name="language">Language: English</string>
+
+    <string name="general_category">General</string>
+
+    <string name="language_title">Language</string>
+    <string name="language_dialog_title">Choose language!</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_hungarian" translatable="false">Magyar</string>
+
+    <string name="vibration_title">Vibrations</string>
+
+    <string name="other_category">Other</string>
+
+    <string name="contact_us_title">Contact us</string>
+    <string name="email_address" translatable="false">sample@email.com</string>
+
+    <string name="version_title">Current version</string>
+
+
 
     //----------------GameActivity------------------------
     <string name="room_id">Room ID:</string>
@@ -29,7 +45,6 @@
 
     <string name="prepare">Prepare for the game</string>
     <string name="round_started">The round has started!</string>
-
 
 
     //-----------------EndScreenActivity---------------------
@@ -47,5 +62,5 @@
     <string name="restart">Restart</string>
 
     <string name="back_to_menu">Back to menu?</string>
-    
+
 </resources>
