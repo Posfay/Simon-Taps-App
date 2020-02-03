@@ -12,63 +12,65 @@ import hu.simon.taps.activities.SettingsActivity;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
+  private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
 
-    public static final String PREF_LANGUAGE = "preferred_language";
-    public static final String PREF_VIBRATION = "preferred_vibration";
-    public static final String CURRENT_VERSION = "current_version";
+  public static final String PREF_LANGUAGE = "preferred_language";
+  public static final String PREF_VIBRATION = "preferred_vibration";
+  public static final String CURRENT_VERSION = "current_version";
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.preference_main, rootKey);
+  @Override
+  public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+    setPreferencesFromResource(R.xml.preference_main, rootKey);
 
-        Preference versionPref = findPreference(CURRENT_VERSION);
-        versionPref.setSummary(MainActivity.VERSION);
+    Preference versionPref = findPreference(CURRENT_VERSION);
+    versionPref.setSummary(MainActivity.VERSION);
 
-        preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+      @Override
+      public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
-                if (key.equals(PREF_LANGUAGE)) {
-                    changeLanguageSummary();
+        if (key.equals(PREF_LANGUAGE)) {
+          changeLanguageSummary();
 
-                    getActivity().finish();
+          getActivity().finish();
 
-                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                    startActivity(intent);
-                }
-
-                if (key.equals(PREF_VIBRATION)) {
-                    Preference vibrationPref = findPreference(PREF_VIBRATION);
-                    vibrationPref.setDefaultValue(sharedPreferences.getBoolean(key, true));
-                }
-            }
-        };
-    }
-
-    public void changeLanguageSummary() {
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(preferenceChangeListener);
-
-        Preference languagePref = findPreference(PREF_LANGUAGE);
-
-        if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE,"").equals("en")) {
-            languagePref.setSummary(R.string.language_english);
+          Intent intent = new Intent(getActivity(), SettingsActivity.class);
+          startActivity(intent);
         }
-        if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE,"").equals("hu")) {
-            languagePref.setSummary(R.string.language_hungarian);
+
+        if (key.equals(PREF_VIBRATION)) {
+          Preference vibrationPref = findPreference(PREF_VIBRATION);
+          vibrationPref.setDefaultValue(sharedPreferences.getBoolean(key, true));
         }
-    }
+      }
+    };
+  }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        changeLanguageSummary();
-    }
+  public void changeLanguageSummary() {
+    getPreferenceScreen().getSharedPreferences()
+        .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    Preference languagePref = findPreference(PREF_LANGUAGE);
 
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE, "").equals("en")) {
+      languagePref.setSummary(R.string.language_english);
     }
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE, "").equals("hu")) {
+      languagePref.setSummary(R.string.language_hungarian);
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    changeLanguageSummary();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+
+    getPreferenceScreen().getSharedPreferences()
+        .unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);
+  }
 }

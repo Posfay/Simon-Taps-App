@@ -1,7 +1,5 @@
 package hu.simon.taps.utils;
 
-import hu.simon.taps.R;
-
 public class GameUtil {
 
   public static final long FLASH_DURATION = 500;

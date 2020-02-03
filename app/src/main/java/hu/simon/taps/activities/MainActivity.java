@@ -8,12 +8,9 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -33,13 +30,11 @@ import hu.simon.taps.BuildConfig;
 import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
-import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
 import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
-import okhttp3.internal.Util;
 
 public class MainActivity extends Activity implements AsyncResponse {
 
@@ -101,9 +96,10 @@ public class MainActivity extends Activity implements AsyncResponse {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    //Changing language
+    // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+        getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);

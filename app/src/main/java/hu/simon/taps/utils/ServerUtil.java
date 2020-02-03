@@ -48,7 +48,8 @@ public class ServerUtil {
   public enum ResponseParameter {
     STATUS("status"), NUMBER_OF_PLAYERS("numberOfPlayers"), LEFT("left"), TILE_ID(
         "tileId"), PATTERN(
-            "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE("compatible"), NUMBER_OF_RESTART_PLAYERS ("numberOfRestartPlayers");
+            "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE(
+                "compatible"), NUMBER_OF_RESTART_PLAYERS("numberOfRestartPlayers");
 
     private String value;
 
@@ -97,13 +98,13 @@ public class ServerUtil {
   public static boolean connectionCheck(Activity myActivity) {
 
     ConnectivityManager connectivityManager =
-            (ConnectivityManager) myActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        (ConnectivityManager) myActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
 
     // we are connected to a network
     return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
-            .getState() == NetworkInfo.State.CONNECTED ||
-            connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                    .getState() == NetworkInfo.State.CONNECTED;
+        .getState() == NetworkInfo.State.CONNECTED ||
+        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+            .getState() == NetworkInfo.State.CONNECTED;
   }
 
   private ServerUtil() {
