@@ -29,6 +29,7 @@ import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
+import hu.simon.taps.utils.ScreenUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
@@ -72,11 +73,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_end_screen);
 
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+    ScreenUtil.setFlags(this,this);
 
     resultText = findViewById(R.id.result);
     resultImage = findViewById(R.id.resultImage);

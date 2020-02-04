@@ -3,6 +3,7 @@ package hu.simon.taps.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -24,6 +25,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     Preference versionPref = findPreference(CURRENT_VERSION);
     versionPref.setSummary(MainActivity.VERSION);
+
+    ((SettingsActivity)getActivity()).updateStatusBarColor();
 
     preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
       @Override
