@@ -147,7 +147,6 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     randomButtonColor();
 
-
     boolean connected = checkInternetOnCreate();
 
     if (connected) {
@@ -216,8 +215,6 @@ public class MainActivity extends Activity implements AsyncResponse {
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.getRequest(BASE_URL + ServerUtil.Endpoint.VERSION.toString() + "/" + VERSION);
   }
-
-
 
   // Alert Dialog
   private void alertDialog(String message, boolean exitActivity) {

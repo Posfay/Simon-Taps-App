@@ -23,28 +23,28 @@ public class SettingsActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-      // Changing language
-      Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-      getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
-              getResources().getDisplayMetrics());
+    // Changing language
+    Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+        getResources().getDisplayMetrics());
 
-      super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_settings);
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_settings);
 
-      getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-      getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-      getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-      getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-      getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
-      vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-      toolbar = findViewById(R.id.toolbar);
+    toolbar = findViewById(R.id.toolbar);
 
-      setSupportActionBar(toolbar);
-      getSupportActionBar().setTitle(getString(R.string.settings));
+    setSupportActionBar(toolbar);
+    getSupportActionBar().setTitle(getString(R.string.settings));
 
-      PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
+    PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
 
   }
 

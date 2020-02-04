@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
@@ -316,15 +315,15 @@ public class GameActivity extends Activity implements AsyncResponse {
     }
     if (tileId == 4) {
       yourButton = findViewById(R.id.blueButton);
-      colorFrom = getResources().getColor(R.color.colorPrimary,null);
-      colorTo = getResources().getColor(R.color.blue_bg,null);
+      colorFrom = getResources().getColor(R.color.colorPrimary, null);
+      colorTo = getResources().getColor(R.color.blue_bg, null);
     }
-
 
     if (!didColorAnimate) {
 
       didColorAnimate = true;
-      ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+      ValueAnimator colorAnimation =
+          ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
       colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
       colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -339,12 +338,11 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     yourButton.setOnClickListener(new View.OnClickListener() {
       @Override
-        public void onClick(View v) {
-            youOnClick(v);
-        }
+      public void onClick(View v) {
+        youOnClick(v);
+      }
     });
     yourButton.setEnabled(false);
-
 
   }
 
@@ -395,51 +393,51 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         VibrationUtil.preferredVibration(GameActivity.this, vibrator);
 
-          if (current == 1) {
+        if (current == 1) {
 
-              greenButton.setBackgroundResource(R.drawable.button_green_active);
-              delayHandler.postDelayed(new Runnable() {
-                  @Override
-                  public void run() {
-                      greenButton.setBackgroundResource(R.drawable.button_green);
-                  }
-              }, GameUtil.FLASH_DURATION);
-          }
-          if (current == 2) {
+          greenButton.setBackgroundResource(R.drawable.button_green_active);
+          delayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              greenButton.setBackgroundResource(R.drawable.button_green);
+            }
+          }, GameUtil.FLASH_DURATION);
+        }
+        if (current == 2) {
 
-              redButton.setBackgroundResource(R.drawable.button_red_active);
-              delayHandler.postDelayed(new Runnable() {
-                  @Override
-                  public void run() {
-                      redButton.setBackgroundResource(R.drawable.button_red);
-                  }
-              }, GameUtil.FLASH_DURATION);
-          }
-          if (current == 3) {
+          redButton.setBackgroundResource(R.drawable.button_red_active);
+          delayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              redButton.setBackgroundResource(R.drawable.button_red);
+            }
+          }, GameUtil.FLASH_DURATION);
+        }
+        if (current == 3) {
 
-              yellowButton.setBackgroundResource(R.drawable.button_yellow_active);
-              delayHandler.postDelayed(new Runnable() {
-                  @Override
-                  public void run() {
-                      yellowButton.setBackgroundResource(R.drawable.button_yellow);
-                  }
-              }, GameUtil.FLASH_DURATION);
-          }
-          if (current == 4) {
+          yellowButton.setBackgroundResource(R.drawable.button_yellow_active);
+          delayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              yellowButton.setBackgroundResource(R.drawable.button_yellow);
+            }
+          }, GameUtil.FLASH_DURATION);
+        }
+        if (current == 4) {
 
-              blueButton.setBackgroundResource(R.drawable.button_blue_active);
-              delayHandler.postDelayed(new Runnable() {
-                  @Override
-                  public void run() {
-                      blueButton.setBackgroundResource(R.drawable.button_blue);
-                  }
-              }, GameUtil.FLASH_DURATION);
-          }
-          if (counter <= 0) {
+          blueButton.setBackgroundResource(R.drawable.button_blue_active);
+          delayHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              blueButton.setBackgroundResource(R.drawable.button_blue);
+            }
+          }, GameUtil.FLASH_DURATION);
+        }
+        if (counter <= 0) {
 
-              startGame();
-              return;
-          }
+          startGame();
+          return;
+        }
 
         timerHandler.postDelayed(this, GameUtil.FLASH_DURATION + GameUtil.DELAY_BETWEEN_FLASHES);
       }

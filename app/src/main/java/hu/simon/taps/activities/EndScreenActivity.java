@@ -1,5 +1,8 @@
 package hu.simon.taps.activities;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,10 +24,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
@@ -37,7 +36,7 @@ import okhttp3.OkHttpClient;
 public class EndScreenActivity extends AppCompatActivity implements AsyncResponse {
 
   public static final String BASE_URL =
-          ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
+      ServerUtil.PROTOCOL + ServerUtil.HOSTNAME + ":" + ServerUtil.PORT + "/";
 
   public OkHttpHandler okHttpHandler;
   public OkHttpClient client;
@@ -65,7 +64,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    //Changing language
+    // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
     getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
         getResources().getDisplayMetrics());
@@ -96,7 +95,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
-    colourCode = getIntent().getLongExtra("playerColourCode",0);
+    colourCode = getIntent().getLongExtra("playerColourCode", 0);
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
@@ -132,8 +131,9 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
       if (offlineTime >= GameUtil.MAX_OFFLINE_TIME) {
 
-        Toast.makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
-                .show();
+        Toast
+            .makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
+            .show();
       }
 
       // Getstate request
@@ -171,11 +171,13 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       }
       if (successfulRounds >= 10) {
 
-        resultText.setText(getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 13) {
 
-        resultText.setText(getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 16) {
 
@@ -184,11 +186,13 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       }
       if (successfulRounds >= 20) {
 
-        resultText.setText(getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 25) {
 
-        resultText.setText(getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 30) {
 
@@ -240,7 +244,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     if (!ServerUtil.connectionCheck(this)) {
 
       Toast.makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
-              .show();
+          .show();
     } else {
       restartButton.setEnabled(false);
     }
@@ -286,6 +290,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       backToGameActivity();
     }
   }
+
   // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
 
