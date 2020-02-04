@@ -74,10 +74,13 @@ public class GameActivity extends Activity implements AsyncResponse {
   long tileId = 0;
   long colorFrom;
   long colorTo;
+  long countdownTime = GameUtil.PREPARING_TIME;
 
   boolean shown = false;
   boolean exitCondition = false;
   boolean leavable = false;
+  boolean counted = false;
+  boolean counting = false;
   boolean didColorAnimate = false;
 
   List<Integer> pattern;
@@ -85,24 +88,22 @@ public class GameActivity extends Activity implements AsyncResponse {
   Handler getStateTimerHandler = new Handler();
   Handler timerHandler = new Handler();
   Handler delayHandler = new Handler();
+  Handler countdownHandler = new Handler();
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    //Changing language
+    // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+        getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedBackText);
@@ -172,6 +173,26 @@ public class GameActivity extends Activity implements AsyncResponse {
     }
   };
 
+  Runnable countdownRunnable = new Runnable() {
+    @Override
+    public void run() {
+
+      if (counted) {
+        return;
+      }
+
+      counting = true;
+      feedbackText.setText(getString(R.string.prepare) + "\n" + countdownTime);
+      countdownTime--;
+
+      if (countdownTime >= 0) {
+        countdownHandler.postDelayed(countdownRunnable, 1000);
+      } else {
+        counted = true;
+      }
+    }
+  };
+
   @Override
   protected void onPause() {
 
@@ -179,6 +200,9 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     // No more getstate requests, when exits this activity
     exitCondition = true;
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
+
+    countdownHandler.removeCallbacks(countdownRunnable);
   }
 
   @Override
@@ -260,8 +284,12 @@ public class GameActivity extends Activity implements AsyncResponse {
     leavable = false;
     bustImage.setVisibility(View.INVISIBLE);
     playersText.setVisibility(View.INVISIBLE);
-    feedbackText.setText(getString(R.string.prepare));
-    roomIdText.setText("");
+
+    if (!counting) {
+      countdownHandler.postDelayed(countdownRunnable, 0);
+    }
+
+    roomIdText.setVisibility(View.INVISIBLE);
 
     final ConstraintLayout layout = findViewById(R.id.layout);
 
@@ -435,6 +463,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gamePlaying() {
 
     feedbackText.setText(getString(R.string.round_started));
+
     yourButton.setEnabled(true);
 
     shown = false;
@@ -521,6 +550,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   public void gameEnd(Boolean success) {
 
     exitCondition = true;
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
 
     feedbackText.setText("");
 

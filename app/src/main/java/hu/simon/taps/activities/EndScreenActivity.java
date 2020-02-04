@@ -18,12 +18,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
@@ -49,7 +50,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   long successfulRounds;
   long offlineTime = 0;
-  int colourCode;
+  long colourCode;
 
   String roomId;
   String playerId;
@@ -66,7 +67,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     //Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+        getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_end_screen);
@@ -90,6 +92,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
+    client = new OkHttpClient();
+
     win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
     colourCode = getIntent().getIntExtra("playerColourCode",0);
@@ -107,6 +111,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     // No more getstate requests, when exits this activity
     exitCondition = true;
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
   }
 
   Runnable getStateTimerRunnable = new Runnable() {
@@ -136,13 +141,14 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
         offlineTime = 0;
         String url =
-                BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
+            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
 
         okHttpHandler = new OkHttpHandler(EndScreenActivity.this, client);
         okHttpHandler.getRequest(url);
       }
 
-      getStateTimerHandler.postDelayed(getStateTimerRunnable, ServerUtil.END_SCREEN_REQUEST_INTERVAL);
+      getStateTimerHandler.postDelayed(getStateTimerRunnable,
+          ServerUtil.END_SCREEN_REQUEST_INTERVAL);
     }
   };
 
@@ -160,7 +166,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
       if (successfulRounds >= 8) {
 
-        resultText.setText(getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 10) {
 
@@ -172,7 +179,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       }
       if (successfulRounds >= 16) {
 
-        resultText.setText(getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
       }
       if (successfulRounds >= 20) {
 
@@ -184,7 +192,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       }
       if (successfulRounds >= 30) {
 
-        resultText.setText(getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
+        resultText.setText(
+            getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
       }
 
       resultImage.setImageResource(R.drawable.cryingcat);
@@ -193,25 +202,26 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   public void restartButtonColour() {
 
-    switch (colourCode) {
+    switch ((int) colourCode) {
       case 0:
         Log.i("intentExtra", "couldn't process");
+        Log.i("colorCode", String.valueOf(colourCode));
         break;
       case 1:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.green));
+            ContextCompat.getColorStateList(this, R.color.green));
         break;
       case 2:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.red));
+            ContextCompat.getColorStateList(this, R.color.red));
         break;
       case 3:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.yellow));
+            ContextCompat.getColorStateList(this, R.color.yellow));
         break;
       case 4:
         ViewCompat.setBackgroundTintList(restartButton,
-                ContextCompat.getColorStateList(this, R.color.blue));
+            ContextCompat.getColorStateList(this, R.color.blue));
         break;
     }
   }
@@ -237,24 +247,28 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), this.playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
     } catch (JSONException e) {
       e.printStackTrace();
     }
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
+
+    getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
   }
 
   public void onRequestComplete(String responseJsonString) {
 
-    JSONObject payloadJson = null;
+    JSONObject payloadJson;
     String status = null;
     String state = null;
 
     try {
 
       payloadJson = new JSONObject(responseJsonString);
+
+      Log.i("restartResponse", responseJsonString);
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
       state = payloadJson.getString(ServerUtil.ResponseParameter.GAME_STATE.toString());
@@ -264,18 +278,14 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     }
 
     if (!status.equals("OK")) {
-      //TODO error response
+      // TODO error response
       return;
     }
 
     if (ServerUtil.State.PREPARING.toString().equals(state)) {
       backToGameActivity();
     }
-
-    payloadJson.optLong(ServerUtil.ResponseParameter.NUMBER_OF_RESTART_PLAYERS.toString());
-
   }
-
   // BACK BUTTON PRESSED
   public boolean onKeyDown(int keyCode, KeyEvent event) {
 
@@ -313,6 +323,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);
 
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
+
     finish();
 
     Intent intent = new Intent(getBaseContext(), MainActivity.class);
@@ -322,6 +334,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   private void backToGameActivity() {
 
     VibrationUtil.preferredVibration(EndScreenActivity.this, vibrator);
+
+    getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
 
     finish();
 
