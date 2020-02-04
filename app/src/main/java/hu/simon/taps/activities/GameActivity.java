@@ -33,6 +33,7 @@ import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
+import hu.simon.taps.utils.ScreenUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
@@ -104,7 +105,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    ScreenUtil.setFlags(this,this);
 
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedBackText);

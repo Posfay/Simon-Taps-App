@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import hu.simon.taps.R;
 import hu.simon.taps.utils.LanguageUtil;
+import hu.simon.taps.utils.ScreenUtil;
 import hu.simon.taps.utils.VibrationUtil;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -31,11 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
 
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
+    ScreenUtil.setFlags(this,this);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -70,5 +67,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     Intent intent = new Intent(getBaseContext(), MainActivity.class);
     startActivity(intent);
+  }
+
+  public void updateStatusBarColor() {
+
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    getWindow().setStatusBarColor(getResources().getColor(R.color.colorToolBar,null));
+
   }
 }

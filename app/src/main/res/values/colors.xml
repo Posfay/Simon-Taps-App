@@ -21,4 +21,5 @@
     <color name="blue_bg">#FF244F5E</color>
 
     <color name="almostBlack">#111111</color>
+    <color name="colorToolBar">#ECECEC</color>
 </resources>
