@@ -96,7 +96,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
-    colourCode = getIntent().getIntExtra("playerColourCode",0);
+    colourCode = getIntent().getLongExtra("playerColourCode",0);
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 

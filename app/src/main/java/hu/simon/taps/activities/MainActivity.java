@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,12 +15,10 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.Fade;
 import android.transition.Scene;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -56,10 +53,10 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   Vibrator vibrator;
 
-  Button joinBut;
-  Button createBut;
-  Button settingsBut;
-  Button notABut;
+  Button joinButton;
+  Button createButton;
+  Button settingsButton;
+  Button notAButton;
 
   Random randomBetweenOneFour = new Random();
 
@@ -116,10 +113,10 @@ public class MainActivity extends Activity implements AsyncResponse {
     getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
     roomIdEditText = findViewById(R.id.editText);
-    joinBut = findViewById(R.id.joinButton);
-    notABut = findViewById(R.id.unusedLayoutButton);
-    createBut = findViewById(R.id.createButton);
-    settingsBut = findViewById(R.id.settingsButton);
+    joinButton = findViewById(R.id.joinButton);
+    notAButton = findViewById(R.id.unusedLayoutButton);
+    createButton = findViewById(R.id.createButton);
+    settingsButton = findViewById(R.id.settingsButton);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -127,21 +124,21 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     roomIdEditText.addTextChangedListener(new UppercaseTextWatcher());
 
-    createBut.setEnabled(true);
+    createButton.setEnabled(true);
 
-    createBut.setOnClickListener(new View.OnClickListener() {
+    createButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         createClick(v);
       }
     });
-    joinBut.setOnClickListener(new View.OnClickListener() {
+    joinButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         joinClick(v);
       }
     });
-    settingsBut.setOnClickListener(new View.OnClickListener() {
+    settingsButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
         settingsClick(v);
@@ -163,44 +160,40 @@ public class MainActivity extends Activity implements AsyncResponse {
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
     switch (randomSwitchNum) {
       case 1:
-        ViewCompat.setBackgroundTintList(notABut,
+        ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.blue));
-        ViewCompat.setBackgroundTintList(joinBut,
+        ViewCompat.setBackgroundTintList(joinButton,
             ContextCompat.getColorStateList(this, R.color.blue));
-        ViewCompat.setBackgroundTintList(createBut,
+        ViewCompat.setBackgroundTintList(createButton,
             ContextCompat.getColorStateList(this, R.color.blue));
-        createBut.setTextColor(getResources().getColor(R.color.blue));
-        // "#00b0ff" alt. blue
+        createButton.setTextColor(getResources().getColor(R.color.blue));
         break;
       case 2:
-        ViewCompat.setBackgroundTintList(notABut,
+        ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.red));
-        ViewCompat.setBackgroundTintList(joinBut,
+        ViewCompat.setBackgroundTintList(joinButton,
             ContextCompat.getColorStateList(this, R.color.red));
-        ViewCompat.setBackgroundTintList(createBut,
+        ViewCompat.setBackgroundTintList(createButton,
             ContextCompat.getColorStateList(this, R.color.red));
-        createBut.setTextColor(getResources().getColor(R.color.red));
-        // #f44336" alt. red
+        createButton.setTextColor(getResources().getColor(R.color.red));
         break;
       case 3:
-        ViewCompat.setBackgroundTintList(notABut,
+        ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.green));
-        ViewCompat.setBackgroundTintList(joinBut,
+        ViewCompat.setBackgroundTintList(joinButton,
             ContextCompat.getColorStateList(this, R.color.green));
-        ViewCompat.setBackgroundTintList(createBut,
+        ViewCompat.setBackgroundTintList(createButton,
             ContextCompat.getColorStateList(this, R.color.green));
-        createBut.setTextColor(getResources().getColor(R.color.green));
-        // "#64dd17" alt. green
+        createButton.setTextColor(getResources().getColor(R.color.green));
         break;
       case 4:
-        ViewCompat.setBackgroundTintList(notABut,
+        ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.yellow));
-        ViewCompat.setBackgroundTintList(joinBut,
+        ViewCompat.setBackgroundTintList(joinButton,
             ContextCompat.getColorStateList(this, R.color.yellow));
-        ViewCompat.setBackgroundTintList(createBut,
+        ViewCompat.setBackgroundTintList(createButton,
             ContextCompat.getColorStateList(this, R.color.yellow));
-        createBut.setTextColor(getResources().getColor(R.color.yellow));
-        // "#ffff00" alt. yellow
+        createButton.setTextColor(getResources().getColor(R.color.yellow));
         break;
     }
   }
@@ -284,7 +277,7 @@ public class MainActivity extends Activity implements AsyncResponse {
       return;
     }
 
-    joinBut.setEnabled(false);
+    joinButton.setEnabled(false);
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
@@ -303,7 +296,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     v.startAnimation(buttonClick);
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
-    createBut.setEnabled(false);
+    createButton.setEnabled(false);
 
     boolean connected = ServerUtil.connectionCheck(this);
 
@@ -380,7 +373,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   @Override
   public void onRequestComplete(String responseJsonString) {
 
-    joinBut.setEnabled(true);
+    joinButton.setEnabled(true);
 
     JSONObject payloadJson = null;
     status = null;
