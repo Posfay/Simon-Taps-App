@@ -101,9 +101,10 @@ public class MainActivity extends Activity implements AsyncResponse {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    //Changing language
+    // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration), getResources().getDisplayMetrics());
+    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+        getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
