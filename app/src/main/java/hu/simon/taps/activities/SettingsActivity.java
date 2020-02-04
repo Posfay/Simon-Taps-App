@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.preference.PreferenceManager;
 import hu.simon.taps.R;
 import hu.simon.taps.utils.LanguageUtil;
-import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.VibrationUtil;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -23,33 +23,29 @@ public class SettingsActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    // Changing language
-    Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
-    getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
-        getResources().getDisplayMetrics());
+      // Changing language
+      Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
+      getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
+              getResources().getDisplayMetrics());
 
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_settings);
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_settings);
 
-    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+      getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+      getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary));
 
-    toolbar = findViewById(R.id.toolbar);
+      vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setTitle(getString(R.string.settings));
+      toolbar = findViewById(R.id.toolbar);
 
-    PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
+      setSupportActionBar(toolbar);
+      getSupportActionBar().setTitle(getString(R.string.settings));
 
-  }
+      PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
 
-  // fullscreen
-  public void onWindowFocusChanged(boolean hasFocus) {
-
-    super.onWindowFocusChanged(hasFocus);
-    if (hasFocus) {
-      View decorView = getWindow().getDecorView();
-      LayoutUtil.hideSystemUI(decorView);
-    }
   }
 
   // BACK BUTTON PRESSED

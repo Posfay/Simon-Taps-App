@@ -6,6 +6,9 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,7 +34,6 @@ import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
 import hu.simon.taps.utils.LanguageUtil;
-import hu.simon.taps.utils.LayoutUtil;
 import hu.simon.taps.utils.ServerUtil;
 import hu.simon.taps.utils.VibrationUtil;
 import okhttp3.OkHttpClient;
@@ -78,6 +80,10 @@ public class GameActivity extends Activity implements AsyncResponse {
   boolean leavable = false;
   boolean counted = false;
   boolean counting = false;
+  boolean didColorAnimate = false;
+
+  int colorFrom;
+  int colorTo;
 
   List<Integer> pattern;
 
@@ -128,15 +134,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
     roomIdText.setText(getString(R.string.room_id) + " " + roomId);
-  }
-
-  public void onWindowFocusChanged(boolean hasFocus) {
-
-    super.onWindowFocusChanged(hasFocus);
-    if (hasFocus) {
-      View decorView = getWindow().getDecorView();
-      LayoutUtil.hideSystemUI(decorView);
-    }
   }
 
   // -----------------------------------GETSTATE REQUEST (REPEATED)---------------------------------
@@ -296,7 +293,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     roomIdText.setVisibility(View.INVISIBLE);
 
-    ConstraintLayout layout = findViewById(R.id.layout);
+    final ConstraintLayout layout = findViewById(R.id.layout);
 
     intervalMilli = ServerUtil.GAME_STATE_REQUEST_INTERVAL;
 
@@ -304,34 +301,54 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     if (tileId == 1) {
       yourButton = findViewById(R.id.greenButton);
-      // yourButton.setBackgroundResource(R.drawable.button_green_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.green_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary, null);
+      colorTo = getResources().getColor(R.color.green_bg, null);
     }
     if (tileId == 2) {
       yourButton = findViewById(R.id.redButton);
-      // yourButton.setBackgroundResource(R.drawable.button_red_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.red_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary, null);
+      colorTo = getResources().getColor(R.color.red_bg, null);
     }
     if (tileId == 3) {
       yourButton = findViewById(R.id.yellowButton);
-      // yourButton.setBackgroundResource(R.drawable.button_yellow_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary, null);
+      colorTo = getResources().getColor(R.color.yellow_bg, null);
     }
     if (tileId == 4) {
       yourButton = findViewById(R.id.blueButton);
-      // yourButton.setBackgroundResource(R.drawable.button_blue_active);
-      layout.setBackgroundColor(ContextCompat.getColor(this, R.color.blue_bg));
+      colorFrom = getResources().getColor(R.color.colorPrimary,null);
+      colorTo = getResources().getColor(R.color.blue_bg,null);
+    }
+
+
+    if (!didColorAnimate) {
+
+      didColorAnimate = true;
+      ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+      colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
+      colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+        @Override
+        public void onAnimationUpdate(ValueAnimator animator) {
+          layout.setBackgroundColor((int) animator.getAnimatedValue());
+        }
+
+      });
+      colorAnimation.start();
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onClick(View v) {
-        youOnClick(v);
-      }
+        public void onClick(View v) {
+            youOnClick(v);
+        }
     });
     yourButton.setEnabled(false);
+
+
   }
 
+  @SuppressLint("SetTextI18n")
   public void gameShowingPattern(JSONObject payloadJson) {
 
     feedbackText.setText("");
@@ -378,51 +395,51 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         VibrationUtil.preferredVibration(GameActivity.this, vibrator);
 
-        if (current == 1) {
+          if (current == 1) {
 
-          greenButton.setBackgroundResource(R.drawable.button_green_active);
-          delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              greenButton.setBackgroundResource(R.drawable.button_green);
-            }
-          }, GameUtil.FLASH_DURATION);
-        }
-        if (current == 2) {
+              greenButton.setBackgroundResource(R.drawable.button_green_active);
+              delayHandler.postDelayed(new Runnable() {
+                  @Override
+                  public void run() {
+                      greenButton.setBackgroundResource(R.drawable.button_green);
+                  }
+              }, GameUtil.FLASH_DURATION);
+          }
+          if (current == 2) {
 
-          redButton.setBackgroundResource(R.drawable.button_red_active);
-          delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              redButton.setBackgroundResource(R.drawable.button_red);
-            }
-          }, GameUtil.FLASH_DURATION);
-        }
-        if (current == 3) {
+              redButton.setBackgroundResource(R.drawable.button_red_active);
+              delayHandler.postDelayed(new Runnable() {
+                  @Override
+                  public void run() {
+                      redButton.setBackgroundResource(R.drawable.button_red);
+                  }
+              }, GameUtil.FLASH_DURATION);
+          }
+          if (current == 3) {
 
-          yellowButton.setBackgroundResource(R.drawable.button_yellow_active);
-          delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              yellowButton.setBackgroundResource(R.drawable.button_yellow);
-            }
-          }, GameUtil.FLASH_DURATION);
-        }
-        if (current == 4) {
+              yellowButton.setBackgroundResource(R.drawable.button_yellow_active);
+              delayHandler.postDelayed(new Runnable() {
+                  @Override
+                  public void run() {
+                      yellowButton.setBackgroundResource(R.drawable.button_yellow);
+                  }
+              }, GameUtil.FLASH_DURATION);
+          }
+          if (current == 4) {
 
-          blueButton.setBackgroundResource(R.drawable.button_blue_active);
-          delayHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-              blueButton.setBackgroundResource(R.drawable.button_blue);
-            }
-          }, GameUtil.FLASH_DURATION);
-        }
-        if (counter <= 0) {
+              blueButton.setBackgroundResource(R.drawable.button_blue_active);
+              delayHandler.postDelayed(new Runnable() {
+                  @Override
+                  public void run() {
+                      blueButton.setBackgroundResource(R.drawable.button_blue);
+                  }
+              }, GameUtil.FLASH_DURATION);
+          }
+          if (counter <= 0) {
 
-          startGame();
-          return;
-        }
+              startGame();
+              return;
+          }
 
         timerHandler.postDelayed(this, GameUtil.FLASH_DURATION + GameUtil.DELAY_BETWEEN_FLASHES);
       }
