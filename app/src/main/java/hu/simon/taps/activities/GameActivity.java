@@ -20,7 +20,6 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -105,7 +104,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
-    ScreenUtil.setFlags(this,this);
+    ScreenUtil.setFlags(this, this);
 
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedBackText);
@@ -117,7 +116,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     yellowButton = findViewById(R.id.yellowButton);
     blueButton = findViewById(R.id.blueButton);
     layout = findViewById(R.id.layout);
-
     bustImage = findViewById(R.id.bustImage);
 
     pattern = new ArrayList<>();
@@ -138,6 +136,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   // -----------------------------------GETSTATE REQUEST (REPEATED)---------------------------------
   Runnable getStateTimerRunnable = new Runnable() {
+
     @Override
     public void run() {
 
@@ -176,6 +175,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   };
 
   Runnable countdownRunnable = new Runnable() {
+
     @Override
     public void run() {
 
@@ -232,38 +232,45 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     // WAITING
     if (state.equals(ServerUtil.State.WAITING.toString())) {
+
       gameWaiting(responseJson);
     }
 
     // PREPARING
     if (state.equals(ServerUtil.State.PREPARING.toString())) {
+
       gamePreparing(responseJson);
     }
 
     // SHOWING_PATTERN
     if (state.equals(ServerUtil.State.SHOWING_PATTERN.toString())) {
+
       gameShowingPattern(responseJson);
     }
 
     // PLAYING
     if (state.equals(ServerUtil.State.PLAYING.toString())) {
+
       gamePlaying();
     }
 
     // SUCCESSFUL_END
     if (state.equals(ServerUtil.State.SUCCESSFUL_END.toString())) {
+
       gameEnd(true);
       return;
     }
 
     // FAIL_END
     if (state.equals(ServerUtil.State.FAIL_END.toString())) {
+
       gameEnd(false);
       return;
     }
 
     // LEAVE ROOM
     if (responseJson.optBoolean(ServerUtil.ResponseParameter.LEFT.toString())) {
+
       backToMainActivity();
     }
   }
@@ -300,21 +307,25 @@ public class GameActivity extends Activity implements AsyncResponse {
     tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
 
     if (tileId == 1) {
+
       yourButton = findViewById(R.id.greenButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.green_bg, null);
     }
     if (tileId == 2) {
+
       yourButton = findViewById(R.id.redButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.red_bg, null);
     }
     if (tileId == 3) {
+
       yourButton = findViewById(R.id.yellowButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.yellow_bg, null);
     }
     if (tileId == 4) {
+
       yourButton = findViewById(R.id.blueButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.blue_bg, null);
@@ -323,6 +334,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     if (!didColorAnimate) {
 
       didColorAnimate = true;
+
       ValueAnimator colorAnimation =
           ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
       colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
@@ -334,17 +346,19 @@ public class GameActivity extends Activity implements AsyncResponse {
         }
 
       });
+
       colorAnimation.start();
     }
 
     yourButton.setOnClickListener(new View.OnClickListener() {
+
       @Override
       public void onClick(View v) {
         youOnClick(v);
       }
     });
-    yourButton.setEnabled(false);
 
+    yourButton.setEnabled(false);
   }
 
   @SuppressLint("SetTextI18n")
@@ -364,6 +378,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       }
 
       timerHandler.postDelayed(new Runnable() {
+
         @Override
         public void run() {
           displayPattern();
@@ -389,6 +404,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
       @Override
       public void run() {
+
         Integer current = pattern.remove(0);
         counter--;
 
@@ -573,6 +589,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       intent.putExtra("win", false);
       intent.putExtra("successfulRounds", (long) wordPattern.length() - 1);
     }
+
     intent.putExtra("playerColourCode", tileId);
     intent.putExtra("EXTRA_PLAYER_ID", playerId);
     intent.putExtra("EXTRA_ROOM_ID", roomId);

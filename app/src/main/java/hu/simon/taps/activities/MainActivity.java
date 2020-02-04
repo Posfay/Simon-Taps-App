@@ -15,11 +15,9 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.Scene;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,8 +45,6 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public OkHttpClient client;
   public OkHttpHandler okHttpHandler;
-
-  public Scene mainScene;
 
   EditText roomIdEditText;
 
@@ -107,7 +103,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    ScreenUtil.setFlags(this,this);
+    ScreenUtil.setFlags(this, this);
 
     roomIdEditText = findViewById(R.id.editText);
     joinButton = findViewById(R.id.joinButton);
@@ -154,7 +150,9 @@ public class MainActivity extends Activity implements AsyncResponse {
   public void randomButtonColor() {
 
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
+
     switch (randomSwitchNum) {
+
       case 1:
         ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.blue));
@@ -164,6 +162,7 @@ public class MainActivity extends Activity implements AsyncResponse {
             ContextCompat.getColorStateList(this, R.color.blue));
         createButton.setTextColor(getResources().getColor(R.color.blue));
         break;
+
       case 2:
         ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.red));
@@ -173,6 +172,7 @@ public class MainActivity extends Activity implements AsyncResponse {
             ContextCompat.getColorStateList(this, R.color.red));
         createButton.setTextColor(getResources().getColor(R.color.red));
         break;
+
       case 3:
         ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.green));
@@ -182,6 +182,7 @@ public class MainActivity extends Activity implements AsyncResponse {
             ContextCompat.getColorStateList(this, R.color.green));
         createButton.setTextColor(getResources().getColor(R.color.green));
         break;
+
       case 4:
         ViewCompat.setBackgroundTintList(notAButton,
             ContextCompat.getColorStateList(this, R.color.yellow));

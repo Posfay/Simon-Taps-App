@@ -14,7 +14,6 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -52,13 +51,13 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   long offlineTime = 0;
   long colourCode;
 
+  boolean win;
+  boolean exitCondition = false;
+
   String roomId;
   String playerId;
 
   Handler getStateTimerHandler = new Handler();
-
-  boolean win;
-  boolean exitCondition = false;
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.75F);
 
@@ -73,7 +72,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_end_screen);
 
-    ScreenUtil.setFlags(this,this);
+    ScreenUtil.setFlags(this, this);
 
     resultText = findViewById(R.id.result);
     resultImage = findViewById(R.id.resultImage);
@@ -111,6 +110,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   }
 
   Runnable getStateTimerRunnable = new Runnable() {
+
     @Override
     public void run() {
 
@@ -123,7 +123,6 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       if (!connected) {
 
         offlineTime += ServerUtil.END_SCREEN_REQUEST_INTERVAL;
-
       }
 
       if (offlineTime >= GameUtil.MAX_OFFLINE_TIME) {
@@ -150,6 +149,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   };
 
   public void setResultText() {
+
     Resources res = getResources();
 
     if (win) {
@@ -204,22 +204,27 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   public void restartButtonColour() {
 
     switch ((int) colourCode) {
+
       case 0:
         Log.i("intentExtra", "couldn't process");
         Log.i("colorCode", String.valueOf(colourCode));
         break;
+
       case 1:
         ViewCompat.setBackgroundTintList(restartButton,
             ContextCompat.getColorStateList(this, R.color.green));
         break;
+
       case 2:
         ViewCompat.setBackgroundTintList(restartButton,
             ContextCompat.getColorStateList(this, R.color.red));
         break;
+
       case 3:
         ViewCompat.setBackgroundTintList(restartButton,
             ContextCompat.getColorStateList(this, R.color.yellow));
         break;
+
       case 4:
         ViewCompat.setBackgroundTintList(restartButton,
             ContextCompat.getColorStateList(this, R.color.blue));

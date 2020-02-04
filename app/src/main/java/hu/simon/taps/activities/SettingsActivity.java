@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
 
-    ScreenUtil.setFlags(this,this);
+    ScreenUtil.setFlags(this, this);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -49,6 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
 
     if (keyCode == KeyEvent.KEYCODE_BACK) {
+
       VibrationUtil.preferredVibration(SettingsActivity.this, vibrator);
 
       backToMainActivity();
@@ -72,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
   public void updateStatusBarColor() {
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    getWindow().setStatusBarColor(getResources().getColor(R.color.colorToolBar,null));
-
+    getWindow().setStatusBarColor(getResources().getColor(R.color.colorToolBar, null));
   }
+
 }
