@@ -201,7 +201,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (!connected) {
 
-      alertDialog(ServerUtil.NO_INTERNET_CONNECTION, true);
+      alertDialog(getString(R.string.no_internet), true);
       return false;
     }
 
@@ -253,7 +253,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (!connected) {
 
-      alertDialog(ServerUtil.NO_INTERNET_CONNECTION, false);
+      alertDialog(getString(R.string.no_internet), false);
       return;
     }
 
@@ -297,7 +297,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (!connected) {
 
-      alertDialog(ServerUtil.NO_INTERNET_CONNECTION, false);
+      alertDialog(getString(R.string.no_internet), false);
       return;
     }
 
@@ -394,7 +394,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
       if (!compatible) {
 
-        alertDialog(ServerUtil.OUTDATED_VERSION, true);
+        alertDialog(getString(R.string.outdated), true);
       }
     } else if (status.equals("OK")) {
 

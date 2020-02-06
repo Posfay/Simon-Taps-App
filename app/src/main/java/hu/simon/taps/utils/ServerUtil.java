@@ -19,10 +19,6 @@ public class ServerUtil {
 
   public static final String AUTHENTICATION_HEADER = "Simon-Auth";
 
-  public static final String NO_INTERNET_CONNECTION = String.valueOf(R.string.no_internet);
-
-  public static final String OUTDATED_VERSION = String.valueOf(R.string.outdated);
-
   public static final long WAITING_STATE_REQUEST_INTERVAL = 1000;
 
   public static final long GAME_STATE_REQUEST_INTERVAL = 250;

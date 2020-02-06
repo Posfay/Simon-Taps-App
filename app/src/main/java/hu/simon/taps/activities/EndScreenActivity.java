@@ -128,7 +128,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       if (offlineTime >= GameUtil.MAX_OFFLINE_TIME) {
 
         Toast
-            .makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
+            .makeText(EndScreenActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT)
             .show();
       }
 
@@ -245,7 +245,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     if (!ServerUtil.connectionCheck(this)) {
 
-      Toast.makeText(EndScreenActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
+      Toast.makeText(EndScreenActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT)
           .show();
     } else {
       restartButton.setEnabled(false);

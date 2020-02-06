@@ -16,7 +16,7 @@
         <SwitchPreference
             android:key="preferred_vibration"
             android:title="@string/vibration_title"
-            android:defaultValue="false"/>
+            android:defaultValue="true"/>
 
     </PreferenceCategory>
 
