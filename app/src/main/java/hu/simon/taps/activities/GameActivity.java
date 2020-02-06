@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -180,6 +181,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     public void run() {
 
       if (counted) {
+        feedbackText.setText("");
         return;
       }
 
@@ -189,7 +191,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
       if (countdownTime >= 0) {
         countdownHandler.postDelayed(countdownRunnable, 1000);
-      } else {
+      }
+      if (countdownTime < 0) {
         counted = true;
       }
     }
@@ -311,24 +314,36 @@ public class GameActivity extends Activity implements AsyncResponse {
       yourButton = findViewById(R.id.greenButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.green_bg, null);
+
+      feedbackText.setTextColor(Color.WHITE);
+      roundText.setTextColor(Color.WHITE);
     }
     if (tileId == 2) {
 
       yourButton = findViewById(R.id.redButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.red_bg, null);
+
+      feedbackText.setTextColor(Color.WHITE);
+      roundText.setTextColor(Color.WHITE);
     }
     if (tileId == 3) {
 
       yourButton = findViewById(R.id.yellowButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.yellow_bg, null);
+
+      feedbackText.setTextColor(Color.WHITE);
+      roundText.setTextColor(Color.WHITE);
     }
     if (tileId == 4) {
 
       yourButton = findViewById(R.id.blueButton);
       colorFrom = getResources().getColor(R.color.colorPrimary, null);
       colorTo = getResources().getColor(R.color.blue_bg, null);
+
+      feedbackText.setTextColor(Color.WHITE);
+      roundText.setTextColor(Color.WHITE);
     }
 
     if (!didColorAnimate) {
@@ -364,8 +379,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   @SuppressLint("SetTextI18n")
   public void gameShowingPattern(JSONObject payloadJson) {
 
-    feedbackText.setText("");
-
+    feedbackText.setVisibility(View.INVISIBLE);
     yourButton.setEnabled(false);
 
     if (!shown) {
@@ -482,6 +496,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   public void gamePlaying() {
 
+    feedbackText.setVisibility(View.VISIBLE);
     feedbackText.setText(getString(R.string.round_started));
 
     yourButton.setEnabled(true);
