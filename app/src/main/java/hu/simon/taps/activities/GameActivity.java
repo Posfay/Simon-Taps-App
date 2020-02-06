@@ -150,7 +150,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       if (!connected) {
 
         offlineTime += intervalMilli;
-        Toast.makeText(GameActivity.this, ServerUtil.NO_INTERNET_CONNECTION, Toast.LENGTH_SHORT)
+        Toast.makeText(GameActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT)
             .show();
       }
 
