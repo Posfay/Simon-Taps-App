@@ -13,11 +13,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import hu.simon.taps.R;
+import hu.simon.taps.fragments.SettingsFragment;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.GameUtil;
@@ -73,7 +76,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   long intervalMilli = ServerUtil.WAITING_STATE_REQUEST_INTERVAL;
   long offlineTime = 0;
   long tileId = 0;
-  long countdownTime = GameUtil.PREPARING_TIME;
+  long countdownTime = GameUtil.PREPARING_TIME_SECONDS;
 
   boolean shown = false;
   boolean exitCondition = false;
@@ -309,61 +312,10 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     tileId = payloadJson.optLong(ServerUtil.ResponseParameter.TILE_ID.toString());
 
-    if (tileId == 1) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
 
-      yourButton = findViewById(R.id.greenButton);
-      colorFrom = getResources().getColor(R.color.colorPrimary, null);
-      colorTo = getResources().getColor(R.color.green_bg, null);
-
-      feedbackText.setTextColor(Color.WHITE);
-      roundText.setTextColor(Color.WHITE);
-    }
-    if (tileId == 2) {
-
-      yourButton = findViewById(R.id.redButton);
-      colorFrom = getResources().getColor(R.color.colorPrimary, null);
-      colorTo = getResources().getColor(R.color.red_bg, null);
-
-      feedbackText.setTextColor(Color.WHITE);
-      roundText.setTextColor(Color.WHITE);
-    }
-    if (tileId == 3) {
-
-      yourButton = findViewById(R.id.yellowButton);
-      colorFrom = getResources().getColor(R.color.colorPrimary, null);
-      colorTo = getResources().getColor(R.color.yellow_bg, null);
-
-      feedbackText.setTextColor(Color.WHITE);
-      roundText.setTextColor(Color.WHITE);
-    }
-    if (tileId == 4) {
-
-      yourButton = findViewById(R.id.blueButton);
-      colorFrom = getResources().getColor(R.color.colorPrimary, null);
-      colorTo = getResources().getColor(R.color.blue_bg, null);
-
-      feedbackText.setTextColor(Color.WHITE);
-      roundText.setTextColor(Color.WHITE);
-    }
-
-    if (!didColorAnimate) {
-
-      didColorAnimate = true;
-
-      ValueAnimator colorAnimation =
-          ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-      colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
-      colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-        @Override
-        public void onAnimationUpdate(ValueAnimator animator) {
-          layout.setBackgroundColor((int) animator.getAnimatedValue());
-        }
-
-      });
-
-      colorAnimation.start();
-    }
+    setBackground(backgroundState, tileId);
 
     yourButton.setOnClickListener(new View.OnClickListener() {
 
@@ -374,6 +326,127 @@ public class GameActivity extends Activity implements AsyncResponse {
     });
 
     yourButton.setEnabled(false);
+  }
+
+  public void setBackground(String backgroundState, Long tileId) {
+
+    if (backgroundState.equals("dark")) {
+
+      if (tileId == 1) {
+
+        yourButton = findViewById(R.id.greenButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.green_bg, null);
+
+        feedbackText.setTextColor(Color.WHITE);
+        roundText.setTextColor(Color.WHITE);
+      }
+      if (tileId == 2) {
+
+        yourButton = findViewById(R.id.redButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.red_bg, null);
+
+        feedbackText.setTextColor(Color.WHITE);
+        roundText.setTextColor(Color.WHITE);
+      }
+      if (tileId == 3) {
+
+        yourButton = findViewById(R.id.yellowButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.yellow_bg, null);
+
+        feedbackText.setTextColor(Color.WHITE);
+        roundText.setTextColor(Color.WHITE);
+      }
+      if (tileId == 4) {
+
+        yourButton = findViewById(R.id.blueButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.blue_bg, null);
+
+        feedbackText.setTextColor(Color.WHITE);
+        roundText.setTextColor(Color.WHITE);
+      }
+
+      if (!didColorAnimate) {
+
+        didColorAnimate = true;
+
+        ValueAnimator colorAnimation =
+                ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+          @Override
+          public void onAnimationUpdate(ValueAnimator animator) {
+            layout.setBackgroundColor((int) animator.getAnimatedValue());
+          }
+
+        });
+
+        colorAnimation.start();
+      }
+    }
+
+    if (backgroundState.equals("light")) {
+
+      if (tileId == 1) {
+
+        yourButton = findViewById(R.id.greenButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.green_pale, null);
+
+        feedbackText.setTextColor(Color.BLACK);
+        roundText.setTextColor(Color.BLACK);
+      }
+      if (tileId == 2) {
+
+        yourButton = findViewById(R.id.redButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.red_pale, null);
+
+        feedbackText.setTextColor(Color.BLACK);
+        roundText.setTextColor(Color.BLACK);
+      }
+      if (tileId == 3) {
+
+        yourButton = findViewById(R.id.yellowButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.yellow_pale, null);
+
+        feedbackText.setTextColor(Color.BLACK);
+        roundText.setTextColor(Color.BLACK);
+      }
+      if (tileId == 4) {
+
+        yourButton = findViewById(R.id.blueButton);
+        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorTo = getResources().getColor(R.color.blue_pale, null);
+
+        feedbackText.setTextColor(Color.BLACK);
+        roundText.setTextColor(Color.BLACK);
+      }
+
+      if (!didColorAnimate) {
+
+        didColorAnimate = true;
+
+        ValueAnimator colorAnimation =
+                ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+          @Override
+          public void onAnimationUpdate(ValueAnimator animator) {
+            layout.setBackgroundColor((int) animator.getAnimatedValue());
+          }
+
+        });
+
+        colorAnimation.start();
+      }
+    }
   }
 
   @SuppressLint("SetTextI18n")

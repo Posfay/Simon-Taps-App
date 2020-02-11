@@ -1,5 +1,8 @@
 package hu.simon.taps.activities;
 
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -8,9 +11,12 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -92,8 +98,36 @@ public class MainActivity extends Activity implements AsyncResponse {
     }
   }
 
+  public static String getWifiMacAddress() {
+    try {
+      List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+      for (NetworkInterface intf : interfaces) {
+        if (! intf.getName().equalsIgnoreCase("wlan0")){
+          continue;
+        }
+
+        byte[] mac = intf.getHardwareAddress();
+        if (mac==null){
+          return "";
+        }
+
+        StringBuilder buf = new StringBuilder();
+        for (byte aMac : mac) {
+          buf.append(String.format("%02X:", aMac));
+        }
+        if (buf.length()>0) {
+          buf.deleteCharAt(buf.length() - 1);
+        }
+        return buf.toString();
+      }
+    } catch (Exception e) { }
+    return "";
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+
+    Log.i("MAC_address",getWifiMacAddress());
 
     // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());

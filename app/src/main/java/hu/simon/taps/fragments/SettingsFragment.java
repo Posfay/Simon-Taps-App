@@ -14,6 +14,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
   private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
 
+  public static final String PREF_BACKGROUND_COLOR = "preferred_background";
+
   public static final String PREF_LANGUAGE = "preferred_language";
 
   public static final String PREF_VIBRATION = "preferred_vibration";
@@ -34,6 +36,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
       @Override
       public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+
+        if (key.equals(PREF_BACKGROUND_COLOR)) {
+
+          changeBackgroundSummary();
+        }
 
         if (key.equals(PREF_LANGUAGE)) {
 
@@ -69,11 +79,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
   }
 
-  @Override
+  public void changeBackgroundSummary() {
+
+    getPreferenceScreen().getSharedPreferences()
+            .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+
+    Preference backgroundPref = findPreference(PREF_BACKGROUND_COLOR);
+
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_BACKGROUND_COLOR, "").equals("dark")) {
+      backgroundPref.setSummary(R.string.background_dark);
+    }
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_BACKGROUND_COLOR, "").equals("light")) {
+      backgroundPref.setSummary(R.string.background_light);
+    }
+  }
+
+    @Override
   public void onResume() {
 
     super.onResume();
 
+    changeBackgroundSummary();
     changeLanguageSummary();
   }
 
