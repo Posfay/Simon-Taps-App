@@ -5,6 +5,10 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
+
 import hu.simon.taps.R;
 
 public class ServerUtil {
@@ -24,6 +28,8 @@ public class ServerUtil {
   public static final long GAME_STATE_REQUEST_INTERVAL = 250;
 
   public static final long END_SCREEN_REQUEST_INTERVAL = 1000;
+
+  public static final String PLAYER_ID = getWifiMacAddress();
 
   public enum Endpoint {
     CREATE("create"), JOIN("join"), LEAVE("leave"), STATE("state"), START("start"), GAME(
@@ -101,6 +107,32 @@ public class ServerUtil {
         .getState() == NetworkInfo.State.CONNECTED ||
         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
             .getState() == NetworkInfo.State.CONNECTED;
+  }
+
+  public static String getWifiMacAddress() {
+    try {
+      List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+      for (NetworkInterface intf : interfaces) {
+        if (! intf.getName().equalsIgnoreCase("wlan0")){
+          continue;
+        }
+
+        byte[] mac = intf.getHardwareAddress();
+        if (mac==null){
+          return "";
+        }
+
+        StringBuilder buf = new StringBuilder();
+        for (byte aMac : mac) {
+          buf.append(String.format("%02X-", aMac));
+        }
+        if (buf.length()>0) {
+          buf.deleteCharAt(buf.length() - 1);
+        }
+        return buf.toString();
+      }
+    } catch (Exception e) { }
+    return "";
   }
 
   private ServerUtil() {

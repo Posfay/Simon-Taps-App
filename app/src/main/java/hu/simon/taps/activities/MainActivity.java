@@ -11,12 +11,9 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
@@ -64,7 +61,6 @@ public class MainActivity extends Activity implements AsyncResponse {
   Random randomBetweenOneFour = new Random();
 
   String roomId;
-  String playerId;
   String status;
   String reason;
 
@@ -98,36 +94,10 @@ public class MainActivity extends Activity implements AsyncResponse {
     }
   }
 
-  public static String getWifiMacAddress() {
-    try {
-      List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-      for (NetworkInterface intf : interfaces) {
-        if (! intf.getName().equalsIgnoreCase("wlan0")){
-          continue;
-        }
-
-        byte[] mac = intf.getHardwareAddress();
-        if (mac==null){
-          return "";
-        }
-
-        StringBuilder buf = new StringBuilder();
-        for (byte aMac : mac) {
-          buf.append(String.format("%02X:", aMac));
-        }
-        if (buf.length()>0) {
-          buf.deleteCharAt(buf.length() - 1);
-        }
-        return buf.toString();
-      }
-    } catch (Exception e) { }
-    return "";
-  }
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    Log.i("MAC_address",getWifiMacAddress());
+    Log.i("playerid",ServerUtil.PLAYER_ID);
 
     // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
@@ -298,9 +268,6 @@ public class MainActivity extends Activity implements AsyncResponse {
     JSONObject payloadJson = new JSONObject();
 
     roomId = roomIdEditText.getText().toString();
-    //playerId = UUID.randomUUID().toString();
-    playerId = getWifiMacAddress();
-    playerId = playerId.replace(":","-");
 
     if (roomId.equals("") || (roomId.length() != 5)) {
 
@@ -312,7 +279,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), this.playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), ServerUtil.PLAYER_ID);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -342,11 +309,10 @@ public class MainActivity extends Activity implements AsyncResponse {
     JSONObject payloadJson = new JSONObject();
 
     roomId = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
-    playerId = UUID.randomUUID().toString();
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), this.playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), ServerUtil.PLAYER_ID);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -434,12 +400,9 @@ public class MainActivity extends Activity implements AsyncResponse {
       }
     } else if (status.equals("OK")) {
 
-      Log.i("name", playerId);
-
       finish();
 
       Intent intent = new Intent(getBaseContext(), GameActivity.class);
-      intent.putExtra("EXTRA_PLAYER_ID", playerId);
       intent.putExtra("EXTRA_ROOM_ID", roomId);
       startActivity(intent);
     } else {
