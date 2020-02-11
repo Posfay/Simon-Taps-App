@@ -96,7 +96,9 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
     setResultText();
-    couponText.setText(coupon);
+    if (!coupon.equals(null)) {
+      couponText.setText(coupon);
+    }
     restartButtonColour();
   }
 
