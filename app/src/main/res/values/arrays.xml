@@ -11,8 +11,8 @@
     </string-array>
 
     <string-array name="preferred_backgrounds_entries">
-        <item>Dark</item>
-        <item>Light</item>
+        <item>@string/background_dark</item>
+        <item>@string/background_light</item>
     </string-array>
 
     <string-array name="preferred_backgrounds_values">

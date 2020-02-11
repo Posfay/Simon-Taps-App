@@ -298,7 +298,9 @@ public class MainActivity extends Activity implements AsyncResponse {
     JSONObject payloadJson = new JSONObject();
 
     roomId = roomIdEditText.getText().toString();
-    playerId = UUID.randomUUID().toString();
+    //playerId = UUID.randomUUID().toString();
+    playerId = getWifiMacAddress();
+    playerId = playerId.replace(":","-");
 
     if (roomId.equals("") || (roomId.length() != 5)) {
 
