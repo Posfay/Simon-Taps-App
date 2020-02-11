@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -16,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +52,6 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   boolean exitCondition = false;
 
   String roomId;
-  String playerId;
   String coupon;
 
   Handler getStateTimerHandler = new Handler();
@@ -92,11 +89,12 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
     colourCode = getIntent().getLongExtra("playerColourCode", 0);
     coupon = getIntent().getStringExtra("couponCode");
-    playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
     setResultText();
-    if (!coupon.equals(null)) {
+    if (coupon.equals(null)) {
+      couponText.setText("");
+    } else {
       couponText.setText(coupon);
     }
     restartButtonColour();
@@ -140,7 +138,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
         offlineTime = 0;
         String url =
-            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
+            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + ServerUtil.PLAYER_ID;
 
         okHttpHandler = new OkHttpHandler(EndScreenActivity.this, client);
         okHttpHandler.getRequest(url);
@@ -244,7 +242,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), ServerUtil.PLAYER_ID);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -338,7 +336,6 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     finish();
 
     Intent intent = new Intent(getBaseContext(), GameActivity.class);
-    intent.putExtra("EXTRA_PLAYER_ID", playerId);
     intent.putExtra("EXTRA_ROOM_ID", roomId);
     startActivity(intent);
   }

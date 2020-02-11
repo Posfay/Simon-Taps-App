@@ -39,8 +39,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     ((SettingsActivity) getActivity()).updateStatusBarColor();
 
-
-
     preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
       @Override
