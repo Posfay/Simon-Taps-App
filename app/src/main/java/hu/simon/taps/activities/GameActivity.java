@@ -67,7 +67,6 @@ public class GameActivity extends Activity implements AsyncResponse {
 
   ConstraintLayout layout;
 
-  String playerId;
   String roomId;
   String wordPattern = "";
 
@@ -132,8 +131,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     leavable = true;
 
-    // Getting Player ID and Room ID from MainActivity
-    playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
+    // Getting Room ID from MainActivity
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
     roomIdText.setText(getString(R.string.room_id) + " " + roomId);
   }
@@ -168,7 +166,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         offlineTime = 0;
         String url =
-            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + playerId;
+            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + ServerUtil.PLAYER_ID;
 
         okHttpHandler = new OkHttpHandler(GameActivity.this, client);
         okHttpHandler.getRequest(url);
@@ -551,7 +549,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), ServerUtil.PLAYER_ID);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -584,7 +582,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), ServerUtil.PLAYER_ID);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -602,7 +600,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     JSONObject payloadJson = new JSONObject();
 
     try {
-      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), playerId);
+      payloadJson.put(ServerUtil.RequestParameter.PLAYER_ID.toString(), ServerUtil.PLAYER_ID);
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -666,7 +664,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     intent.putExtra("successfulRounds", (long) wordPattern.length()-1);
     intent.putExtra("couponCode", couponCode);
     intent.putExtra("playerColourCode", tileId);
-    intent.putExtra("EXTRA_PLAYER_ID", playerId);
     intent.putExtra("EXTRA_ROOM_ID", roomId);
 
     startActivity(intent);
