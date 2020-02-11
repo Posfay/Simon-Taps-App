@@ -45,17 +45,17 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   Button restartButton;
   TextView resultText;
-  ImageView resultImage;
+  TextView couponText;
 
   long successfulRounds;
   long offlineTime = 0;
   long colourCode;
 
-  boolean win;
   boolean exitCondition = false;
 
   String roomId;
   String playerId;
+  String coupon;
 
   Handler getStateTimerHandler = new Handler();
 
@@ -75,7 +75,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     ScreenUtil.setFlags(this, this);
 
     resultText = findViewById(R.id.result);
-    resultImage = findViewById(R.id.resultImage);
+    couponText = findViewById(R.id.coupon);
 
     restartButton = findViewById(R.id.restartButton);
     restartButton.setOnClickListener(new View.OnClickListener() {
@@ -89,13 +89,14 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     client = new OkHttpClient();
 
-    win = getIntent().getBooleanExtra("win", false);
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
     colourCode = getIntent().getLongExtra("playerColourCode", 0);
+    coupon = getIntent().getStringExtra("couponCode");
     playerId = getIntent().getStringExtra("EXTRA_PLAYER_ID");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
     setResultText();
+    couponText.setText(coupon);
     restartButtonColour();
   }
 
@@ -150,54 +151,42 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   public void setResultText() {
 
-    Resources res = getResources();
+    resultText.setText(getString(R.string.score) + successfulRounds);
 
-    if (win) {
+    if (successfulRounds >= 8) {
 
-      resultText.setText(getString(R.string.score) + successfulRounds);
+      resultText.setText(
+          getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
+    }
+    if (successfulRounds >= 10) {
 
-      resultImage.setImageDrawable(res.getDrawable(R.drawable.godfathercat));
-    } else {
+      resultText.setText(
+          getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
+    }
+    if (successfulRounds >= 13) {
 
-      resultText.setText(getString(R.string.score) + successfulRounds);
+      resultText.setText(
+          getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
+    }
+    if (successfulRounds >= 16) {
 
-      if (successfulRounds >= 8) {
+      resultText.setText(
+          getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
+    }
+    if (successfulRounds >= 20) {
 
-        resultText.setText(
-            getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
-      }
-      if (successfulRounds >= 10) {
+      resultText.setText(
+          getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
+    }
+    if (successfulRounds >= 25) {
 
-        resultText.setText(
-            getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
-      }
-      if (successfulRounds >= 13) {
+      resultText.setText(
+          getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
+    }
+    if (successfulRounds >= 30) {
 
-        resultText.setText(
-            getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
-      }
-      if (successfulRounds >= 16) {
-
-        resultText.setText(
-            getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
-      }
-      if (successfulRounds >= 20) {
-
-        resultText.setText(
-            getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
-      }
-      if (successfulRounds >= 25) {
-
-        resultText.setText(
-            getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
-      }
-      if (successfulRounds >= 30) {
-
-        resultText.setText(
-            getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
-      }
-
-      resultImage.setImageResource(R.drawable.cryingcat);
+      resultText.setText(
+          getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
     }
   }
 

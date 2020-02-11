@@ -28,6 +28,10 @@
             android:title="@string/vibration_title"
             android:defaultValue="true"/>
 
+        <Preference
+            android:key="coupons"
+            android:title="Coupons"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/other_category">

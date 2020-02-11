@@ -1,8 +1,12 @@
 package hu.simon.taps.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -20,7 +24,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
   public static final String PREF_VIBRATION = "preferred_vibration";
 
+  public static final String COUPON = "coupons";
+
   public static final String CURRENT_VERSION = "current_version";
+
 
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -31,6 +38,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     versionPref.setSummary(MainActivity.VERSION);
 
     ((SettingsActivity) getActivity()).updateStatusBarColor();
+
+
 
     preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
@@ -59,6 +68,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
           Preference vibrationPref = findPreference(PREF_VIBRATION);
           vibrationPref.setDefaultValue(sharedPreferences.getBoolean(key, true));
+        }
+
+        if (key.equals(COUPON)) {
+
+          Log.i("displaying","coupons");
+
+          couponDialog();
         }
       }
     };
@@ -92,6 +108,45 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     if (getPreferenceScreen().getSharedPreferences().getString(PREF_BACKGROUND_COLOR, "").equals("light")) {
       backgroundPref.setSummary(R.string.background_light);
     }
+  }
+
+  public void couponDialog() {
+    AlertDialog.Builder builderSingle;
+    builderSingle = new AlertDialog.Builder(getActivity());
+    builderSingle.setIcon(R.drawable.ic_launcher);
+    builderSingle.setTitle("Select One Name:-");
+
+    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
+    arrayAdapter.add("Hardik");
+    arrayAdapter.add("Archit");
+    arrayAdapter.add("Jignesh");
+    arrayAdapter.add("Umang");
+    arrayAdapter.add("Gatti");
+
+    builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        dialog.dismiss();
+      }
+    });
+
+    builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        String strName = arrayAdapter.getItem(which);
+        AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
+        builderInner.setMessage(strName);
+        builderInner.setTitle("Your Selected Item is");
+        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog,int which) {
+            dialog.dismiss();
+          }
+        });
+        builderInner.show();
+      }
+    });
+    builderSingle.show();
   }
 
     @Override

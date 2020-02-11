@@ -261,16 +261,9 @@ public class GameActivity extends Activity implements AsyncResponse {
     }
 
     // SUCCESSFUL_END
-    if (state.equals(ServerUtil.State.SUCCESSFUL_END.toString())) {
+    if (state.equals(ServerUtil.State.END.toString())) {
 
-      gameEnd(true);
-      return;
-    }
-
-    // FAIL_END
-    if (state.equals(ServerUtil.State.FAIL_END.toString())) {
-
-      gameEnd(false);
+      gameEnd(responseJson);
       return;
     }
 
@@ -655,7 +648,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   // END OF THE GAME
-  public void gameEnd(Boolean success) {
+  public void gameEnd(JSONObject payloadJson) {
 
     exitCondition = true;
     getStateTimerHandler.removeCallbacks(getStateTimerRunnable);
@@ -664,20 +657,14 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     yourButton.setEnabled(false);
 
+    String couponCode = payloadJson.optString(ServerUtil.ResponseParameter.COUPON.toString());
+
     finish();
 
     Intent intent = new Intent(getBaseContext(), EndScreenActivity.class);
 
-    if (success) {
-
-      intent.putExtra("win", true);
-      intent.putExtra("successfulRounds", (long) wordPattern.length());
-    } else {
-
-      intent.putExtra("win", false);
-      intent.putExtra("successfulRounds", (long) wordPattern.length() - 1);
-    }
-
+    intent.putExtra("successfulRounds", (long) wordPattern.length()-1);
+    intent.putExtra("couponCode", couponCode);
     intent.putExtra("playerColourCode", tileId);
     intent.putExtra("EXTRA_PLAYER_ID", playerId);
     intent.putExtra("EXTRA_ROOM_ID", roomId);

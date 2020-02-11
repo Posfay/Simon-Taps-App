@@ -52,16 +52,15 @@
         app:layout_constraintTop_toTopOf="@id/firstHorizontalGuideline"
         android:gravity="center_horizontal"/>
 
-    <ImageView
-        android:id="@+id/resultImage"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:contentDescription="@string/result_picture"
-        app:layout_constraintBottom_toBottomOf="@id/secondHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="@id/thirdVerticalGuideline"
-        app:layout_constraintStart_toStartOf="@id/thirdVerticalGuideline"
-        app:layout_constraintTop_toTopOf="@id/secondHorizontalGuideline"
-        app:srcCompat="@drawable/godfathercat" />
+    <TextView
+        android:id="@+id/coupon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/restartButton"
