@@ -71,8 +71,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (key.equals(COUPON)) {
 
           Log.i("displaying","coupons");
-
-          couponDialog();
         }
       }
     };
@@ -108,46 +106,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
   }
 
-  public void couponDialog() {
-    AlertDialog.Builder builderSingle;
-    builderSingle = new AlertDialog.Builder(getActivity());
-    builderSingle.setIcon(R.drawable.ic_launcher);
-    builderSingle.setTitle("Select One Name:-");
-
-    final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
-    arrayAdapter.add("Hardik");
-    arrayAdapter.add("Archit");
-    arrayAdapter.add("Jignesh");
-    arrayAdapter.add("Umang");
-    arrayAdapter.add("Gatti");
-
-    builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        dialog.dismiss();
-      }
-    });
-
-    builderSingle.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        String strName = arrayAdapter.getItem(which);
-        AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-        builderInner.setMessage(strName);
-        builderInner.setTitle("Your Selected Item is");
-        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog,int which) {
-            dialog.dismiss();
-          }
-        });
-        builderInner.show();
-      }
-    });
-    builderSingle.show();
-  }
-
-    @Override
+  @Override
   public void onResume() {
 
     super.onResume();
