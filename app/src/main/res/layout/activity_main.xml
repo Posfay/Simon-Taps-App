@@ -70,8 +70,10 @@
         android:src="@drawable/simon_taps_no_bg_cut"
         app:layout_constraintBottom_toTopOf="@id/secondHorizontalGuideline"
         app:layout_constraintEnd_toEndOf="@id/fifthVerticalGuideline"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/firstVerticalGuideline"
-        app:layout_constraintTop_toTopOf="@id/firstHorizontalGuideline" />
+        app:layout_constraintTop_toTopOf="@id/firstHorizontalGuideline"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/unusedLayoutButton"
@@ -133,7 +135,8 @@
         android:gravity="center|center_horizontal|center_vertical"
         android:hint="@string/edit_text"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
+        android:inputType="text"
+        android:maxLength="5"
         android:scrollHorizontally="false"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@id/fifthHorizontalGuideline"

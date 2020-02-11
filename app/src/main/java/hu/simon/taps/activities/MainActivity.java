@@ -68,6 +68,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
+  @Override
+  public <T extends View> T findViewById(int id) {
+    return super.findViewById(id);
+  }
+
   private class UppercaseTextWatcher implements TextWatcher {
 
     @Override
