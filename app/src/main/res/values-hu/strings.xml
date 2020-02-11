@@ -31,8 +31,9 @@
     <string name="general_category">Általános</string>
     <string name="language_title">Nyelv</string>
     <string name="vibration_title">Rezgések</string>
-    <string name="contact_us_title">Elérhetőségünk</string>
-    <string name="version_title">Aktuális verzió</string>
+    <string name="coupons">Kuponok</string>
+    <string name="contact_us_title">Elérhetőségeink</string>
+    <string name="version_title">Jelenlegi verzió</string>
     <string name="other_category">Egyéb</string>
     <string name="background_dark">Sötét</string>
     <string name="background_light">Világos</string>
