@@ -45,7 +45,7 @@ public class ServerUtil {
     STATUS("status"), NUMBER_OF_PLAYERS("numberOfPlayers"), LEFT("left"), TILE_ID(
         "tileId"), PATTERN(
             "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE(
-                "compatible"), NUMBER_OF_RESTART_PLAYERS("numberOfRestartPlayers");
+                "compatible"), NUMBER_OF_RESTART_PLAYERS("numberOfRestartPlayers"), COUPON("coupon");
 
     private String value;
 
@@ -76,7 +76,7 @@ public class ServerUtil {
 
   public enum State {
     WAITING("1_waiting"), PREPARING("2_preparing"), SHOWING_PATTERN("3_showing_pattern"), PLAYING(
-        "4_playing"), SUCCESSFUL_END("5_successful_end"), FAIL_END("5_fail_end");
+        "4_playing"), END("5_end");
 
     private String value;
 

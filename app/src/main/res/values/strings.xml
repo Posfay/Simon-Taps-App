@@ -19,6 +19,12 @@
     //---------------SettingsActivity------------------------------
     <string name="settings">Settings</string>
 
+    <string name="gameplay_category">Gameplay</string>
+    <string name="background_title">Background colour</string>
+    <string name="background_dialog_title">Background during game?</string>
+    <string name="background_dark">Dark</string>
+    <string name="background_light">Light</string>
+
     <string name="general_category">General</string>
 
     <string name="language_title">Language</string>

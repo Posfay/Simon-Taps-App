@@ -34,4 +34,9 @@
     <string name="contact_us_title">Elérhetőségünk</string>
     <string name="version_title">Aktuális verzió</string>
     <string name="other_category">Egyéb</string>
+    <string name="background_dark">Sötét</string>
+    <string name="background_light">Világos</string>
+    <string name="background_title">Háttér színe</string>
+    <string name="background_dialog_title">Háttér a játék alatt?</string>
+    <string name="gameplay_category">Játékmenet</string>
 </resources>
