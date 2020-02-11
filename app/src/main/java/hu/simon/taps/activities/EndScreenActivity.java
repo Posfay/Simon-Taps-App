@@ -277,7 +277,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       backToGameActivity();
     }
     if (ServerUtil.State.END.toString().equals(state)) {
-      if (TextUtils.isEmpty(couponCode)) {
+      if (couponCode.equals("null")) {
         couponText.setText("");
       } else {
         couponText.setText(couponCode);
