@@ -54,12 +54,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if (key.equals(PREF_LANGUAGE)) {
 
-          changeLanguageSummary();
-
           getActivity().finish();
 
           Intent intent = new Intent(getActivity(), SettingsActivity.class);
           startActivity(intent);
+
+          changeLanguageSummary();
         }
 
         if (key.equals(PREF_VIBRATION)) {
