@@ -69,10 +69,5 @@ public class SettingsActivity extends AppCompatActivity {
     startActivity(intent);
   }
 
-  public void updateStatusBarColor() {
-
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    getWindow().setStatusBarColor(getResources().getColor(R.color.colorToolBar, null));
-  }
 
 }

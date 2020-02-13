@@ -37,7 +37,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     Preference versionPref = findPreference(CURRENT_VERSION);
     versionPref.setSummary(MainActivity.VERSION);
 
-    ((SettingsActivity) getActivity()).updateStatusBarColor();
 
     preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
