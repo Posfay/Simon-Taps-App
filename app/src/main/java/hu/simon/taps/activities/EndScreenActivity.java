@@ -134,7 +134,8 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
         offlineTime = 0;
         String url =
-            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + ServerUtil.PLAYER_ID;
+            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/"
+                + ServerUtil.PLAYER_ID;
 
         okHttpHandler = new OkHttpHandler(EndScreenActivity.this, client);
         okHttpHandler.getRequest(url);

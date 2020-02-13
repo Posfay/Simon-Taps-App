@@ -166,7 +166,8 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         offlineTime = 0;
         String url =
-            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/" + ServerUtil.PLAYER_ID;
+            BASE_URL + ServerUtil.Endpoint.STATE.toString() + "/" + roomId + "/"
+                + ServerUtil.PLAYER_ID;
 
         okHttpHandler = new OkHttpHandler(GameActivity.this, client);
         okHttpHandler.getRequest(url);
@@ -365,7 +366,7 @@ public class GameActivity extends Activity implements AsyncResponse {
         didColorAnimate = true;
 
         ValueAnimator colorAnimation =
-                ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -424,7 +425,7 @@ public class GameActivity extends Activity implements AsyncResponse {
         didColorAnimate = true;
 
         ValueAnimator colorAnimation =
-                ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration(GameUtil.ANIMATE_DURATION); // milliseconds
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
@@ -659,7 +660,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     Intent intent = new Intent(getBaseContext(), EndScreenActivity.class);
 
-    intent.putExtra("successfulRounds", (long) wordPattern.length()-1);
+    intent.putExtra("successfulRounds", (long) wordPattern.length() - 1);
     intent.putExtra("playerColourCode", tileId);
     intent.putExtra("EXTRA_ROOM_ID", roomId);
 

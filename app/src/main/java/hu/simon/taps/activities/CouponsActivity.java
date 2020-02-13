@@ -1,24 +1,16 @@
 package hu.simon.taps.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
-import hu.simon.taps.R;
-import hu.simon.taps.http.handler.AsyncResponse;
-import hu.simon.taps.http.handler.OkHttpHandler;
-import hu.simon.taps.utils.GameUtil;
-import hu.simon.taps.utils.LanguageUtil;
-import hu.simon.taps.utils.ScreenUtil;
-import androidx.appcompat.widget.Toolbar;
-import hu.simon.taps.utils.ServerUtil;
-import hu.simon.taps.utils.VibrationUtil;
-import okhttp3.OkHttpClient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-import android.app.Activity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
@@ -30,14 +22,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import hu.simon.taps.R;
+import hu.simon.taps.http.handler.AsyncResponse;
+import hu.simon.taps.http.handler.OkHttpHandler;
+import hu.simon.taps.utils.LanguageUtil;
+import hu.simon.taps.utils.ScreenUtil;
+import hu.simon.taps.utils.ServerUtil;
+import hu.simon.taps.utils.VibrationUtil;
+import okhttp3.OkHttpClient;
 
 public class CouponsActivity extends AppCompatActivity implements AsyncResponse {
 
@@ -51,7 +45,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
   TextView couponCode;
   TextView couponExpiration;
 
-  ArrayList <String> coupons = new ArrayList<String>();
+  ArrayList<String> coupons = new ArrayList<>();
   ArrayAdapter adapter;
 
   @Override
@@ -59,7 +53,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
     getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
-            getResources().getDisplayMetrics());
+        getResources().getDisplayMetrics());
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_coupons);
@@ -80,7 +74,8 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
     getCoupons();
 
-    //adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, coupons);
+    // adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
+    // coupons);
     adapter = new CustomAdapter(this, R.layout.list_item_coupons, coupons);
   }
 
@@ -111,9 +106,10 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
   private void getCoupons() {
 
-    Log.i("coupons","requested");
+    Log.i("coupons", "requested");
 
-    String url = GameActivity.BASE_URL + ServerUtil.Endpoint.COUPON.toString() + "/" + "user" + "/" + ServerUtil.PLAYER_ID;
+    String url = GameActivity.BASE_URL + ServerUtil.Endpoint.COUPON.toString() + "/" + "user" + "/"
+        + ServerUtil.PLAYER_ID;
 
     JSONObject payloadJson = new JSONObject();
 
@@ -135,10 +131,10 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       Log.i("CouponsResponse", responseJsonString);
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
-      //coupons = payloadJson.optJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
+      // coupons = payloadJson.optJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
 
-      JSONArray couponsJsonArray = payloadJson.getJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
-
+      JSONArray couponsJsonArray =
+          payloadJson.getJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
 
       for (int i = 0; i < couponsJsonArray.length(); i++) {
         coupons.add(couponsJsonArray.getString(i));
@@ -171,7 +167,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       String actualCode = getItem(position);
 
       couponCode.setText(actualCode.substring(0, actualCode.indexOf("+")));
-      couponExpiration.setText("Valid for: " + actualCode.substring(actualCode.indexOf("+")+1));
+      couponExpiration.setText("Valid for: " + actualCode.substring(actualCode.indexOf("+") + 1));
 
       randomColor();
 

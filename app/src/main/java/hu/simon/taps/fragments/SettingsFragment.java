@@ -1,12 +1,9 @@
 package hu.simon.taps.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -28,7 +25,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
   public static final String CURRENT_VERSION = "current_version";
 
-
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
@@ -37,14 +33,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     Preference versionPref = findPreference(CURRENT_VERSION);
     versionPref.setSummary(MainActivity.VERSION);
 
-
     preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
       @Override
       public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+            .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
 
         if (key.equals(PREF_BACKGROUND_COLOR)) {
 
@@ -69,7 +64,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         if (key.equals(COUPON)) {
 
-          Log.i("displaying","coupons");
+          Log.i("displaying", "coupons");
         }
       }
     };
@@ -93,14 +88,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
   public void changeBackgroundSummary() {
 
     getPreferenceScreen().getSharedPreferences()
-            .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+        .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
 
     Preference backgroundPref = findPreference(PREF_BACKGROUND_COLOR);
 
-    if (getPreferenceScreen().getSharedPreferences().getString(PREF_BACKGROUND_COLOR, "").equals("dark")) {
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_BACKGROUND_COLOR, "")
+        .equals("dark")) {
       backgroundPref.setSummary(R.string.background_dark);
     }
-    if (getPreferenceScreen().getSharedPreferences().getString(PREF_BACKGROUND_COLOR, "").equals("light")) {
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_BACKGROUND_COLOR, "")
+        .equals("light")) {
       backgroundPref.setSummary(R.string.background_light);
     }
   }

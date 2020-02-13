@@ -1,15 +1,13 @@
 package hu.simon.taps.utils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
 
-import hu.simon.taps.R;
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class ServerUtil {
 
@@ -51,7 +49,8 @@ public class ServerUtil {
     STATUS("status"), NUMBER_OF_PLAYERS("numberOfPlayers"), LEFT("left"), TILE_ID(
         "tileId"), PATTERN(
             "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE(
-                "compatible"), NUMBER_OF_RESTART_PLAYERS("numberOfRestartPlayers"), COUPON("coupon"), COUPONS("coupons");
+                "compatible"), NUMBER_OF_RESTART_PLAYERS(
+                    "numberOfRestartPlayers"), COUPON("coupon"), COUPONS("coupons");
 
     private String value;
 
@@ -113,12 +112,12 @@ public class ServerUtil {
     try {
       List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
       for (NetworkInterface intf : interfaces) {
-        if (! intf.getName().equalsIgnoreCase("wlan0")){
+        if (!intf.getName().equalsIgnoreCase("wlan0")) {
           continue;
         }
 
         byte[] mac = intf.getHardwareAddress();
-        if (mac==null){
+        if (mac == null) {
           return "";
         }
 
@@ -126,12 +125,13 @@ public class ServerUtil {
         for (byte aMac : mac) {
           buf.append(String.format("%02X-", aMac));
         }
-        if (buf.length()>0) {
+        if (buf.length() > 0) {
           buf.deleteCharAt(buf.length() - 1);
         }
         return buf.toString();
       }
-    } catch (Exception e) { }
+    } catch (Exception e) {
+    }
     return "";
   }
 

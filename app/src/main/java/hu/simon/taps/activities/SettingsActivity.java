@@ -6,8 +6,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,7 +38,6 @@ public class SettingsActivity extends AppCompatActivity {
     setContentView(R.layout.activity_settings);
 
     settingsActivity = this;
-
 
     PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
 
@@ -76,6 +73,5 @@ public class SettingsActivity extends AppCompatActivity {
     Intent intent = new Intent(getBaseContext(), MainActivity.class);
     startActivity(intent);
   }
-
 
 }

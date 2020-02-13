@@ -7,10 +7,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
-import androidx.appcompat.app.AppCompatActivity;
 import hu.simon.taps.fragments.SettingsFragment;
 
-public class LanguageUtil extends AppCompatActivity {
+public class LanguageUtil {
 
   public static Configuration preferredLanguage(Context context, Configuration mainConfiguration) {
 

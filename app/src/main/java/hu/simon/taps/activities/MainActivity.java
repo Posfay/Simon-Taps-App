@@ -82,15 +82,18 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+
       if (roomIdEditText.getText().length() >= 5) {
-        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayoutMain);
+
+        ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
         constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.5f);
         TransitionManager.beginDelayedTransition(constraintLayout);
         constraintSet.applyTo(constraintLayout);
       } else {
-        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayoutMain);
+
+        ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
         constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.99f);
@@ -117,7 +120,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
-    Log.i("playerid",ServerUtil.PLAYER_ID);
+    Log.i("playerid", ServerUtil.PLAYER_ID);
 
     // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());
@@ -172,8 +175,6 @@ public class MainActivity extends Activity implements AsyncResponse {
       checkVersionOnCreate();
     }
   }
-
-
 
   public void randomButtonColor() {
 
