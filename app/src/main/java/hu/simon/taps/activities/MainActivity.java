@@ -351,6 +351,7 @@ public class MainActivity extends Activity implements AsyncResponse {
         public void onClick(DialogInterface dialog, int which) {
           VibrationUtil.preferredVibration(MainActivity.this, vibrator);
           finish();
+          android.os.Process.killProcess(android.os.Process.myPid());
           System.exit(0);
         }
       });

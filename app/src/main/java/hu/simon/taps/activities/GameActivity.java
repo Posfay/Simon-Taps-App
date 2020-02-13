@@ -655,14 +655,11 @@ public class GameActivity extends Activity implements AsyncResponse {
 
     yourButton.setEnabled(false);
 
-    String couponCode = payloadJson.optString(ServerUtil.ResponseParameter.COUPON.toString());
-
     finish();
 
     Intent intent = new Intent(getBaseContext(), EndScreenActivity.class);
 
     intent.putExtra("successfulRounds", (long) wordPattern.length()-1);
-    intent.putExtra("couponCode", couponCode);
     intent.putExtra("playerColourCode", tileId);
     intent.putExtra("EXTRA_ROOM_ID", roomId);
 

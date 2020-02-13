@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -52,7 +53,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   boolean exitCondition = false;
 
   String roomId;
-  String coupon;
+  String couponCode;
 
   Handler getStateTimerHandler = new Handler();
 
@@ -88,15 +89,11 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     successfulRounds = getIntent().getLongExtra("successfulRounds", 0);
     colourCode = getIntent().getLongExtra("playerColourCode", 0);
-    coupon = getIntent().getStringExtra("couponCode");
     roomId = getIntent().getStringExtra("EXTRA_ROOM_ID");
 
+    getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
+
     setResultText();
-    if (coupon.equals(null)) {
-      couponText.setText("");
-    } else {
-      couponText.setText(coupon);
-    }
     restartButtonColour();
   }
 
@@ -249,8 +246,6 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     okHttpHandler = new OkHttpHandler(this, client);
     okHttpHandler.postRequest(url, payloadJson);
-
-    getStateTimerHandler.postDelayed(getStateTimerRunnable, 0);
   }
 
   public void onRequestComplete(String responseJsonString) {
@@ -267,6 +262,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
       state = payloadJson.getString(ServerUtil.ResponseParameter.GAME_STATE.toString());
+      couponCode = payloadJson.optString(ServerUtil.ResponseParameter.COUPON.toString());
 
     } catch (JSONException e) {
       e.printStackTrace();
@@ -279,6 +275,13 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
     if (ServerUtil.State.PREPARING.toString().equals(state)) {
       backToGameActivity();
+    }
+    if (ServerUtil.State.END.toString().equals(state)) {
+      if (couponCode.equals("null")) {
+        couponText.setText("");
+      } else {
+        couponText.setText(couponCode);
+      }
     }
   }
 
