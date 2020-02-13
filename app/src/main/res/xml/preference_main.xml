@@ -30,7 +30,14 @@
 
         <Preference
             android:key="coupons"
-            android:title="@string/coupons" />
+            android:title="@string/coupons">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="hu.simon.taps.activities.CouponsActivity"
+                android:targetPackage="hu.simon.taps" />
+
+        </Preference>
 
     </PreferenceCategory>
 

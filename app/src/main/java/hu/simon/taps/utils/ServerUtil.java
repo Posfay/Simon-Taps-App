@@ -33,7 +33,7 @@ public class ServerUtil {
 
   public enum Endpoint {
     CREATE("create"), JOIN("join"), LEAVE("leave"), STATE("state"), START("start"), GAME(
-        "game"), VERSION("version"), RESTART("restart");
+        "game"), VERSION("version"), RESTART("restart"), COUPON("coupon");
 
     private String value;
 
@@ -51,7 +51,7 @@ public class ServerUtil {
     STATUS("status"), NUMBER_OF_PLAYERS("numberOfPlayers"), LEFT("left"), TILE_ID(
         "tileId"), PATTERN(
             "pattern"), REASON("reason"), GAME_STATE("gameState"), COMPATIBLE(
-                "compatible"), NUMBER_OF_RESTART_PLAYERS("numberOfRestartPlayers"), COUPON("coupon");
+                "compatible"), NUMBER_OF_RESTART_PLAYERS("numberOfRestartPlayers"), COUPON("coupon"), COUPONS("coupons");
 
     private String value;
 

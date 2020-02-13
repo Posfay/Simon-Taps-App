@@ -1,11 +1,14 @@
 package hu.simon.taps.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,8 +20,12 @@ import hu.simon.taps.utils.VibrationUtil;
 
 public class SettingsActivity extends AppCompatActivity {
 
+  public static Activity settingsActivity;
+
   Vibrator vibrator;
   Toolbar toolbar;
+
+  private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +35,14 @@ public class SettingsActivity extends AppCompatActivity {
     getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
         getResources().getDisplayMetrics());
 
+    ScreenUtil.setFlags(this, this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
 
-    ScreenUtil.setFlags(this, this);
+    settingsActivity = this;
+
+
+    PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -39,9 +50,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle(getString(R.string.settings));
-
-    PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
-
   }
 
   // BACK BUTTON PRESSED

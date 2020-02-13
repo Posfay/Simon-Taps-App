@@ -22,4 +22,6 @@
 
     <color name="almostBlack">#111111</color>
     <color name="colorToolBar">#ECECEC</color>
+
+    <color name="toolbarGray">#DEDEDE</color>
 </resources>

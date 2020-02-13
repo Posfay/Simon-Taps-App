@@ -141,7 +141,9 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     roomIdEditText.addTextChangedListener(new UppercaseTextWatcher());
 
-    createButton.setEnabled(true);
+    createButton.setEnabled(false);
+    joinButton.setEnabled(false);
+    settingsButton.setEnabled(false);
 
     createButton.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -297,7 +299,9 @@ public class MainActivity extends Activity implements AsyncResponse {
       return;
     }
 
+    createButton.setEnabled(false);
     joinButton.setEnabled(false);
+    settingsButton.setEnabled(false);
 
     try {
       payloadJson.put(ServerUtil.RequestParameter.ROOM_ID.toString(), roomId);
@@ -317,6 +321,8 @@ public class MainActivity extends Activity implements AsyncResponse {
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
     createButton.setEnabled(false);
+    joinButton.setEnabled(false);
+    settingsButton.setEnabled(false);
 
     boolean connected = ServerUtil.connectionCheck(this);
 
@@ -416,6 +422,12 @@ public class MainActivity extends Activity implements AsyncResponse {
 
       boolean compatible =
           payloadJson.optBoolean(ServerUtil.ResponseParameter.COMPATIBLE.toString());
+
+      if (compatible) {
+        createButton.setEnabled(true);
+        joinButton.setEnabled(true);
+        settingsButton.setEnabled(true);
+      }
 
       if (!compatible) {
 
