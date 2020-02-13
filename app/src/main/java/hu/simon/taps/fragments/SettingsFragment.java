@@ -37,6 +37,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     Preference versionPref = findPreference(CURRENT_VERSION);
     versionPref.setSummary(MainActivity.VERSION);
 
+
     preferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
       @Override

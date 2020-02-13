@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
@@ -25,6 +26,15 @@
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/thirdVerticalGuideline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@id/editText"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintTop_toTopOf="@id/joinButton" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/movingGuideline1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -67,11 +77,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/simon_taps"
-        android:src="@drawable/simon_taps_no_bg_cut"
+        android:src="@drawable/simon_taps_no_bg"
         app:layout_constraintBottom_toTopOf="@id/secondHorizontalGuideline"
         app:layout_constraintEnd_toEndOf="@id/fifthVerticalGuideline"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@id/firstVerticalGuideline"
-        app:layout_constraintTop_toTopOf="@id/firstHorizontalGuideline" />
+        app:layout_constraintTop_toTopOf="@id/firstHorizontalGuideline"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/unusedLayoutButton"
@@ -102,6 +114,22 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.52" />
 
+    <Button
+        android:id="@+id/joinButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/button_standard"
+        android:clickable="false"
+        android:text="@string/join_button"
+        android:textColor="#000000"
+        android:textSize="22dp"
+        app:layout_constraintBottom_toTopOf="@+id/fifthHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="@+id/fifthVerticalGuideline"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/movingGuideline1"
+        app:layout_constraintTop_toTopOf="@+id/fourthHorizontalGuideline"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/fourthHorizontalGuideline"
         android:layout_width="wrap_content"
@@ -114,15 +142,18 @@
         style="@style/Widget.AppCompat.EditText"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/edittext"
         android:gravity="center|center_horizontal|center_vertical"
         android:hint="@string/edit_text"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
+        android:inputType="text"
+        android:longClickable="true"
+        android:maxLength="5"
         android:scrollHorizontally="false"
-        android:textSize="14dp"
+        android:textSize="16dp"
         app:layout_constraintBottom_toBottomOf="@id/fifthHorizontalGuideline"
-        app:layout_constraintEnd_toStartOf="@+id/thirdVerticalGuideline"
-        app:layout_constraintStart_toStartOf="@id/secondVerticalGuideline"
+        app:layout_constraintEnd_toStartOf="@id/movingGuideline1"
+        app:layout_constraintStart_toStartOf="@id/firstVerticalGuideline"
         app:layout_constraintTop_toTopOf="@id/fourthHorizontalGuideline" />
 
     <Button

@@ -1,8 +1,5 @@
 package hu.simon.taps.activities;
 
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -18,6 +15,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import hu.simon.taps.BuildConfig;
@@ -68,6 +68,11 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
+  @Override
+  public <T extends View> T findViewById(int id) {
+    return super.findViewById(id);
+  }
+
   private class UppercaseTextWatcher implements TextWatcher {
 
     @Override
@@ -77,7 +82,21 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-      // pass
+      if (roomIdEditText.getText().length() >= 5) {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayoutMain);
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(constraintLayout);
+        constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.5f);
+        TransitionManager.beginDelayedTransition(constraintLayout);
+        constraintSet.applyTo(constraintLayout);
+      } else {
+        ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.constraintLayoutMain);
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(constraintLayout);
+        constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.99f);
+        TransitionManager.beginDelayedTransition(constraintLayout);
+        constraintSet.applyTo(constraintLayout);
+      }
     }
 
     @Override
@@ -90,6 +109,7 @@ public class MainActivity extends Activity implements AsyncResponse {
         s = s.toUpperCase();
         roomIdEditText.setText(s);
         roomIdEditText.setSelection(roomIdEditText.length());
+
       }
     }
   }
@@ -152,6 +172,8 @@ public class MainActivity extends Activity implements AsyncResponse {
       checkVersionOnCreate();
     }
   }
+
+
 
   public void randomButtonColor() {
 
