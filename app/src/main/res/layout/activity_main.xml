@@ -67,7 +67,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/simon_taps"
-        android:src="@drawable/simon_taps_no_bg_cut"
+        android:src="@drawable/simon_taps_no_bg"
         app:layout_constraintBottom_toTopOf="@id/secondHorizontalGuideline"
         app:layout_constraintEnd_toEndOf="@id/fifthVerticalGuideline"
         app:layout_constraintHorizontal_bias="0.0"
