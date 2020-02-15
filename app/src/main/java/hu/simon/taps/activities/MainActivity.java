@@ -68,6 +68,7 @@ public class MainActivity extends Activity implements AsyncResponse {
   boolean versionChecked = false;
   boolean joinButtonVisible = true;
 
+  
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
   private class UppercaseTextWatcher implements TextWatcher {
@@ -115,7 +116,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     roomIdEditText = findViewById(R.id.editText);
     joinButton = findViewById(R.id.joinButton);
-    notAButton = findViewById(R.id.unusedLayoutButton);
+    notAButton = findViewById(R.id.unusedLayoutButtonShape);
     createButton = findViewById(R.id.createButton);
     settingsButton = findViewById(R.id.settingsButton);
 
@@ -169,7 +170,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
       ConstraintSet constraintSet = new ConstraintSet();
       constraintSet.clone(constraintLayout);
-      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.5f);
+      constraintSet.setGuidelinePercent(R.id.animatedGuideline, 0.5f);
       constraintSet.applyTo(constraintLayout);
 
       TransitionManager.beginDelayedTransition(constraintLayout);
@@ -183,7 +184,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
       ConstraintSet constraintSet = new ConstraintSet();
       constraintSet.clone(constraintLayout);
-      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.99f);
+      constraintSet.setGuidelinePercent(R.id.animatedGuideline, 0.99f);
       constraintSet.applyTo(constraintLayout);
 
       TransitionManager.beginDelayedTransition(constraintLayout);
