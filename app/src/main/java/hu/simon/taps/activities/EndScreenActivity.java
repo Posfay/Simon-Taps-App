@@ -280,7 +280,7 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       if (couponCode.equals("null")) {
         couponText.setText("");
       } else {
-        couponText.setText(couponCode);
+        couponText.setText(getString(R.string.coupon_received) + "\n" + couponCode);
       }
     }
   }
