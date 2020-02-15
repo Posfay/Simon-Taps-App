@@ -166,8 +166,8 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
       String actualCode = getItem(position);
 
-      couponCode.setText(actualCode.substring(0, actualCode.indexOf("+")));
-      couponExpiration.setText("Valid for: " + actualCode.substring(actualCode.indexOf("+") + 1));
+      couponCode.setText(actualCode.substring(0, actualCode.indexOf("-")));
+      couponExpiration.setText("Valid for: " + actualCode.substring(actualCode.indexOf("-") + 1));
 
       randomColor();
 

@@ -144,7 +144,7 @@
         android:gravity="center|center_horizontal|center_vertical"
         android:hint="@string/edit_text"
         android:importantForAutofill="no"
-        android:inputType="text"
+        android:inputType="text|textNoSuggestions"
         android:longClickable="true"
         android:maxLength="5"
         android:scrollHorizontally="false"
