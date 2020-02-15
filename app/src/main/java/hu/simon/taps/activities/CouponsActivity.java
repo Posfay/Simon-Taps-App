@@ -8,18 +8,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +50,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
   TextView couponCode;
   TextView couponExpiration;
+  RelativeLayout couponBackground;
 
   ArrayList<String> coupons = new ArrayList<>();
   ArrayAdapter adapter;
@@ -166,16 +173,23 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
       String actualCode = getItem(position);
 
-      couponCode.setText(actualCode.substring(0, actualCode.indexOf("-")));
-      couponExpiration.setText("Valid for: " + actualCode.substring(actualCode.indexOf("-") + 1));
+      final String code = actualCode.substring(0, actualCode.indexOf("-"));
+      String date = actualCode.substring(actualCode.indexOf("-") + 1);
+      String[] dateValues = date.split(" ");
+      String day = dateValues[0] + "d";
+      String hour = dateValues[1] + "h";
+      String minute = dateValues[2] + "m";
 
-      randomColor();
+      couponCode.setText(code);
+      couponExpiration.setText("Valid for: " + day + " " + hour + " " + minute);
+
+      randomColor(v);
 
       return v;
     }
   }
 
-  public void randomColor() {
+  public void randomColor(View v) {
 
     Random randomBetweenOneFour = new Random();
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
@@ -183,23 +197,19 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     switch (randomSwitchNum) {
 
       case 1:
-        couponCode.setTextColor(getResources().getColor(R.color.blue));
-        couponExpiration.setTextColor(getResources().getColor(R.color.blue));
+        v.setBackgroundColor(getResources().getColor(R.color.blue_pale));
         break;
 
       case 2:
-        couponCode.setTextColor(getResources().getColor(R.color.red));
-        couponExpiration.setTextColor(getResources().getColor(R.color.red));
+        v.setBackgroundColor(getResources().getColor(R.color.red_pale));
         break;
 
       case 3:
-        couponCode.setTextColor(getResources().getColor(R.color.green));
-        couponExpiration.setTextColor(getResources().getColor(R.color.green));
+        v.setBackgroundColor(getResources().getColor(R.color.green_pale));
         break;
 
       case 4:
-        couponCode.setTextColor(getResources().getColor(R.color.yellow));
-        couponExpiration.setTextColor(getResources().getColor(R.color.yellow));
+        v.setBackgroundColor(getResources().getColor(R.color.yellow_pale));
         break;
     }
   }
