@@ -176,12 +176,12 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       final String code = actualCode.substring(0, actualCode.indexOf("-"));
       String date = actualCode.substring(actualCode.indexOf("-") + 1);
       String[] dateValues = date.split(" ");
-      String day = dateValues[0] + "d";
-      String hour = dateValues[1] + "h";
-      String minute = dateValues[2] + "m";
+      String day = dateValues[0] + getString(R.string.day);
+      String hour = dateValues[1] + getString(R.string.hour);
+      String minute = dateValues[2] + getString(R.string.minute);
 
       couponCode.setText(code);
-      couponExpiration.setText("Valid for: " + day + " " + hour + " " + minute);
+      couponExpiration.setText(getString(R.string.valid) + " " + day + " " + hour + " " + minute);
 
       randomColor(v);
 

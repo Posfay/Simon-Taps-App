@@ -40,4 +40,9 @@
     <string name="background_title">Háttér színe</string>
     <string name="background_dialog_title">Háttér a játék alatt?</string>
     <string name="gameplay_category">Játékmenet</string>
+    <string name="coupon_received">Kaptál egy kupont:</string>
+    <string name="day">n</string>
+    <string name="hour">ó</string>
+    <string name="minute">p</string>
+    <string name="valid">Érvényes még:</string>
 </resources>

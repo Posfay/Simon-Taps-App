@@ -65,8 +65,16 @@
     <string name="pos6" translatable="false">wtf</string>
     <string name="pos7" translatable="false">hacker!</string>
 
+    <string name="coupon_received">You received a coupon:</string>
+
     <string name="restart">Restart</string>
 
     <string name="back_to_menu">Back to menu?</string>
+
+    //-----------------CouponsActivity---------------------
+    <string name="valid">Valid for:</string>
+    <string name="day">d</string>
+    <string name="hour">h</string>
+    <string name="minute">m</string>
 
 </resources>
