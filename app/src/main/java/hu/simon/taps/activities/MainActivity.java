@@ -165,32 +165,27 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public void checkJoinButtonAnimation() {
 
+    ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
+
+    ConstraintSet constraintSet = new ConstraintSet();
+    constraintSet.clone(constraintLayout);
+
     if (roomIdEditText.getText().length() >= 5) {
 
-      ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
-
-      ConstraintSet constraintSet = new ConstraintSet();
-      constraintSet.clone(constraintLayout);
-      constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.5f);
-      constraintSet.applyTo(constraintLayout);
-
-      TransitionManager.beginDelayedTransition(constraintLayout);
+      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.5f);
 
       joinButton.setText(getString(R.string.join_button));
 
     } else {
 
-      ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
-
-      ConstraintSet constraintSet = new ConstraintSet();
-      constraintSet.clone(constraintLayout);
-      constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.99f);
-      constraintSet.applyTo(constraintLayout);
-
-      TransitionManager.beginDelayedTransition(constraintLayout);
+      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.99f);
 
       joinButton.setText("");
+
     }
+    constraintSet.applyTo(constraintLayout);
+
+    TransitionManager.beginDelayedTransition(constraintLayout);
   }
 
   public void randomButtonColor() {
