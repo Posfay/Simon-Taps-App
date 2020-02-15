@@ -83,23 +83,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-      if (roomIdEditText.getText().length() >= 5) {
-
-        ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(constraintLayout);
-        constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.5f);
-        TransitionManager.beginDelayedTransition(constraintLayout);
-        constraintSet.applyTo(constraintLayout);
-      } else {
-
-        ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(constraintLayout);
-        constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.99f);
-        TransitionManager.beginDelayedTransition(constraintLayout);
-        constraintSet.applyTo(constraintLayout);
-      }
+      checkJoinButtonAnimation();
     }
 
     @Override
@@ -145,7 +129,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     roomIdEditText.addTextChangedListener(new UppercaseTextWatcher());
 
     createButton.setEnabled(false);
-    joinButton.setEnabled(false);
+    // joinButton.setEnabled(false);
     settingsButton.setEnabled(false);
 
     createButton.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +157,39 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     if (connected) {
       checkVersionOnCreate();
+    }
+
+    checkJoinButtonAnimation();
+
+  }
+
+  public void checkJoinButtonAnimation() {
+
+    if (roomIdEditText.getText().length() >= 5) {
+
+      ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
+
+      ConstraintSet constraintSet = new ConstraintSet();
+      constraintSet.clone(constraintLayout);
+      constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.5f);
+      constraintSet.applyTo(constraintLayout);
+
+      TransitionManager.beginDelayedTransition(constraintLayout);
+
+      joinButton.setText(getString(R.string.join_button));
+
+    } else {
+
+      ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
+
+      ConstraintSet constraintSet = new ConstraintSet();
+      constraintSet.clone(constraintLayout);
+      constraintSet.setGuidelinePercent(R.id.movingGuideline1, 0.99f);
+      constraintSet.applyTo(constraintLayout);
+
+      TransitionManager.beginDelayedTransition(constraintLayout);
+
+      joinButton.setText("");
     }
   }
 
@@ -322,7 +339,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
     createButton.setEnabled(false);
-    joinButton.setEnabled(false);
+    // joinButton.setEnabled(false);
     settingsButton.setEnabled(false);
 
     boolean connected = ServerUtil.connectionCheck(this);
