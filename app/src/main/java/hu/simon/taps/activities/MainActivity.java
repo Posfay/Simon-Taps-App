@@ -118,7 +118,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     roomIdEditText = findViewById(R.id.editText);
     joinButton = findViewById(R.id.joinButton);
-    notAButton = findViewById(R.id.unusedLayoutButton);
+    notAButton = findViewById(R.id.unusedLayoutButtonShape);
     createButton = findViewById(R.id.createButton);
     settingsButton = findViewById(R.id.settingsButton);
 
@@ -164,22 +164,28 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public void checkJoinButtonAnimation() {
 
+
     ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
 
     ConstraintSet constraintSet = new ConstraintSet();
     constraintSet.clone(constraintLayout);
 
+
     if (roomIdEditText.getText().length() >= 5) {
 
-      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.5f);
+      constraintSet.setGuidelinePercent(R.id.animatedGuideline, 0.5f);
 
       joinButton.setText(getString(R.string.join_button));
-    } else {
 
-      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.99f);
-
-      joinButton.setText("");
     }
+    else  {
+
+        constraintSet.setGuidelinePercent(R.id.animatedGuideline, 0.99f);
+
+        joinButton.setText("");
+
+    }
+
 
     constraintSet.applyTo(constraintLayout);
 

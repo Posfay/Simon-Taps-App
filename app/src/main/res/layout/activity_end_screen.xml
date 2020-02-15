@@ -7,14 +7,14 @@
     tools:context=".activities.EndScreenActivity">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/thirdVerticalGuideline"
+        android:id="@+id/verticalGuideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/firstHorizontalGuideline"
+        android:id="@+id/horizontalGuideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="216dp"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/secondHorizontalGuideline"
+        android:id="@+id/horizontalGuideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -46,10 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="28dp"
-        app:layout_constraintBottom_toBottomOf="@id/firstHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="@id/thirdVerticalGuideline"
-        app:layout_constraintStart_toStartOf="@id/thirdVerticalGuideline"
-        app:layout_constraintTop_toTopOf="@id/firstHorizontalGuideline"
+        app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline1"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline3"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline3"
+        app:layout_constraintTop_toTopOf="@id/horizontalGuideline1"
         android:gravity="center_horizontal"/>
 
     <TextView
@@ -70,8 +70,8 @@
         android:text="@string/restart"
         android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="@id/bottomHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="@id/thirdVerticalGuideline"
-        app:layout_constraintStart_toStartOf="@id/thirdVerticalGuideline"
+        app:layout_constraintEnd_toEndOf="@id/verticalGuideline3"
+        app:layout_constraintStart_toStartOf="@id/verticalGuideline3"
         app:layout_constraintTop_toTopOf="@id/bottomHorizontalGuideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
