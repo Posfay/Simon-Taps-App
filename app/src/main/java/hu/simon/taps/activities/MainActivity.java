@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     roomIdEditText.addTextChangedListener(new UppercaseTextWatcher());
 
     createButton.setEnabled(false);
-    // joinButton.setEnabled(false);
+    joinButton.setEnabled(false);
     settingsButton.setEnabled(false);
 
     createButton.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +160,6 @@ public class MainActivity extends Activity implements AsyncResponse {
     }
 
     checkJoinButtonAnimation();
-
   }
 
   public void checkJoinButtonAnimation() {
@@ -175,14 +174,13 @@ public class MainActivity extends Activity implements AsyncResponse {
       constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.5f);
 
       joinButton.setText(getString(R.string.join_button));
-
     } else {
 
       constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.99f);
 
       joinButton.setText("");
-
     }
+
     constraintSet.applyTo(constraintLayout);
 
     TransitionManager.beginDelayedTransition(constraintLayout);
@@ -334,7 +332,7 @@ public class MainActivity extends Activity implements AsyncResponse {
     VibrationUtil.preferredVibration(MainActivity.this, vibrator);
 
     createButton.setEnabled(false);
-    // joinButton.setEnabled(false);
+    joinButton.setEnabled(false);
     settingsButton.setEnabled(false);
 
     boolean connected = ServerUtil.connectionCheck(this);
@@ -437,12 +435,11 @@ public class MainActivity extends Activity implements AsyncResponse {
           payloadJson.optBoolean(ServerUtil.ResponseParameter.COMPATIBLE.toString());
 
       if (compatible) {
+
         createButton.setEnabled(true);
         joinButton.setEnabled(true);
         settingsButton.setEnabled(true);
-      }
-
-      if (!compatible) {
+      } else {
 
         alertDialog(getString(R.string.outdated), true);
       }
