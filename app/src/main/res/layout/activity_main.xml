@@ -30,8 +30,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="@id/editText"
-        app:layout_constraintGuide_percent="0.5"
-        app:layout_constraintTop_toTopOf="@id/joinButton" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/movingGuideline1"
@@ -39,8 +38,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="@id/editText"
-        app:layout_constraintGuide_percent="0.5"
-        app:layout_constraintTop_toTopOf="@id/joinButton" />
+        app:layout_constraintGuide_percent="0.99" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/fourthVerticalGuideline"
@@ -155,22 +153,6 @@
         app:layout_constraintEnd_toStartOf="@id/movingGuideline1"
         app:layout_constraintStart_toStartOf="@id/firstVerticalGuideline"
         app:layout_constraintTop_toTopOf="@id/fourthHorizontalGuideline" />
-
-    <Button
-        android:id="@+id/joinButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/button_standard"
-        android:clickable="false"
-        android:text="@string/join_button"
-        android:textColor="#000000"
-        android:textSize="22dp"
-        app:layout_constraintBottom_toTopOf="@+id/fifthHorizontalGuideline"
-        app:layout_constraintEnd_toEndOf="@+id/fifthVerticalGuideline"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/thirdVerticalGuideline"
-        app:layout_constraintTop_toTopOf="@+id/fourthHorizontalGuideline"
-        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/fifthHorizontalGuideline"
