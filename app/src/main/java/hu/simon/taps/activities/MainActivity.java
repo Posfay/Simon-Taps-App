@@ -63,15 +63,13 @@ public class MainActivity extends Activity implements AsyncResponse {
   String roomId;
   String status;
   String reason;
+  String joinButtonText;
 
   boolean versionChecked = false;
+  boolean joinButtonVisible = true;
 
+  
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
-
-  @Override
-  public <T extends View> T findViewById(int id) {
-    return super.findViewById(id);
-  }
 
   private class UppercaseTextWatcher implements TextWatcher {
 
@@ -118,7 +116,7 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     roomIdEditText = findViewById(R.id.editText);
     joinButton = findViewById(R.id.joinButton);
-    notAButton = findViewById(R.id.unusedLayoutButton);
+    notAButton = findViewById(R.id.unusedLayoutButtonShape);
     createButton = findViewById(R.id.createButton);
     settingsButton = findViewById(R.id.settingsButton);
 
@@ -151,6 +149,8 @@ public class MainActivity extends Activity implements AsyncResponse {
       }
     });
 
+    joinButtonText = getString(R.string.join_button);
+
     randomButtonColor();
 
     boolean connected = checkInternetOnCreate();
@@ -164,26 +164,35 @@ public class MainActivity extends Activity implements AsyncResponse {
 
   public void checkJoinButtonAnimation() {
 
-    ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
+    if ((!joinButtonVisible) && (roomIdEditText.getText().length() == 5)) {
 
-    ConstraintSet constraintSet = new ConstraintSet();
-    constraintSet.clone(constraintLayout);
+      ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
 
-    if (roomIdEditText.getText().length() >= 5) {
+      ConstraintSet constraintSet = new ConstraintSet();
+      constraintSet.clone(constraintLayout);
+      constraintSet.setGuidelinePercent(R.id.animatedGuideline, 0.5f);
+      constraintSet.applyTo(constraintLayout);
 
-      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.5f);
+      TransitionManager.beginDelayedTransition(constraintLayout);
 
-      joinButton.setText(getString(R.string.join_button));
-    } else {
+      joinButton.setText(joinButtonText);
 
-      constraintSet.setGuidelinePercent(R.id.movingGuideline, 0.99f);
+      joinButtonVisible = !joinButtonVisible;
+    } else if ((joinButtonVisible) && (roomIdEditText.getText().length() < 5)) {
+
+      ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
+
+      ConstraintSet constraintSet = new ConstraintSet();
+      constraintSet.clone(constraintLayout);
+      constraintSet.setGuidelinePercent(R.id.animatedGuideline, 0.99f);
+      constraintSet.applyTo(constraintLayout);
+
+      TransitionManager.beginDelayedTransition(constraintLayout);
 
       joinButton.setText("");
+
+      joinButtonVisible = !joinButtonVisible;
     }
-
-    constraintSet.applyTo(constraintLayout);
-
-    TransitionManager.beginDelayedTransition(constraintLayout);
   }
 
   public void randomButtonColor() {
