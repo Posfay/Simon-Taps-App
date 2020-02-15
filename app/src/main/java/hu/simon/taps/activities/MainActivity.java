@@ -68,7 +68,6 @@ public class MainActivity extends Activity implements AsyncResponse {
   boolean versionChecked = false;
   boolean joinButtonVisible = true;
 
-  
   private AlphaAnimation buttonClick = new AlphaAnimation(1F, 0.5F);
 
   private class UppercaseTextWatcher implements TextWatcher {
