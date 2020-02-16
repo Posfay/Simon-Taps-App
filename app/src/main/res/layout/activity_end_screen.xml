@@ -45,17 +45,19 @@
         android:id="@+id/result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textAlignment="center"
         android:textSize="28dp"
         app:layout_constraintBottom_toBottomOf="@id/horizontalGuideline1"
         app:layout_constraintEnd_toEndOf="@id/verticalGuideline3"
         app:layout_constraintStart_toStartOf="@id/verticalGuideline3"
-        app:layout_constraintTop_toTopOf="@id/horizontalGuideline1"
-        android:gravity="center_horizontal"/>
+        app:layout_constraintTop_toTopOf="@id/horizontalGuideline1" />
 
     <TextView
         android:id="@+id/coupon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:textSize="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
