@@ -45,4 +45,5 @@
     <string name="hour">ó</string>
     <string name="minute">p</string>
     <string name="valid">Érvényes még:</string>
+    <string name="empty">Nincsenek kuponjaid</string>
 </resources>

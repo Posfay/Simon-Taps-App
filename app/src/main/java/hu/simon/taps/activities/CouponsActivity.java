@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import hu.simon.taps.R;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
@@ -70,6 +71,10 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     toolbar = findViewById(R.id.toolbar);
     couponList = findViewById(R.id.couponsList);
 
+    View child = getLayoutInflater().inflate(R.layout.list_item_coupons_empty,null);
+    ((ViewGroup)couponList.getParent()).addView(child);
+    couponList.setEmptyView(child);
+
     setSupportActionBar(toolbar);
     getSupportActionBar().setTitle(R.string.coupons);
 
@@ -78,6 +83,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     // adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
     // coupons);
     adapter = new CustomAdapter(this, R.layout.list_item_coupons, coupons);
+    couponList.setAdapter(adapter);
   }
 
   // BACK BUTTON PRESSED
@@ -179,9 +185,11 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       String minuteS = dateValues[2] + getString(R.string.minute);
 
       String expirationText = getString(R.string.valid);
+      expirationText = expirationText + "\n";
+
 
       if (day > 0) {
-        expirationText += " " + dayS;
+        expirationText += dayS;
       }
       if (hour > 0) {
         expirationText += " " + hourS;
