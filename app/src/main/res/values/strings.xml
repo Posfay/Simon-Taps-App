@@ -76,5 +76,6 @@
     <string name="day">d</string>
     <string name="hour">h</string>
     <string name="minute">m</string>
+    <string name="empty">You don\'t have any coupons</string>
 
 </resources>

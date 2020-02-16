@@ -1,5 +1,6 @@
 package hu.simon.taps.activities;
 
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -102,6 +103,8 @@ public class MainActivity extends Activity implements AsyncResponse {
   protected void onCreate(Bundle savedInstanceState) {
 
     Log.i("playerid", ServerUtil.PLAYER_ID);
+
+    Log.i("lang", Locale.getDefault().getDisplayLanguage());
 
     // Changing language
     Configuration mainConfiguration = new Configuration(getResources().getConfiguration());

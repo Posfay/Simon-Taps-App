@@ -14,7 +14,7 @@ public class LanguageUtil {
   public static Configuration preferredLanguage(Context context, Configuration mainConfiguration) {
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    String languageToLoad = prefs.getString(SettingsFragment.PREF_LANGUAGE, "en");
+    String languageToLoad = prefs.getString(SettingsFragment.PREF_LANGUAGE, Locale.getDefault().getDisplayLanguage());
     Locale locale = new Locale(languageToLoad);
     Locale.setDefault(locale);
 

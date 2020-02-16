@@ -1,30 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/couponBackground"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="84dp"
+    android:animateLayoutChanges="true"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
-    <TextView
-        android:id="@+id/couponExpiration"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/firstVerticalGuideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="36dp"
-        android:layout_marginBottom="30dp"
-        android:gravity="center|center_horizontal|center_vertical"
-        android:text="Coupon Expiration"
-        android:textColor="@android:color/black"
-        android:textSize="14dp" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/secondVerticalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.475" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleVerticalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/thirdVerticalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.525" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fourthVerticalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleHorizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
 
     <TextView
         android:id="@+id/couponCode"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:text="Coupon Code"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="CouponCode"
         android:textColor="@android:color/black"
-        android:textSize="36dp" />
-</RelativeLayout>
+        android:textSize="36dp"
+        app:layout_constraintBottom_toBottomOf="@id/middleHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="@id/secondVerticalGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/middleHorizontalGuideline" />
+
+    <TextView
+        android:id="@+id/couponExpiration"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:text="CouponExpiration"
+        android:textColor="@android:color/black"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/middleHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/thirdVerticalGuideline"
+        app:layout_constraintTop_toTopOf="@id/middleHorizontalGuideline" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
