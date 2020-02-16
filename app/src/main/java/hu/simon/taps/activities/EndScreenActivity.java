@@ -148,42 +148,42 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
   public void setResultText() {
 
-    resultText.setText(getString(R.string.score) + successfulRounds);
+    resultText.setText(getString(R.string.score) + " " + successfulRounds);
 
+    if (successfulRounds >= 5) {
+
+      resultText.setText(
+          getString(R.string.pos1) + "\n" + getString(R.string.score) + " " + successfulRounds);
+    }
     if (successfulRounds >= 8) {
 
       resultText.setText(
-          getString(R.string.pos1) + "\n" + getString(R.string.score) + successfulRounds);
+          getString(R.string.pos2) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
-    if (successfulRounds >= 10) {
+    if (successfulRounds >= 11) {
 
       resultText.setText(
-          getString(R.string.pos2) + "\n" + getString(R.string.score) + successfulRounds);
+          getString(R.string.pos3) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
-    if (successfulRounds >= 13) {
+    if (successfulRounds >= 15) {
 
       resultText.setText(
-          getString(R.string.pos3) + "\n" + getString(R.string.score) + successfulRounds);
-    }
-    if (successfulRounds >= 16) {
-
-      resultText.setText(
-          getString(R.string.pos4) + "\n" + getString(R.string.score) + successfulRounds);
+          getString(R.string.pos4) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
     if (successfulRounds >= 20) {
 
       resultText.setText(
-          getString(R.string.pos5) + "\n" + getString(R.string.score) + successfulRounds);
+          getString(R.string.pos5) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
     if (successfulRounds >= 25) {
 
       resultText.setText(
-          getString(R.string.pos6) + "\n" + getString(R.string.score) + successfulRounds);
+          getString(R.string.pos6) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
     if (successfulRounds >= 30) {
 
       resultText.setText(
-          getString(R.string.pos7) + "\n" + getString(R.string.score) + successfulRounds);
+          getString(R.string.pos7) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
   }
 
@@ -274,13 +274,18 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     }
 
     if (ServerUtil.State.PREPARING.toString().equals(state)) {
+
       backToGameActivity();
     }
+
     if (ServerUtil.State.END.toString().equals(state)) {
+
       if (couponCode.equals("null")) {
+
         couponText.setText("");
       } else {
-        couponText.setText(couponCode);
+
+        couponText.setText(getString(R.string.coupon_received) + "\n" + couponCode);
       }
     }
   }

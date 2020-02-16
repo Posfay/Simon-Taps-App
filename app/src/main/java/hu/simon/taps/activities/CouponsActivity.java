@@ -4,28 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,7 +45,6 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
   TextView couponCode;
   TextView couponExpiration;
-  RelativeLayout couponBackground;
 
   ArrayList<String> coupons = new ArrayList<>();
   ArrayAdapter adapter;
@@ -118,32 +112,29 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     String url = GameActivity.BASE_URL + ServerUtil.Endpoint.COUPON.toString() + "/" + "user" + "/"
         + ServerUtil.PLAYER_ID;
 
-    JSONObject payloadJson = new JSONObject();
-
     okHttpHandler = new OkHttpHandler(CouponsActivity.this, client);
     okHttpHandler.getRequest(url);
   }
 
   public void onRequestComplete(String responseJsonString) {
 
-    JSONObject payloadJson;
+    JSONObject responseJson;
     String status = null;
-
-    JSONObject responseJson = null;
 
     try {
 
-      payloadJson = new JSONObject(responseJsonString);
+      responseJson = new JSONObject(responseJsonString);
 
       Log.i("CouponsResponse", responseJsonString);
 
-      status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
-      // coupons = payloadJson.optJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
+      status = responseJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
+      // coupons = responseJson.optJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
 
       JSONArray couponsJsonArray =
-          payloadJson.getJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
+          responseJson.getJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
 
       for (int i = 0; i < couponsJsonArray.length(); i++) {
+
         coupons.add(couponsJsonArray.getString(i));
         couponList.setAdapter(adapter);
       }
@@ -154,18 +145,20 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
     if (!status.equals("OK")) {
       // TODO error response
-      return;
     }
   }
 
   public class CustomAdapter extends ArrayAdapter<String> {
 
     CustomAdapter(Context context, int resource, List<String> objects) {
+
       super(context, resource, objects);
     }
 
+    @NotNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
+
       View v = LayoutInflater.from(getContext()).inflate(R.layout.list_item_coupons, parent, false);
 
       couponCode = v.findViewById(R.id.couponCode);
@@ -176,12 +169,29 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       final String code = actualCode.substring(0, actualCode.indexOf("-"));
       String date = actualCode.substring(actualCode.indexOf("-") + 1);
       String[] dateValues = date.split(" ");
-      String day = dateValues[0] + "d";
-      String hour = dateValues[1] + "h";
-      String minute = dateValues[2] + "m";
+
+      long day = Long.valueOf(dateValues[0]);
+      long hour = Long.valueOf(dateValues[1]);
+      long minute = Long.valueOf(dateValues[2]);
+
+      String dayS = dateValues[0] + getString(R.string.day);
+      String hourS = dateValues[1] + getString(R.string.hour);
+      String minuteS = dateValues[2] + getString(R.string.minute);
+
+      String expirationText = getString(R.string.valid);
+
+      if (day > 0) {
+        expirationText += " " + dayS;
+      }
+      if (hour > 0) {
+        expirationText += " " + hourS;
+      }
+      if (minute > 0) {
+        expirationText += " " + minuteS;
+      }
 
       couponCode.setText(code);
-      couponExpiration.setText("Valid for: " + day + " " + hour + " " + minute);
+      couponExpiration.setText(expirationText);
 
       randomColor(v);
 

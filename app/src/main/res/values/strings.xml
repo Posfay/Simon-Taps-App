@@ -38,7 +38,7 @@
     <string name="other_category">Other</string>
 
     <string name="contact_us_title">Contact us</string>
-    <string name="email_address" translatable="false">benedek@posfay.com\nkoa@dkrmg.hu\nmarton@csutora.com</string>
+    <string name="email_address" translatable="false">dev@mabelabs.com</string>
 
     <string name="version_title">Current version</string>
 
@@ -56,7 +56,7 @@
     //-----------------EndScreenActivity---------------------
     <string name="result_picture">Picture about a cat</string>
 
-    <string name="score">"Your score: "</string>
+    <string name="score">"Your score:"</string>
     <string name="pos1">Nice!</string>
     <string name="pos2">Good job!</string>
     <string name="pos3">Great job!</string>
@@ -65,8 +65,16 @@
     <string name="pos6" translatable="false">wtf</string>
     <string name="pos7" translatable="false">hacker!</string>
 
+    <string name="coupon_received">You have received a coupon!</string>
+
     <string name="restart">Restart</string>
 
     <string name="back_to_menu">Back to menu?</string>
+
+    //-----------------CouponsActivity---------------------
+    <string name="valid">Valid for</string>
+    <string name="day">d</string>
+    <string name="hour">h</string>
+    <string name="minute">m</string>
 
 </resources>
