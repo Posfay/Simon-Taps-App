@@ -39,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     settingsActivity = this;
 
-    PreferenceManager.setDefaultValues(this, R.xml.preference_main, false);
+    PreferenceManager.setDefaultValues(this, R.xml.preference_settings, false);
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 

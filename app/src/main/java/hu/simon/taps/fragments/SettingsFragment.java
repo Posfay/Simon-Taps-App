@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.Locale;
+
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import hu.simon.taps.R;
@@ -28,7 +30,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
   @Override
   public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
-    setPreferencesFromResource(R.xml.preference_main, rootKey);
+    setPreferencesFromResource(R.xml.preference_settings, rootKey);
 
     Preference versionPref = findPreference(CURRENT_VERSION);
     versionPref.setSummary(MainActivity.VERSION);
@@ -77,10 +79,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     Preference languagePref = findPreference(PREF_LANGUAGE);
 
-    if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE, "").equals("en")) {
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE, " ").equals("en")) {
       languagePref.setSummary(R.string.language_english);
     }
-    if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE, "").equals("hu")) {
+    if (getPreferenceScreen().getSharedPreferences().getString(PREF_LANGUAGE, " ").equals("hu")) {
       languagePref.setSummary(R.string.language_hungarian);
     }
   }
