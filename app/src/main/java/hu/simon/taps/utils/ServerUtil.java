@@ -102,6 +102,12 @@ public class ServerUtil {
         (ConnectivityManager) myActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
 
     // we are connected to a network
+    if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE) == null) {
+
+      return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+          .getState() == NetworkInfo.State.CONNECTED;
+    }
+
     return connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE)
         .getState() == NetworkInfo.State.CONNECTED ||
         connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
