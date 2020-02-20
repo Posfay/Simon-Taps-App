@@ -9,8 +9,8 @@
     <string name="simon_taps">Simon Taps logó</string>
     <string name="round">Kör</string>
     <string name="invalid_room">Hibás szobakód</string>
-    <string name="exit">Biztosan ki szeretnél lépni?</string>
-    <string name="leave">Biztosan ki szeretnél lépni?</string>
+    <string name="exit">Biztosan ki szeretnél lépni a játékból?</string>
+    <string name="leave">Biztosan ki szeretnél lépni a szobából?</string>
     <string name="no_internet">Nincs internet kapcsolat!</string>
     <string name="outdated">Egy elavult verzióját használod az alkalmazásnak! Kérlek töltsd le a legújabbat!</string>
     <string name="room_exists">A szoba már létezik</string>
@@ -37,8 +37,8 @@
     <string name="other_category">Egyéb</string>
     <string name="background_dark">Sötét</string>
     <string name="background_light">Világos</string>
-    <string name="background_title">Háttér színe</string>
-    <string name="background_dialog_title">Háttérszín a játék alatt</string>
+    <string name="background_title">Színséma</string>
+    <string name="background_dialog_title">Háttérszín</string>
     <string name="gameplay_category">Játékmenet</string>
     <string name="coupon_received">Kaptál egy kupont:</string>
     <string name="day">n</string>

@@ -8,10 +8,10 @@
     tools:context=".activities.SettingsActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/settingsToolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/toolbarGray"
+        android:background="@color/toolbarGrey"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,6 +26,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/settingsToolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

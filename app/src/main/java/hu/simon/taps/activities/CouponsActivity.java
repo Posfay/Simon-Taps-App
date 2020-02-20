@@ -9,11 +9,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,8 +28,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
+
 import hu.simon.taps.R;
+import hu.simon.taps.fragments.SettingsFragment;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.LanguageUtil;
@@ -50,6 +54,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
   ArrayList<String> coupons = new ArrayList<>();
   ArrayAdapter adapter;
 
+  public static Activity couponsActivity;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     // Changing language
@@ -57,19 +62,23 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
         getResources().getDisplayMetrics());
 
+    ScreenUtil.setFlags(this, this);
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_coupons);
 
-    SettingsActivity.settingsActivity.finish();
+    couponsActivity = this;
 
-    ScreenUtil.setFlags(this, this);
+    SettingsActivity.settingsActivity.finish();
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
     client = new OkHttpClient();
 
-    toolbar = findViewById(R.id.toolbar);
+    toolbar = findViewById(R.id.couponToolbar);
     couponList = findViewById(R.id.couponsList);
+
+    ScreenUtil.setToolbarColor(this, toolbar);
 
     View child = getLayoutInflater().inflate(R.layout.list_item_coupons_empty,null);
     ((ViewGroup)couponList.getParent()).addView(child);
@@ -131,7 +140,9 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
       responseJson = new JSONObject(responseJsonString);
 
-      Log.i("CouponsResponse", responseJsonString);
+      if (responseJsonString != null) {
+        Log.i("CouponsResponse", responseJsonString);
+      }
 
       status = responseJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
       // coupons = responseJson.optJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
@@ -201,6 +212,18 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       couponCode.setText(code);
       couponExpiration.setText(expirationText);
 
+      SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(couponsActivity);
+      String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
+
+      if (backgroundState.equals("dark")) {
+        couponCode.setTextColor(getResources().getColor(R.color.light_grey));
+        couponExpiration.setTextColor(getResources().getColor(R.color.light_grey));
+      }
+      else if (backgroundState.equals("light")) {
+        couponCode.setTextColor(getResources().getColor(R.color.black));
+        couponExpiration.setTextColor(getResources().getColor(R.color.black));
+      }
+
       randomColor(v);
 
       return v;
@@ -212,23 +235,51 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     Random randomBetweenOneFour = new Random();
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
 
-    switch (randomSwitchNum) {
+    SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+    String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
 
-      case 1:
-        v.setBackgroundColor(getResources().getColor(R.color.blue_pale));
-        break;
+    if (backgroundState.equals("dark")) {
 
-      case 2:
-        v.setBackgroundColor(getResources().getColor(R.color.red_pale));
-        break;
+      switch (randomSwitchNum) {
 
-      case 3:
-        v.setBackgroundColor(getResources().getColor(R.color.green_pale));
-        break;
+        case 1:
+          v.setBackgroundColor(getResources().getColor(R.color.blue_bg));
+          break;
 
-      case 4:
-        v.setBackgroundColor(getResources().getColor(R.color.yellow_pale));
-        break;
+        case 2:
+          v.setBackgroundColor(getResources().getColor(R.color.red_bg));
+          break;
+
+        case 3:
+          v.setBackgroundColor(getResources().getColor(R.color.green_bg));
+          break;
+
+        case 4:
+          v.setBackgroundColor(getResources().getColor(R.color.yellow_bg));
+          break;
+      }
+    }
+
+    else if (backgroundState.equals("light")) {
+
+      switch (randomSwitchNum) {
+
+        case 1:
+          v.setBackgroundColor(getResources().getColor(R.color.blue_bg_pale));
+          break;
+
+        case 2:
+          v.setBackgroundColor(getResources().getColor(R.color.red_bg_pale));
+          break;
+
+        case 3:
+          v.setBackgroundColor(getResources().getColor(R.color.green_bg_pale));
+          break;
+
+        case 4:
+          v.setBackgroundColor(getResources().getColor(R.color.yellow_bg_pale));
+          break;
+      }
     }
   }
 }

@@ -10,6 +10,7 @@ import java.util.Locale;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import hu.simon.taps.R;
+import hu.simon.taps.activities.GameActivity;
 import hu.simon.taps.activities.MainActivity;
 import hu.simon.taps.activities.SettingsActivity;
 
@@ -44,6 +45,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             .registerOnSharedPreferenceChangeListener(preferenceChangeListener);
 
         if (key.equals(PREF_BACKGROUND_COLOR)) {
+          getActivity().finish();
+
+          Intent intent = new Intent(getActivity(), SettingsActivity.class);
+          startActivity(intent);
 
           changeBackgroundSummary();
         }
@@ -102,6 +107,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         .equals("light")) {
       backgroundPref.setSummary(R.string.background_light);
     }
+
   }
 
   @Override

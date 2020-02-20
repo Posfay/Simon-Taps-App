@@ -5,8 +5,7 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="84dp"
-    android:animateLayoutChanges="true"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+    android:animateLayoutChanges="true">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/firstVerticalGuideline"
