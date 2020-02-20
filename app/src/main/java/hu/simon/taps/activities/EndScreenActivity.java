@@ -66,10 +66,10 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
     getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
         getResources().getDisplayMetrics());
 
+    ScreenUtil.setFlags(this, this);
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_end_screen);
-
-    ScreenUtil.setFlags(this, this);
 
     resultText = findViewById(R.id.result);
     couponText = findViewById(R.id.coupon);
@@ -258,7 +258,9 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
 
       payloadJson = new JSONObject(responseJsonString);
 
-      Log.i("restartResponse", responseJsonString);
+      if (responseJsonString != null) {
+        Log.i("restartResponse", responseJsonString);
+      }
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
       state = payloadJson.getString(ServerUtil.ResponseParameter.GAME_STATE.toString());

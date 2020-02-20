@@ -20,8 +20,8 @@
     <string name="settings">Settings</string>
 
     <string name="gameplay_category">Gameplay</string>
-    <string name="background_title">Background colour</string>
-    <string name="background_dialog_title">Background during game?</string>
+    <string name="background_title">Color scheme</string>
+    <string name="background_dialog_title">Background color</string>
     <string name="background_dark">Dark</string>
     <string name="background_light">Light</string>
 
@@ -47,7 +47,7 @@
     <string name="room_id">Room ID:</string>
     <string name="round">Round</string>
     <string name="bust">Bust image</string>
-    <string name="leave">Do you want to leave the room?</string>
+    <string name="leave">Are you sure you want to leave the room?</string>
 
     <string name="prepare">Prepare for the game</string>
     <string name="round_started">The round has started!</string>
@@ -65,14 +65,14 @@
     <string name="pos6" translatable="false">wtf</string>
     <string name="pos7" translatable="false">hacker!</string>
 
-    <string name="coupon_received">You have received a coupon!</string>
+    <string name="coupon_received">You have received a coupon:</string>
 
     <string name="restart">Restart</string>
 
     <string name="back_to_menu">Back to menu?</string>
 
     //-----------------CouponsActivity---------------------
-    <string name="valid">Valid for</string>
+    <string name="valid">Valid for:</string>
     <string name="day">d</string>
     <string name="hour">h</string>
     <string name="minute">m</string>

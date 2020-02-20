@@ -11,9 +11,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.TransitionManager;
@@ -31,6 +33,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import hu.simon.taps.BuildConfig;
 import hu.simon.taps.R;
+import hu.simon.taps.fragments.SettingsFragment;
 import hu.simon.taps.http.handler.AsyncResponse;
 import hu.simon.taps.http.handler.OkHttpHandler;
 import hu.simon.taps.utils.LanguageUtil;
@@ -111,16 +114,26 @@ public class MainActivity extends Activity implements AsyncResponse {
     getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
         getResources().getDisplayMetrics());
 
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
 
     ScreenUtil.setFlags(this, this);
+
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
     roomIdEditText = findViewById(R.id.editText);
     joinButton = findViewById(R.id.joinButton);
     notAButton = findViewById(R.id.unusedLayoutButtonShape);
     createButton = findViewById(R.id.createButton);
     settingsButton = findViewById(R.id.settingsButton);
+
+    if (backgroundState.equals("dark")) {
+      settingsButton.setBackground(getDrawable(R.drawable.settings_icon_light));
+    }
+    else if (backgroundState.equals("light")) {
+      settingsButton.setBackground(getDrawable(R.drawable.settings_icon));
+    }
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -428,8 +441,9 @@ public class MainActivity extends Activity implements AsyncResponse {
     reason = null;
 
     try {
-      Log.i("JoinResponse", responseJsonString);
-
+      if (responseJsonString != null) {
+        Log.i("JoinResponse", responseJsonString);
+      }
       payloadJson = new JSONObject(responseJsonString);
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());

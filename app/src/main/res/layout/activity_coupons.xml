@@ -7,10 +7,10 @@
     tools:context=".activities.CouponsActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/couponToolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/toolbarGray"
+        android:background="@color/toolbarGrey"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/couponToolbar"
         android:divider="@android:color/black"
         android:dividerHeight="0dp"/>
 

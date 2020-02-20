@@ -104,10 +104,10 @@ public class GameActivity extends Activity implements AsyncResponse {
     getResources().updateConfiguration(LanguageUtil.preferredLanguage(this, mainConfiguration),
         getResources().getDisplayMetrics());
 
+    ScreenUtil.setFlags(this, this);
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
-
-    ScreenUtil.setFlags(this, this);
 
     // ----------------------------------FINDING COMPONENTS-----------------------------------------
     feedbackText = findViewById(R.id.feedBackText);
@@ -120,6 +120,23 @@ public class GameActivity extends Activity implements AsyncResponse {
     blueButton = findViewById(R.id.blueButton);
     layout = findViewById(R.id.layout);
     bustImage = findViewById(R.id.bustImage);
+
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
+
+    if (backgroundState.equals("dark")) {
+      bustImage.setImageDrawable(getDrawable(R.drawable.bust_light));
+      roomIdText.setTextColor(getResources().getColor(R.color.light_grey));
+      roundText.setTextColor(getResources().getColor(R.color.light_grey));
+      playersText.setTextColor(getResources().getColor(R.color.light_grey));
+    }
+    else if (backgroundState.equals("light")) {
+      bustImage.setImageDrawable(getDrawable(R.drawable.bust));
+      roomIdText.setTextColor(getResources().getColor(R.color.black));
+      roundText.setTextColor(getResources().getColor(R.color.black));
+      playersText.setTextColor(getResources().getColor(R.color.black));
+    }
+
 
     pattern = new ArrayList<>();
 
@@ -219,7 +236,9 @@ public class GameActivity extends Activity implements AsyncResponse {
     String status = null;
     String state = null;
 
-    Log.i("GameResponse", responseJsonString);
+    if (responseJsonString != null) {
+      Log.i("GameResponse", responseJsonString);
+    }
 
     try {
       responseJson = new JSONObject(responseJsonString);
@@ -373,6 +392,7 @@ public class GameActivity extends Activity implements AsyncResponse {
           @Override
           public void onAnimationUpdate(ValueAnimator animator) {
             layout.setBackgroundColor((int) animator.getAnimatedValue());
+            getWindow().setStatusBarColor((int) animator.getAnimatedValue());
           }
 
         });
@@ -387,7 +407,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         yourButton = findViewById(R.id.greenButton);
         colorFrom = getResources().getColor(R.color.colorPrimary, null);
-        colorTo = getResources().getColor(R.color.green_pale, null);
+        colorTo = getResources().getColor(R.color.green_bg_pale, null);
 
         feedbackText.setTextColor(Color.BLACK);
         roundText.setTextColor(Color.BLACK);
@@ -396,7 +416,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         yourButton = findViewById(R.id.redButton);
         colorFrom = getResources().getColor(R.color.colorPrimary, null);
-        colorTo = getResources().getColor(R.color.red_pale, null);
+        colorTo = getResources().getColor(R.color.red_bg_pale, null);
 
         feedbackText.setTextColor(Color.BLACK);
         roundText.setTextColor(Color.BLACK);
@@ -405,7 +425,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         yourButton = findViewById(R.id.yellowButton);
         colorFrom = getResources().getColor(R.color.colorPrimary, null);
-        colorTo = getResources().getColor(R.color.yellow_pale, null);
+        colorTo = getResources().getColor(R.color.yellow_bg_pale, null);
 
         feedbackText.setTextColor(Color.BLACK);
         roundText.setTextColor(Color.BLACK);
@@ -414,7 +434,7 @@ public class GameActivity extends Activity implements AsyncResponse {
 
         yourButton = findViewById(R.id.blueButton);
         colorFrom = getResources().getColor(R.color.colorPrimary, null);
-        colorTo = getResources().getColor(R.color.blue_pale, null);
+        colorTo = getResources().getColor(R.color.blue_bg_pale, null);
 
         feedbackText.setTextColor(Color.BLACK);
         roundText.setTextColor(Color.BLACK);
@@ -432,6 +452,7 @@ public class GameActivity extends Activity implements AsyncResponse {
           @Override
           public void onAnimationUpdate(ValueAnimator animator) {
             layout.setBackgroundColor((int) animator.getAnimatedValue());
+            getWindow().setStatusBarColor((int) animator.getAnimatedValue());
           }
 
         });
@@ -439,6 +460,8 @@ public class GameActivity extends Activity implements AsyncResponse {
         colorAnimation.start();
       }
     }
+    final int Flags = getWindow().getDecorView().getSystemUiVisibility();
+    getWindow().getDecorView().setSystemUiVisibility(backgroundState.equals("light") ? (Flags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (Flags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
   }
 
   @SuppressLint("SetTextI18n")
@@ -476,6 +499,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     redButton.setBackgroundResource(R.drawable.button_red);
     yellowButton.setBackgroundResource(R.drawable.button_yellow);
     blueButton.setBackgroundResource(R.drawable.button_blue);
+    yourButton.setEnabled(false); //just to be sure, there were problems
 
     Runnable timerRunnable = new Runnable() {
 
