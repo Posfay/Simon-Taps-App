@@ -64,6 +64,7 @@
     <string name="pos5">Nailed it!</string>
     <string name="pos6" translatable="false">wtf</string>
     <string name="pos7" translatable="false">hacker!</string>
+    <string name="pos8">Find the easter egg!</string>
 
     <string name="coupon_received">You have received a coupon:</string>
 

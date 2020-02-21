@@ -251,6 +251,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     } catch (JSONException e) {
 
       Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
+      return;
     }
 
     // -----------------------------------EXAMINING GAME STATES-------------------------------------

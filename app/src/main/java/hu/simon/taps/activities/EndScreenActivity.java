@@ -165,26 +165,32 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
       resultText.setText(
           getString(R.string.pos3) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
-    if (successfulRounds >= 15) {
+    if (successfulRounds >= 18) {
 
       resultText.setText(
           getString(R.string.pos4) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
-    if (successfulRounds >= 20) {
+    if (successfulRounds >= 24) {
 
       resultText.setText(
           getString(R.string.pos5) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
-    if (successfulRounds >= 25) {
+    if (successfulRounds >= 29) {
 
       resultText.setText(
           getString(R.string.pos6) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
-    if (successfulRounds >= 30) {
+    if (successfulRounds >= 40) {
 
       resultText.setText(
           getString(R.string.pos7) + "\n" + getString(R.string.score) + " " + successfulRounds);
     }
+    if (successfulRounds >= 100) {
+
+      resultText.setText(
+          getString(R.string.pos8) + "\n" + getString(R.string.score) + " " + successfulRounds);
+    }
+
   }
 
   public void restartButtonColour() {
