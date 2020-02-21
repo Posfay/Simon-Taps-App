@@ -350,7 +350,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       if (tileId == 1) {
 
         yourButton = findViewById(R.id.greenButton);
-        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorFrom = getResources().getColor(R.color.colorPrimaryDark, null);
         colorTo = getResources().getColor(R.color.green_bg, null);
 
         feedbackText.setTextColor(Color.WHITE);
@@ -359,7 +359,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       if (tileId == 2) {
 
         yourButton = findViewById(R.id.redButton);
-        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorFrom = getResources().getColor(R.color.colorPrimaryDark, null);
         colorTo = getResources().getColor(R.color.red_bg, null);
 
         feedbackText.setTextColor(Color.WHITE);
@@ -368,7 +368,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       if (tileId == 3) {
 
         yourButton = findViewById(R.id.yellowButton);
-        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorFrom = getResources().getColor(R.color.colorPrimaryDark, null);
         colorTo = getResources().getColor(R.color.yellow_bg, null);
 
         feedbackText.setTextColor(Color.WHITE);
@@ -377,7 +377,7 @@ public class GameActivity extends Activity implements AsyncResponse {
       if (tileId == 4) {
 
         yourButton = findViewById(R.id.blueButton);
-        colorFrom = getResources().getColor(R.color.colorPrimary, null);
+        colorFrom = getResources().getColor(R.color.colorPrimaryDark, null);
         colorTo = getResources().getColor(R.color.blue_bg, null);
 
         feedbackText.setTextColor(Color.WHITE);
