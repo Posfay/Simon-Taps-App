@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.appcompat.widget.Toolbar;
-
 import hu.simon.taps.R;
 import hu.simon.taps.fragments.SettingsFragment;
 
@@ -27,14 +26,15 @@ public class ScreenUtil {
 
       activity.setTheme(R.style.AppThemeDark);
       activity.getWindow()
-              .setStatusBarColor(context.getResources().getColor(R.color.colorPrimaryDark, null));
-    }
-    else if (backgroundState.equals("light")) {
+          .setStatusBarColor(context.getResources().getColor(R.color.colorPrimaryDark, null));
 
-      activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    } else if (backgroundState.equals("light")) {
+
+      activity.getWindow().getDecorView()
+          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
       activity.setTheme(R.style.AppTheme);
       activity.getWindow()
-              .setStatusBarColor(context.getResources().getColor(R.color.colorPrimary, null));
+          .setStatusBarColor(context.getResources().getColor(R.color.colorPrimary, null));
     }
   }
 
@@ -44,9 +44,11 @@ public class ScreenUtil {
     String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
 
     if (backgroundState.equals("dark")) {
+
       toolbar.setBackgroundColor(context.getResources().getColor(R.color.toolbarGreyDark, null));
-    }
-    else if (backgroundState.equals("light")) {
+
+    } else if (backgroundState.equals("light")) {
+
       toolbar.setBackgroundColor(context.getResources().getColor(R.color.toolbarGrey, null));
     }
   }

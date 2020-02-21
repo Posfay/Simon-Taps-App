@@ -125,18 +125,21 @@ public class GameActivity extends Activity implements AsyncResponse {
     String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
 
     if (backgroundState.equals("dark")) {
+
       bustImage.setImageDrawable(getDrawable(R.drawable.bust_light));
       roomIdText.setTextColor(getResources().getColor(R.color.light_grey));
       roundText.setTextColor(getResources().getColor(R.color.light_grey));
       playersText.setTextColor(getResources().getColor(R.color.light_grey));
-    }
-    else if (backgroundState.equals("light")) {
+      feedbackText.setTextColor(getResources().getColor(R.color.light_grey));
+
+    } else if (backgroundState.equals("light")) {
+
       bustImage.setImageDrawable(getDrawable(R.drawable.bust));
       roomIdText.setTextColor(getResources().getColor(R.color.black));
       roundText.setTextColor(getResources().getColor(R.color.black));
       playersText.setTextColor(getResources().getColor(R.color.black));
+      feedbackText.setTextColor(getResources().getColor(R.color.black));
     }
-
 
     pattern = new ArrayList<>();
 
@@ -246,11 +249,14 @@ public class GameActivity extends Activity implements AsyncResponse {
       state = responseJson.optString(ServerUtil.ResponseParameter.GAME_STATE.toString());
 
     } catch (JSONException e) {
-      e.printStackTrace();
+
+      Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
     }
 
     // -----------------------------------EXAMINING GAME STATES-------------------------------------
-    if (!status.equals("OK")) {
+    if (!"OK".equals(status)) {
+
+      Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
       return;
     }
 
@@ -281,7 +287,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     // SUCCESSFUL_END
     if (state.equals(ServerUtil.State.END.toString())) {
 
-      gameEnd(responseJson);
+      gameEnd();
       return;
     }
 
@@ -316,8 +322,6 @@ public class GameActivity extends Activity implements AsyncResponse {
     }
 
     roomIdText.setVisibility(View.INVISIBLE);
-
-    final ConstraintLayout layout = findViewById(R.id.layout);
 
     intervalMilli = ServerUtil.GAME_STATE_REQUEST_INTERVAL;
 
@@ -461,7 +465,9 @@ public class GameActivity extends Activity implements AsyncResponse {
       }
     }
     final int Flags = getWindow().getDecorView().getSystemUiVisibility();
-    getWindow().getDecorView().setSystemUiVisibility(backgroundState.equals("light") ? (Flags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (Flags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
+    getWindow().getDecorView().setSystemUiVisibility(
+        backgroundState.equals("light") ? (Flags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)
+            : (Flags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR));
   }
 
   @SuppressLint("SetTextI18n")
@@ -499,7 +505,7 @@ public class GameActivity extends Activity implements AsyncResponse {
     redButton.setBackgroundResource(R.drawable.button_red);
     yellowButton.setBackgroundResource(R.drawable.button_yellow);
     blueButton.setBackgroundResource(R.drawable.button_blue);
-    yourButton.setEnabled(false); //just to be sure, there were problems
+    yourButton.setEnabled(false); // just to be sure, there were problems
 
     Runnable timerRunnable = new Runnable() {
 
@@ -671,7 +677,7 @@ public class GameActivity extends Activity implements AsyncResponse {
   }
 
   // END OF THE GAME
-  public void gameEnd(JSONObject payloadJson) {
+  public void gameEnd() {
 
     exitCondition = true;
     getStateTimerHandler.removeCallbacks(getStateTimerRunnable);

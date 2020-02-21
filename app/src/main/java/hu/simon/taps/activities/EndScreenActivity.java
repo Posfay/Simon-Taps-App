@@ -251,27 +251,26 @@ public class EndScreenActivity extends AppCompatActivity implements AsyncRespons
   public void onRequestComplete(String responseJsonString) {
 
     JSONObject payloadJson;
-    String status = null;
-    String state = null;
+    String status;
+    String state;
 
     try {
 
       payloadJson = new JSONObject(responseJsonString);
-
-      if (responseJsonString != null) {
-        Log.i("restartResponse", responseJsonString);
-      }
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
       state = payloadJson.getString(ServerUtil.ResponseParameter.GAME_STATE.toString());
       couponCode = payloadJson.optString(ServerUtil.ResponseParameter.COUPON.toString());
 
     } catch (JSONException e) {
-      e.printStackTrace();
+
+      Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
+      return;
     }
 
-    if (!status.equals("OK")) {
-      // TODO error response
+    if (!"OK".equals(status)) {
+
+      Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
       return;
     }
 

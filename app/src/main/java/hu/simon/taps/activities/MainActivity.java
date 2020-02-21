@@ -129,9 +129,11 @@ public class MainActivity extends Activity implements AsyncResponse {
     settingsButton = findViewById(R.id.settingsButton);
 
     if (backgroundState.equals("dark")) {
+
       settingsButton.setBackground(getDrawable(R.drawable.settings_icon_light));
-    }
-    else if (backgroundState.equals("light")) {
+
+    } else if (backgroundState.equals("light")) {
+
       settingsButton.setBackground(getDrawable(R.drawable.settings_icon));
     }
 
@@ -193,6 +195,7 @@ public class MainActivity extends Activity implements AsyncResponse {
       joinButton.setText(joinButtonText);
 
       joinButtonVisible = !joinButtonVisible;
+
     } else if ((joinButtonVisible) && (roomIdEditText.getText().length() < 5)) {
 
       ConstraintLayout constraintLayout = findViewById(R.id.constraintLayoutMain);
@@ -436,20 +439,24 @@ public class MainActivity extends Activity implements AsyncResponse {
 
     joinButton.setEnabled(true);
 
-    JSONObject payloadJson = null;
+    JSONObject payloadJson;
     status = null;
     reason = null;
 
     try {
+
       if (responseJsonString != null) {
         Log.i("JoinResponse", responseJsonString);
       }
+
       payloadJson = new JSONObject(responseJsonString);
 
       status = payloadJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
 
     } catch (JSONException e) {
-      e.printStackTrace();
+
+      Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
+      return;
     }
 
     if (!versionChecked) {
@@ -464,11 +471,12 @@ public class MainActivity extends Activity implements AsyncResponse {
         createButton.setEnabled(true);
         joinButton.setEnabled(true);
         settingsButton.setEnabled(true);
+
       } else {
 
         alertDialog(getString(R.string.outdated), true);
       }
-    } else if (status.equals("OK")) {
+    } else if ("OK".equals(status)) { // Create/Join endpoint
 
       finish();
 
@@ -487,6 +495,9 @@ public class MainActivity extends Activity implements AsyncResponse {
       }
       if (reason.equals("ROOM_IS_FULL")) {
         reason = getString(R.string.room_full);
+      }
+      if (reason.equals("")) {
+        reason = ServerUtil.UNKNOWN_SERVER_ERROR;
       }
 
       Toast.makeText(this, reason, Toast.LENGTH_SHORT).show();

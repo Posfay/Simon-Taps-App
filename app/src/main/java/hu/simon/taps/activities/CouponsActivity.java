@@ -25,10 +25,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import hu.simon.taps.R;
 import hu.simon.taps.fragments.SettingsFragment;
 import hu.simon.taps.http.handler.AsyncResponse;
@@ -55,6 +55,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
   ArrayAdapter adapter;
 
   public static Activity couponsActivity;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     // Changing language
@@ -80,8 +81,8 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
     ScreenUtil.setToolbarColor(this, toolbar);
 
-    View child = getLayoutInflater().inflate(R.layout.list_item_coupons_empty,null);
-    ((ViewGroup)couponList.getParent()).addView(child);
+    View child = getLayoutInflater().inflate(R.layout.list_item_coupons_empty, null);
+    ((ViewGroup) couponList.getParent()).addView(child);
     couponList.setEmptyView(child);
 
     setSupportActionBar(toolbar);
@@ -89,8 +90,6 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
 
     getCoupons();
 
-    // adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1,
-    // coupons);
     adapter = new CustomAdapter(this, R.layout.list_item_coupons, coupons);
     couponList.setAdapter(adapter);
   }
@@ -131,21 +130,17 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     okHttpHandler.getRequest(url);
   }
 
+  @Override
   public void onRequestComplete(String responseJsonString) {
 
     JSONObject responseJson;
-    String status = null;
+    String status;
 
     try {
 
       responseJson = new JSONObject(responseJsonString);
 
-      if (responseJsonString != null) {
-        Log.i("CouponsResponse", responseJsonString);
-      }
-
       status = responseJson.getString(ServerUtil.ResponseParameter.STATUS.toString());
-      // coupons = responseJson.optJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
 
       JSONArray couponsJsonArray =
           responseJson.getJSONArray(ServerUtil.ResponseParameter.COUPONS.toString());
@@ -157,11 +152,15 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       }
 
     } catch (JSONException e) {
-      e.printStackTrace();
+
+      Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
+      return;
     }
 
-    if (!status.equals("OK")) {
-      // TODO error response
+    if (!"OK".equals(status)) {
+
+      Toast.makeText(this, ServerUtil.UNKNOWN_SERVER_ERROR, Toast.LENGTH_SHORT).show();
+      return;
     }
   }
 
@@ -198,7 +197,6 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       String expirationText = getString(R.string.valid);
       expirationText = expirationText + "\n";
 
-
       if (day > 0) {
         expirationText += dayS;
       }
@@ -218,8 +216,7 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
       if (backgroundState.equals("dark")) {
         couponCode.setTextColor(getResources().getColor(R.color.light_grey));
         couponExpiration.setTextColor(getResources().getColor(R.color.light_grey));
-      }
-      else if (backgroundState.equals("light")) {
+      } else if (backgroundState.equals("light")) {
         couponCode.setTextColor(getResources().getColor(R.color.black));
         couponExpiration.setTextColor(getResources().getColor(R.color.black));
       }
@@ -235,7 +232,8 @@ public class CouponsActivity extends AppCompatActivity implements AsyncResponse 
     Random randomBetweenOneFour = new Random();
     int randomSwitchNum = randomBetweenOneFour.nextInt(5 - 1) + 1;
 
-    SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(this);
+    SharedPreferences prefs =
+        android.preference.PreferenceManager.getDefaultSharedPreferences(this);
     String backgroundState = prefs.getString(SettingsFragment.PREF_BACKGROUND_COLOR, "dark");
 
     if (backgroundState.equals("dark")) {
